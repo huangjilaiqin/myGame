@@ -22,4 +22,7 @@ cc.Class({
     // update: function (dt) {
 
     // },
+    searchOpponent:function(){
+        cc.log('searchOpponent');
+    },
 });
