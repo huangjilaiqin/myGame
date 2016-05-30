@@ -78,12 +78,6 @@
       },
       {
         "__id__": 8
-      },
-      {
-        "__id__": 10
-      },
-      {
-        "__id__": 12
       }
     ],
     "_rotationX": 0,
@@ -106,10 +100,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 14
+        "__id__": 10
       },
       {
-        "__id__": 15
+        "__id__": 11
+      },
+      {
+        "__id__": 12
       }
     ],
     "_prefab": null
@@ -249,8 +246,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 7,
-      "y": 41
+      "x": -274,
+      "y": 73
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -365,146 +362,6 @@
     "_N$overflow": 0
   },
   {
-    "__type__": "cc.Node",
-    "_name": "myboy",
-    "_objFlags": 0,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_cascadeOpacityEnabled": true,
-    "_parent": {
-      "__id__": 2
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_children": [],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": -139,
-      "y": -63
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_reorderChildDirty": false,
-    "_id": "168cdMn/eNLzrsJib1yhXK3",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 11
-      }
-    ],
-    "_prefab": null
-  },
-  {
-    "__type__": "sp.Skeleton",
-    "_name": "",
-    "_objFlags": 786432,
-    "node": {
-      "__id__": 10
-    },
-    "_enabled": true,
-    "defaultSkin": "",
-    "defaultAnimation": "animation",
-    "loop": true,
-    "_N$skeletonData": {
-      "__uuid__": "96ea7e95-48f5-42fa-b62d-878b202aba31"
-    },
-    "_N$timeScale": 1,
-    "_N$debugSlots": false,
-    "_N$debugBones": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "spineboy",
-    "_objFlags": 0,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_cascadeOpacityEnabled": true,
-    "_parent": {
-      "__id__": 2
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_children": [],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": 292,
-      "y": -139
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_reorderChildDirty": false,
-    "_id": "9f0abkZntNLT6UPQDvUm89d",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 13
-      }
-    ],
-    "_prefab": null
-  },
-  {
-    "__type__": "sp.Skeleton",
-    "_name": "",
-    "_objFlags": 786432,
-    "node": {
-      "__id__": 12
-    },
-    "_enabled": true,
-    "defaultSkin": "",
-    "defaultAnimation": "walk",
-    "loop": true,
-    "_N$skeletonData": {
-      "__uuid__": "b6ddc8fc-fadd-43bf-a698-66cfae467165"
-    },
-    "_N$timeScale": 1,
-    "_N$debugSlots": false,
-    "_N$debugBones": false
-  },
-  {
     "__type__": "cc.Canvas",
     "_name": "",
     "_objFlags": 1835008,
@@ -531,9 +388,24 @@
     "label": {
       "__id__": 9
     },
-    "text": "Hello, World!",
-    "hande": {
-      "__id__": 11
-    }
+    "text": "Hello, World!"
+  },
+  {
+    "__type__": "sp.Skeleton",
+    "_name": "",
+    "_objFlags": 786432,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "defaultSkin": "",
+    "defaultAnimation": "walk",
+    "loop": true,
+    "_N$skeletonData": {
+      "__uuid__": "b6ddc8fc-fadd-43bf-a698-66cfae467165"
+    },
+    "_N$timeScale": 1,
+    "_N$debugSlots": false,
+    "_N$debugBones": false
   }
 ]
