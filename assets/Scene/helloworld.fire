@@ -403,7 +403,9 @@
       "__id__": 2
     },
     "_enabled": true,
-    "label": null,
+    "label": {
+      "__id__": 9
+    },
     "text": "Hello, World"
   }
 ]
