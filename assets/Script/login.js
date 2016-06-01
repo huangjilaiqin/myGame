@@ -1,3 +1,7 @@
+
+const Network = require('Network');
+const globalsInfo = require('globalsInfo');
+
 cc.Class({
     extends: cc.Component,
 
@@ -23,7 +27,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-
+        
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -31,9 +35,57 @@ cc.Class({
 
     // },
     login:function(){
-        cc.log('login',this.username.string,this.passwd.string);
+        var username = this.username.string;
+        var passwd = this.passwd.string;
+        var netInstance = Network.getInstance();
+        
+        //转圈圈
+
+        netInstance.emit('login', JSON.stringify({'username':username,'passwd':passwd}));
+        netInstance.listeneOn('login', function(obj){
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("login: "+result.error);
+            }else{
+                var userid = result.userid;
+                var token = result.token;
+                
+                cc.log('login success',userid,token);
+                
+                globalsInfo.userid=userid;
+                globalsInfo.token=token;
+                globalsInfo.username=username;
+    
+                //*
+                // android 有问题
+                cc.sys.localStorage.setItem('userid',userid);
+                cc.sys.localStorage.setItem('username',username);
+                cc.sys.localStorage.setItem('token',token);
+                //*/
+                cc.director.loadScene('main');
+            }
+        });   
     },
     register:function(){
+        var username = this.username.string;
+        var passwd = this.passwd.string;
+        var netInstance = Network.getInstance();
+        
         cc.log('register()',this.username.string,this.passwd.string);
+        netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
+        
+        netInstance.listeneOn('register', function(obj){
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("register: "+result.error);
+            }else{
+                var userid = result.userid;
+                cc.log('register success, userid:'+userid);
+    
+                //播放注册成功动画
+            }
+        });   
     },
 });

@@ -1,10 +1,10 @@
 
-const Test = require('Test');
 const Network = require('Network');
+const globalsInfo = require('globalsInfo');
+const config = require('config');
 
 cc.Class({
     extends: cc.Component,
-
     properties: {
         // foo: {
         //    default: null,
@@ -23,13 +23,8 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        cc.log(Test);
-        var test = new Test();
-        test.foo();
-        var network = new Network();
-        //cc.log(network.getInstance(undefined,undefined,function(){cc.log('getInstance');}));
-        //cc.log(network.getInstance());
-        var netInstance = network.getInstance("123.59.40.113",5002,function(){
+        
+        var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
             //显示广告
@@ -41,7 +36,7 @@ cc.Class({
                 console.log('testMessage response:'+obj);
             });
             var userid = parseInt(cc.sys.localStorage.getItem('userid'));
-            cc.log('userid type:',typeof(userid))
+            cc.log('userid type:',typeof(userid));
             var token = cc.sys.localStorage.getItem('token');
             var username = cc.sys.localStorage.getItem('username');
             if(!userid || userid.length===0){
@@ -51,19 +46,20 @@ cc.Class({
                 netInstance.emit('verifyToken', JSON.stringify({'userid':userid,'token':token}));
                 netInstance.listeneOn('verifyToken', function(obj){
                     console.log(obj);
-                    result = JSON.parse(obj);
-                    if(result['error']){
-                        cc.log("verifyToken: "+result['error']);
-                        cc.director.runScene(new LoginScene());
+                    var result = JSON.parse(obj);
+                    if(result.error){
+                        cc.log("verifyToken: "+result.error);
+                        cc.director.loadScene('login');
                     }else{
-                        globalsInfo['userid']=userid;
-                        globalsInfo['token']=token;
-                        globalsInfo['username']=username;
-                        cc.director.runScene(new MenuScene());
+                        globalsInfo.userid=userid;
+                        globalsInfo.token=token;
+                        globalsInfo.username=username;
+                        cc.log('verifyToken success');
                     }
                 });
             }
         });
+        //*/
         //cc.audioEngine.playMusic(this.bgAudio, true);
     },
 
@@ -72,6 +68,21 @@ cc.Class({
 
     // },
     searchOpponent:function(){
-        cc.log('searchOpponent');
+        var netInstance = Network.getInstance();
+        netInstance.emit('searchOpponent', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        netInstance.listeneOn('searchOpponent', function(obj){
+            cc.log(obj);
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("search: "+result.error);
+            }else{
+                //cc.audioEngine.stopMusic();
+                cc.log('search result');
+                cc.log(result);
+                globalsInfo.opponent = result;
+                cc.director.loadScene('mirrorFight');
+            }
+        });
     },
 });

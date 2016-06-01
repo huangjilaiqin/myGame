@@ -1,18 +1,19 @@
-//Network.js
 var SocketIO = SocketIO || window.io;
-
-cc.Class({
-    extends:cc.Component,
-    
+var Test = {
+    test:function(){
+        cc.log('Test.test()');
+        return 'Test return';
+    },
     ip:"",
     port:null,
     instance:null,
     socket:null,
+    onConnect:null,
     
-	getNetworkInstance:function(ip,port,onConnect){
+	getNetworkInstance:function(){
         cc.log('getNetworkInstance '+this.ip+":"+this.port);
         var socket = SocketIO.connect(this.ip+":"+this.port);
-        socket.on("connect", onConnect);
+        socket.on("connect", this.onConnect);
         socket.on("disconnect", function() {
             cc.log('disconnect');
         });
@@ -35,7 +36,7 @@ cc.Class({
             
 		var networkInstance = {
             emit:function(eventName,obj){
-                //cc.log(eventName,obj);
+                cc.log(eventName,obj);
                 socket.emit(eventName,obj);
             },
             listeneOn:function(eventName,callback){
@@ -45,17 +46,17 @@ cc.Class({
 		return networkInstance;
 	},
 	getInstance:function(ip,port,onConnect){
-        if(this.ip===undefined)
+        if(ip===undefined && this.ip===undefined)
             this.ip="123.59.40.113";
         else
             this.ip=ip;
             
-        if(this.port===undefined)
+        if(port===undefined && this.port===undefined)
             this.port=5002;
         else
             this.port=port;
             
-        if(onConnect===undefined)
+        if(onConnect===undefined && this.onConnect===undefined)
             this.onConnect=function(){
                 cc.log('default onConnect');
             };
@@ -67,5 +68,6 @@ cc.Class({
 		}
 		return this.instance;
 	},
-	
-});
+};
+
+module.exports=Test;
