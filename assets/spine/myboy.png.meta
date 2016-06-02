@@ -6,7 +6,7 @@
   "filterMode": "bilinear",
   "subMetas": {
     "myboy": {
-      "ver": "1.0.2",
+      "ver": "1.0.3",
       "uuid": "6d5814e2-31d0-465b-9ed8-44e3959993a3",
       "rawTextureUuid": "6ed7075f-0baa-47e0-bbfc-2632e6586ae6",
       "trimType": "auto",
@@ -18,6 +18,8 @@
       "trimY": 2,
       "width": 108,
       "height": 53,
+      "rawWidth": 128,
+      "rawHeight": 64,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
