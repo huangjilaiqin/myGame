@@ -9,6 +9,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        fightResult: {
+            default: null,
+            type: cc.Prefab
+        },
         numtest:{
             default: null,
             type: cc.Prefab
@@ -33,6 +37,7 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        
         myScore:0,
         opponentScore:0,
         countdownTime:6,
@@ -50,7 +55,22 @@ cc.Class({
     },
     gameOver:function(){
         cc.log('gameover');
+        //*
+        var fx = cc.instantiate(this.fightResult);
+        var tt = fx.getComponent('fightResult');
+        tt.init(this.myScore,this.opponentScore);
+        fx.setPosition(cc.p(0,0));
+        this.node.addChild(fx);
+        //*/
+        /*
+        var fx = cc.instantiate(this.start_countdown);
+        this.node.addChild(fx);
+        fx.setPosition(cc.p(0,0));
+        var tt = fx.getComponent('start_countdown');
+        tt.init(this);
+        //*/
     },
+    
     gameStart:function(){
         //开始
         this.gameStatus=1;
@@ -58,6 +78,11 @@ cc.Class({
         
         //倒计时
         this.schedule(this.ticktack,1,this.countdownTime-1,1);
+        
+        //设置点击事件
+        //this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup,this);
+        this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup.bind(this));
+        
     },
     ticktack:function(){
         this.countdownTime--;
@@ -80,9 +105,6 @@ cc.Class({
         this.opponentName.string=this.opponentInfo.username;
         this.opponentRecordsSize=this.opponentInfo.records.length;
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex++];
-        //设置点击事件
-        //this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup,this);
-        this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup.bind(this));
         
         var fx = cc.instantiate(this.start_countdown);
         this.node.addChild(fx);
@@ -124,6 +146,5 @@ cc.Class({
                 }
             }
         }
-        
     },
 });

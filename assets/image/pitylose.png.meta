@@ -6,7 +6,7 @@
   "filterMode": "bilinear",
   "subMetas": {
     "pitylose": {
-      "ver": "1.0.3",
+      "ver": "1.0.2",
       "uuid": "646dc0fc-454f-4d65-8eb8-f75afabe8278",
       "rawTextureUuid": "777d7920-b997-4f89-b641-2536f02c449b",
       "trimType": "auto",
@@ -18,8 +18,6 @@
       "trimY": 0,
       "width": 222,
       "height": 103,
-      "rawWidth": 222,
-      "rawHeight": 103,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

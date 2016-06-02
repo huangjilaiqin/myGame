@@ -6,7 +6,7 @@
   "filterMode": "bilinear",
   "subMetas": {
     "spineboy": {
-      "ver": "1.0.3",
+      "ver": "1.0.2",
       "uuid": "d145b66f-b325-462b-bdd7-d7e8775b20ab",
       "rawTextureUuid": "3196f8d5-3105-4280-af8b-28d85d59fdcf",
       "trimType": "auto",
@@ -18,8 +18,6 @@
       "trimY": 2,
       "width": 499,
       "height": 252,
-      "rawWidth": 512,
-      "rawHeight": 256,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

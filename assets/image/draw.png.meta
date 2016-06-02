@@ -6,7 +6,7 @@
   "filterMode": "bilinear",
   "subMetas": {
     "draw": {
-      "ver": "1.0.3",
+      "ver": "1.0.2",
       "uuid": "7ef1c48d-151d-4768-a303-d93a45153ab9",
       "rawTextureUuid": "9eb38df7-d5d4-48e6-ab5d-c732ffaef6a0",
       "trimType": "auto",
@@ -18,8 +18,6 @@
       "trimY": 0,
       "width": 89,
       "height": 102,
-      "rawWidth": 89,
-      "rawHeight": 102,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

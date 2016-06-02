@@ -5,30 +5,44 @@ cc.Class({
         completeWin:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         win:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         narrowWin:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         draw:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         completeLose:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         lose:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         pityLose:{
             default:null,
             type:cc.Sprite,
+            active:false,
+            opacity:0,
         },
         winAudio:{
             default:null,
@@ -40,13 +54,30 @@ cc.Class({
         },
         myScore:0,
         opponentScore:0,
+        playAgainBt:{
+            default:null,
+            type:cc.Button,
+        },
+        restBt:{
+            default:null,
+            type:cc.Button,
+        },
     },
     init:function(myScore,opponentScore){
+        cc.log('init',myScore,opponentScore);
         this.myScore=myScore;
         this.opponentScore=opponentScore;
     },
-    // use this for initialization
-    onLoad: function () {
+    playAgain:function(){
+        //自动所有
+        cc.director.loadScene('main');
+    },
+    rest:function(){
+        cc.director.loadScene('main');
+    },
+    /*
+    start:function(){
+        //*
         this.completeWin.node.active=false;
         this.win.node.active=false;
         this.narrowWin.node.active=false;
@@ -55,48 +86,98 @@ cc.Class({
         this.pityLose.node.active=false;
         this.draw.node.active=false;
         
+    },
+    */
+    // use this for initialization
+    onLoad: function () {
+        cc.log('fightresult onLoad');
+        //*
+        this.completeWin.node.opacity=0;
+        this.win.node.opacity=0;
+        this.narrowWin.node.opacity=0;
+        this.completeLose.node.opacity=0;
+        this.lose.node.opacity=0;
+        this.pityLose.node.opacity=0;
+        this.draw.node.opacity=0;
+        //*/
+        
+        /*
+        this.scheduleOnce(function(){
+            this.narrowWin.node.opacity=255;
+            this.narrowWin.node.runAction(cc.sequence(cc.scaleTo(0.6, 2, 2),cc.fadeOut(0.4),
+            cc.callFunc(function(){
+                cc.log('fightresult onload');
+                //this.start1.node.opacity=1;  
+                //this.game.gameStart();
+            },this)));
+        },0);
+        
+        //*/
+        //*
         var delta=0;
-        if(this.myScore>this.opponentSocre){
+        
+        if(this.myScore>this.opponentScore){
             //播放动画
             cc.audioEngine.playEffect(this.winAudio);
-            delta = this.myScore-this.opponentSocre;
-            var sprite=null;
+            delta = this.myScore-this.opponentScore;
             if(delta<=3){
                 //险胜
-                sprite = new cc.Sprite(res.narrowwin_png);
-            }else if(delta/this.opponentSocre>=0.5){
+                this.narrowWin.node.active=true;
+                this.narrowWin.node.opacity=255;
+                this.narrowWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                cc.callFunc(function(){
+                    cc.log('callFunc game narrowWin',this.game);   
+                },this)));
+            }else if(delta/this.opponentScore>=0.5){
                 //完勝
-                sprite = new cc.Sprite(res.completewin_png);
+                this.completeWin.node.opacity=255;
+                this.completeWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                cc.callFunc(function(){
+                    cc.log('callFunc game completeWin',this.game);   
+                },this)));
             }else{
                 //胜
-                sprite = new cc.Sprite(res.win_png);
+                this.win.node.opacity=255;
+                this.win.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                cc.callFunc(function(){
+                    cc.log('callFunc game win',this.game);   
+                },this)));
             }
-            sprite.setPosition(centerPoint);
-            this.addChild(sprite, 0);
-            sprite.runAction(cc.Sequence.create(cc.ScaleTo.create(0.6, 2, 2)));
-        }else if (this.myScore<this.opponentSocre){
+        }else if (this.myScore<this.opponentScore){
             cc.audioEngine.playEffect(this.loseAudio);
-            delta = this.opponentSocre-this.myScore;
-            sprite=null;
+            delta = this.opponentScore-this.myScore;
+            cc.log('delta:', delta);
+            cc.log('rate',delta/this.opponentScore);
             if(delta<=3){
                 //惜败
-                sprite = new cc.Sprite(res.pitylose_png);
-            }else if(delta/opponentSocre>=0.5){
+                this.pityLose.node.opacity=255;
+                this.pityLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                cc.callFunc(function(){
+                    cc.log('callFunc game pityLose',this.game);   
+                },this)));
+            }else if(delta/this.opponentScore>=0.5){
                 //惨败
-                sprite = new cc.Sprite(res.completelose_png);
+                this.completeLose.node.opacity=255;
+                this.completeLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                    cc.callFunc(function(){
+                        cc.log('callFunc game completeLose',this.game);   
+                    },this)));
             }else{
                 //败
-                sprite = new cc.Sprite(res.lose_png);
+                this.lose.node.opacity=255;
+                this.lose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                cc.callFunc(function(){
+                    cc.log('callFunc game lose',this.game);   
+                },this)));
             }
-            sprite.setPosition(centerPoint)
-            this.addChild(sprite, 0);
-            sprite.runAction(cc.Sequence.create(cc.ScaleTo.create(0.6, 2, 2)));
         }else{
-            var sprite= new cc.Sprite(res.draw_png);
-            sprite.setPosition(centerPoint)
-            this.addChild(sprite, 0);
-            sprite.runAction(cc.Sequence.create(cc.ScaleTo.create(0.6, 2, 2)));
+            this.draw.node.opacity=255;
+            this.draw.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+            cc.callFunc(function(){
+                cc.log('callFunc game start',this.game);   
+            },this)));
         }
+        //*/
     },
 
     // called every frame, uncomment this function to activate update callback
