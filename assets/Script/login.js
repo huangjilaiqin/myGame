@@ -22,7 +22,11 @@ cc.Class({
         passwd:{
             default:null,
             type:cc.EditBox,
-        }
+        },
+        tip:{
+            default:null,
+            type:cc.Label,
+        },
     },
 
     // use this for initialization
@@ -40,13 +44,15 @@ cc.Class({
         var netInstance = Network.getInstance();
         
         //转圈圈
-
+        var that = this;
         netInstance.emit('login', JSON.stringify({'username':username,'passwd':passwd}));
         netInstance.listeneOn('login', function(obj){
+            that.tip.string = obj;
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
                 cc.log("login: "+result.error);
+                //this.tip.string = result.error;
             }else{
                 var userid = result.userid;
                 var token = result.token;
@@ -57,7 +63,7 @@ cc.Class({
                 globalsInfo.token=token;
                 globalsInfo.username=username;
     
-                //*
+                /*
                 // android 有问题
                 cc.sys.localStorage.setItem('userid',userid);
                 cc.sys.localStorage.setItem('username',username);

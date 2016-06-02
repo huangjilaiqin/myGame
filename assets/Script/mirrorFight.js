@@ -100,17 +100,25 @@ cc.Class({
     },
     
     onLoad: function () {
+        
         cc.log(globalsInfo.opponent);
         this.opponentInfo = globalsInfo.opponent;
+        
+        this.opponentName.string='testName';
+        /*
+        这里有问题
         this.opponentName.string=this.opponentInfo.username;
+        
         this.opponentRecordsSize=this.opponentInfo.records.length;
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex++];
+        
         
         var fx = cc.instantiate(this.start_countdown);
         this.node.addChild(fx);
         fx.setPosition(cc.p(0,0));
         var tt = fx.getComponent('start_countdown');
         tt.init(this);
+        */
     },
     myPushup:function(){
         if(this.countdownTime===0)
@@ -127,6 +135,7 @@ cc.Class({
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         //在游戏中,且对手没有完
+        /*
         if(this.oppponentStatus===1){
             this.opponentUpdateTime+=dt;
             
@@ -146,5 +155,6 @@ cc.Class({
                 }
             }
         }
+        */
     },
 });
