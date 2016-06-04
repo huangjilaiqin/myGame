@@ -49,7 +49,7 @@ cc.Class({
                     var result = JSON.parse(obj);
                     if(result.error){
                         cc.log("verifyToken: "+result.error);
-                        cc.director.loadScene('login');
+                        //cc.director.loadScene('login');
                     }else{
                         globalsInfo.userid=userid;
                         globalsInfo.token=token;
