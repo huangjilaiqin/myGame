@@ -19,11 +19,18 @@ cc.Class({
             default:null,
             url:cc.AudioClip
         },
+        
+        tip:{
+            default:null,
+            type:cc.Label,
+        },
+        
     },
 
     // use this for initialization
     onLoad: function () {
-        
+        var tip = this.tip;
+        tip.string='test';
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -38,6 +45,7 @@ cc.Class({
             var userid = parseInt(cc.sys.localStorage.getItem('userid'));
             cc.log('userid type:',typeof(userid));
             var token = cc.sys.localStorage.getItem('token');
+            tip.string='token:'+token;
             var username = cc.sys.localStorage.getItem('username');
             if(!userid || userid.length===0){
                 cc.director.loadScene('login');
@@ -49,18 +57,19 @@ cc.Class({
                     var result = JSON.parse(obj);
                     if(result.error){
                         cc.log("verifyToken: "+result.error);
-                        //cc.director.loadScene('login');
+                        cc.director.loadScene('login');
                     }else{
                         globalsInfo.userid=userid;
                         globalsInfo.token=token;
                         globalsInfo.username=username;
+                        //tip=token;
                         cc.log('verifyToken success');
                     }
                 });
             }
         });
         //*/
-        //cc.audioEngine.playMusic(this.bgAudio, true);
+        cc.audioEngine.playMusic(this.bgAudio, true);
     },
 
     // called every frame, uncomment this function to activate update callback

@@ -27,10 +27,6 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
-        tip2:{
-            default:null,
-            type:cc.Label,
-        },
     },
 
     // use this for initialization
@@ -49,24 +45,25 @@ cc.Class({
         
         //转圈圈
         var that = this;
-        that.tip.string = 'login';
         netInstance.emit('login', JSON.stringify({'username':username,'passwd':passwd}));
         netInstance.listeneOn('login', function(obj){
-            var kk = JSON.stringify({'userid':1234,'token':'asdfasdfasdfsad'});
-            cc.log(kk);
             cc.log(obj);
-            that.tip2.string = kk;
-            
-            var myre = JSON.parse(kk);
+            /*
+            if(/^"/.test(obj))
+                obj = eval(obj);
+                */
             var result = JSON.parse(obj);
-            that.tip.string = obj;
+            
+            that.tip.string = 'token:'+result.token+"#";
+            //that.tip2.string = 'ok';
+            
             if(result.error){
                 //提示
                 cc.log("login: "+result.error);
                 that.tip.string = result.error;
             }else{
-                var userid = result['userid'];
-                var token = result['token'];
+                var userid = result.userid;
+                var token = result.token;
                 
                 cc.log('login success',userid,token);
                 
@@ -74,15 +71,15 @@ cc.Class({
                 globalsInfo.token=token;
                 globalsInfo.username=username;
     
-                /*
+                //*
                 // android 有问题
                 //that.tip.string='login success:'+userid;
                 cc.sys.localStorage.setItem('userid',userid);
                 cc.sys.localStorage.setItem('username',username);
                 cc.sys.localStorage.setItem('token',token);
-                //that.tip.string=cc.sys.localStorage.getItem('userid');
+                that.tip.string=cc.sys.localStorage.getItem('userid');
                 //*/
-                //cc.director.loadScene('main');
+                cc.director.loadScene('main');
             }
         });   
     },

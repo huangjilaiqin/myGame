@@ -3,6 +3,7 @@
     "__type__": "cc.Prefab",
     "_name": "",
     "_objFlags": 0,
+    "_rawFiles": null,
     "data": {
       "__id__": 1
     }
@@ -88,7 +89,8 @@
     ],
     "_prefab": {
       "__id__": 41
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Node",
@@ -142,7 +144,8 @@
     ],
     "_prefab": {
       "__id__": 4
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -232,7 +235,8 @@
     ],
     "_prefab": {
       "__id__": 7
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -322,7 +326,8 @@
     ],
     "_prefab": {
       "__id__": 10
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -412,7 +417,8 @@
     ],
     "_prefab": {
       "__id__": 13
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -502,7 +508,8 @@
     ],
     "_prefab": {
       "__id__": 16
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -592,7 +599,8 @@
     ],
     "_prefab": {
       "__id__": 19
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -682,7 +690,8 @@
     ],
     "_prefab": {
       "__id__": 22
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -757,8 +766,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -80,
-      "y": -130
+      "x": -98,
+      "y": -220
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -779,7 +788,8 @@
     ],
     "_prefab": {
       "__id__": 30
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Node",
@@ -833,7 +843,8 @@
     ],
     "_prefab": {
       "__id__": 26
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Label",
@@ -847,6 +858,7 @@
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
+    "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "再战一次",
     "_N$horizontalAlign": 1,
@@ -1004,8 +1016,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 59,
-      "y": -130
+      "x": 79,
+      "y": -220
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1026,7 +1038,8 @@
     ],
     "_prefab": {
       "__id__": 38
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Node",
@@ -1080,7 +1093,8 @@
     ],
     "_prefab": {
       "__id__": 34
-    }
+    },
+    "groupIndex": 0
   },
   {
     "__type__": "cc.Label",
@@ -1094,6 +1108,7 @@
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
+    "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "休息一下",
     "_N$horizontalAlign": 1,

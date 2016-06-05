@@ -40,7 +40,12 @@ var Test = {
                 socket.emit(eventName,obj);
             },
             listeneOn:function(eventName,callback){
-                socket.on(eventName,callback);
+                //socket.on(eventName,callback);
+                socket.on(eventName,function(obj){
+                    if(/^"/.test(obj))
+                        obj = eval(obj);
+                    callback(obj);
+                });
             },
 		};
 		return networkInstance;
