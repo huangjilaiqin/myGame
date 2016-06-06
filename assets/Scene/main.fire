@@ -75,10 +75,10 @@
         "__id__": 3
       },
       {
-        "__id__": 5
+        "__id__": 6
       },
       {
-        "__id__": 11
+        "__id__": 12
       }
     ],
     "_rotationX": 0,
@@ -101,10 +101,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 13
+        "__id__": 14
       },
       {
-        "__id__": 14
+        "__id__": 15
       }
     ],
     "_prefab": null,
@@ -133,8 +133,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120,
-      "height": 120
+      "width": 84.43271767810027,
+      "height": 92.61939218523878
     },
     "_children": [],
     "_rotationX": 0,
@@ -158,6 +158,9 @@
     "_components": [
       {
         "__id__": 4
+      },
+      {
+        "__id__": 5
       }
     ],
     "_prefab": null,
@@ -175,7 +178,7 @@
       "__uuid__": "6e29ead4-654e-4d57-b438-bcb7f6f98c18"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -188,6 +191,27 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_atlas": null
+  },
+  {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 3
+    },
+    "_enabled": true,
+    "isAlignOnce": false,
+    "_alignFlags": 45,
+    "_left": 0,
+    "_right": 0,
+    "_top": 0,
+    "_bottom": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": true,
+    "_isAbsTop": true,
+    "_isAbsBottom": true,
+    "_originalWidth": 120,
+    "_originalHeight": 120
   },
   {
     "__type__": "cc.Node",
@@ -217,7 +241,7 @@
     },
     "_children": [
       {
-        "__id__": 6
+        "__id__": 7
       }
     ],
     "_rotationX": 0,
@@ -226,8 +250,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 12,
-      "y": -50
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -240,10 +264,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 8
+        "__id__": 9
       },
       {
-        "__id__": 9
+        "__id__": 10
       }
     ],
     "_prefab": null,
@@ -263,7 +287,7 @@
     },
     "_cascadeOpacityEnabled": true,
     "_parent": {
-      "__id__": 5
+      "__id__": 6
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -282,7 +306,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 1.1368683772161603e-13,
+      "x": 0,
       "y": 0
     },
     "_skewX": 0,
@@ -296,7 +320,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 7
+        "__id__": 8
       }
     ],
     "_prefab": null,
@@ -307,7 +331,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 6
+      "__id__": 7
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -326,7 +350,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 5
+      "__id__": 6
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -352,7 +376,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 5
+      "__id__": 6
     },
     "_enabled": true,
     "transition": 2,
@@ -379,7 +403,7 @@
     },
     "clickEvents": [
       {
-        "__id__": 10
+        "__id__": 11
       }
     ],
     "_N$interactable": true,
@@ -404,7 +428,7 @@
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
     "_N$target": {
-      "__id__": 5
+      "__id__": 6
     }
   },
   {
@@ -448,8 +472,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 21,
-      "y": 90
+      "x": 0,
+      "y": 80
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -462,7 +486,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 12
+        "__id__": 13
       }
     ],
     "_prefab": null,
@@ -473,7 +497,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 11
+      "__id__": 12
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -515,7 +539,7 @@
       "__uuid__": "2d3ed473-37bb-46fa-98f8-8df5a4110dd7"
     },
     "tip": {
-      "__id__": 12
+      "__id__": 13
     }
   }
 ]

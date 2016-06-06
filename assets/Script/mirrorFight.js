@@ -13,19 +13,27 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        myCountScorePre: {
+            default: null,
+            type: cc.Prefab
+        },
+        myCountScore:{
+            default:null,
+            visible:false,
+        },
+        opponentCountScorePre: {
+            default: null,
+            type: cc.Prefab
+        },
+        opponentCountScore:{
+            default:null,
+            visible:false,
+        },
         numtest:{
             default: null,
             type: cc.Prefab
         },
         myName:{
-            default:null,
-            type:cc.Label,
-        },
-        myScoreLabel:{
-            default:null,
-            type:cc.Label,
-        },
-        opponentScoreLabel:{
             default:null,
             type:cc.Label,
         },
@@ -38,8 +46,6 @@ cc.Class({
             type:cc.Label,
         },
         
-        myScore:0,
-        opponentScore:0,
         countdownTime:6,
         //0:未开始,1:进行中,2:有一个人完成,3:两个人都完成
         gameStatus:0,
@@ -56,9 +62,11 @@ cc.Class({
     gameOver:function(){
         cc.log('gameover');
         //*
+        this.node.removeChildByTag(1002);
+        this.node.removeChildByTag(1001);
         var fx = cc.instantiate(this.fightResult);
         var tt = fx.getComponent('fightResult');
-        tt.init(this.myScore,this.opponentScore);
+        tt.init(this.myCountScore.getScore(),this.opponentCountScore.getScore());
         fx.setPosition(cc.p(0,0));
         this.node.addChild(fx);
         //*/
@@ -117,17 +125,29 @@ cc.Class({
         fx.setPosition(cc.p(0,0));
         var tt = fx.getComponent('start_countdown');
         tt.init(this);
-        //*/
+        
+        var fx1 = cc.instantiate(this.myCountScorePre);
+        this.node.addChild(fx1,1,1002);
+        fx1.setPosition(cc.p(-50,0));
+        this.myCountScore = fx1.getComponent('countScore');
+        
+        var fx2 = cc.instantiate(this.opponentCountScorePre);
+        this.node.addChild(fx2,1,1001);
+        fx2.setPosition(cc.p(50,0));
+        this.opponentCountScore = fx2.getComponent('countScore');
+        
+    },
+    addScore:function(){
+        this.countScore.add();
+        cc.log('add score');
     },
     myPushup:function(){
         if(this.countdownTime===0)
             return;
-        this.myScore++;
-        this.myScoreLabel.string=this.myScore;
+        this.myCountScore.add();
     },
     opponentPushup:function(){
-        this.opponentScore++;
-        this.opponentScoreLabel.string=this.opponentScore;
+        this.opponentCountScore.add();
         //this.unschedule(this.opponentPushup);
         this.opponentCallbackWork=0;
     },
@@ -144,6 +164,7 @@ cc.Class({
                 //重新计时准备下一次调用,把多出来的时间计入到下一轮减少误差
                 this.opponentUpdateTime=this.opponentUpdateTime-this.opponentNextTime;
                 this.opponentIndex++;
+                
                 if(this.opponentIndex===this.opponentRecordsSize){
                     this.oppponentStatus=3;
                     this.gameStatus++;

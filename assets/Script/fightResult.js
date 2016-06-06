@@ -62,6 +62,14 @@ cc.Class({
             default:null,
             type:cc.Button,
         },
+        myScoreLabel:{
+            default:null,
+            type:cc.Label,
+        },
+        opponentScoreLabel:{
+            default:null,
+            type:cc.Label,
+        },
     },
     init:function(myScore,opponentScore){
         cc.log('init',myScore,opponentScore);
@@ -100,7 +108,8 @@ cc.Class({
         this.pityLose.node.opacity=0;
         this.draw.node.opacity=0;
         //*/
-        
+        this.myScoreLabel.string=this.myScore;
+        this.opponentScoreLabel.string=this.opponentScore;
         /*
         this.scheduleOnce(function(){
             this.narrowWin.node.opacity=255;
@@ -124,21 +133,21 @@ cc.Class({
                 //险胜
                 this.narrowWin.node.active=true;
                 this.narrowWin.node.opacity=255;
-                this.narrowWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.narrowWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                 cc.callFunc(function(){
                     cc.log('callFunc game narrowWin',this.game);   
                 },this)));
             }else if(delta/this.opponentScore>=0.5){
                 //完勝
                 this.completeWin.node.opacity=255;
-                this.completeWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.completeWin.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                 cc.callFunc(function(){
                     cc.log('callFunc game completeWin',this.game);   
                 },this)));
             }else{
                 //胜
                 this.win.node.opacity=255;
-                this.win.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.win.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                 cc.callFunc(function(){
                     cc.log('callFunc game win',this.game);   
                 },this)));
@@ -151,28 +160,28 @@ cc.Class({
             if(delta<=3){
                 //惜败
                 this.pityLose.node.opacity=255;
-                this.pityLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.pityLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                 cc.callFunc(function(){
                     cc.log('callFunc game pityLose',this.game);   
                 },this)));
             }else if(delta/this.opponentScore>=0.5){
                 //惨败
                 this.completeLose.node.opacity=255;
-                this.completeLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.completeLose.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                     cc.callFunc(function(){
                         cc.log('callFunc game completeLose',this.game);   
                     },this)));
             }else{
                 //败
                 this.lose.node.opacity=255;
-                this.lose.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+                this.lose.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
                 cc.callFunc(function(){
                     cc.log('callFunc game lose',this.game);   
                 },this)));
             }
         }else{
             this.draw.node.opacity=255;
-            this.draw.node.runAction(cc.sequence(cc.scaleTo(1, 1.8, 1.8),
+            this.draw.node.runAction(cc.sequence(cc.scaleTo(1, 1.5, 1.5),
             cc.callFunc(function(){
                 cc.log('callFunc game start',this.game);   
             },this)));
