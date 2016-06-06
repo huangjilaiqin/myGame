@@ -45,8 +45,16 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        myPushupAudio:{
+            default:null,
+            url:cc.AudioClip
+        },
+        opponentPushupAudio:{
+            default:null,
+            url:cc.AudioClip
+        },
         
-        countdownTime:6,
+        countdownTime:30,
         //0:未开始,1:进行中,2:有一个人完成,3:两个人都完成
         gameStatus:0,
         opponentInfo:null,
@@ -69,6 +77,25 @@ cc.Class({
         tt.init(this.myCountScore.getScore(),this.opponentCountScore.getScore());
         fx.setPosition(cc.p(0,0));
         this.node.addChild(fx);
+        
+        var records = this.myCountScore.getRecords();
+        var netInstance = Network.getInstance();
+        var userid = globalsInfo.userid;
+        var token = globalsInfo.token;
+        var opponentId = this.opponentInfo.userid;
+        netInstance.emit('uploadRecord', JSON.stringify({'userid':userid,'token':token,'opponentId':opponentId,'records':records}));
+        
+        netInstance.listeneOn('uploadRecord', function(obj){
+            cc.log(obj);
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("uploadRecord: "+result.error);
+            }else{
+                cc.log('uploadRecord success');
+    
+            }
+        });
         //*/
         /*
         var fx = cc.instantiate(this.start_countdown);
@@ -91,6 +118,15 @@ cc.Class({
         //this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup,this);
         this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup.bind(this));
         
+        var fx1 = cc.instantiate(this.myCountScorePre);
+        this.node.addChild(fx1,1,1002);
+        fx1.setPosition(cc.p(-55,0));
+        this.myCountScore = fx1.getComponent('countScore');
+        
+        var fx2 = cc.instantiate(this.opponentCountScorePre);
+        this.node.addChild(fx2,1,1001);
+        fx2.setPosition(cc.p(55,0));
+        this.opponentCountScore = fx2.getComponent('countScore');
     },
     ticktack:function(){
         this.countdownTime--;
@@ -112,9 +148,10 @@ cc.Class({
         cc.log(globalsInfo.opponent);
         this.opponentInfo = globalsInfo.opponent;
         
-        this.opponentName.string='testName';
+        this.opponentName.string='瑟瑟饿发抖';
+        
+        this.countdown.string=this.countdownTime;
         //*
-        //这里有问题
         this.opponentName.string=this.opponentInfo.username;
         
         this.opponentRecordsSize=this.opponentInfo.records.length;
@@ -126,30 +163,18 @@ cc.Class({
         var tt = fx.getComponent('start_countdown');
         tt.init(this);
         
-        var fx1 = cc.instantiate(this.myCountScorePre);
-        this.node.addChild(fx1,1,1002);
-        fx1.setPosition(cc.p(-50,0));
-        this.myCountScore = fx1.getComponent('countScore');
-        
-        var fx2 = cc.instantiate(this.opponentCountScorePre);
-        this.node.addChild(fx2,1,1001);
-        fx2.setPosition(cc.p(50,0));
-        this.opponentCountScore = fx2.getComponent('countScore');
-        
-    },
-    addScore:function(){
-        this.countScore.add();
-        cc.log('add score');
     },
     myPushup:function(){
         if(this.countdownTime===0)
             return;
         this.myCountScore.add();
+        cc.audioEngine.playMusic(this.myPushupAudio);
     },
     opponentPushup:function(){
         this.opponentCountScore.add();
         //this.unschedule(this.opponentPushup);
         this.opponentCallbackWork=0;
+        cc.audioEngine.playEffect(this.opponentPushupAudio);
     },
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {

@@ -6,31 +6,31 @@ const config = require('config');
 cc.Class({
     extends: cc.Component,
     properties: {
-        // foo: {
-        //    default: null,
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
         bgAudio:{
             default:null,
             url:cc.AudioClip
         },
-        
         tip:{
             default:null,
             type:cc.Label,
         },
-        
+        searchPre: {
+            default: null,
+            type: cc.Prefab
+        },
+        searchPreInst:{
+            default:null,
+            visible:false,
+        },
     },
 
     // use this for initialization
     onLoad: function () {
         var tip = this.tip;
-        tip.string='test';
+        this.searchPreInst=cc.instantiate(this.searchPre);
+        this.searchPreInst.setPosition(cc.p(0,0));
+        //this.node.addChild(this.searchPreInst,1,1000);
+        
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -45,7 +45,7 @@ cc.Class({
             var userid = parseInt(cc.sys.localStorage.getItem('userid'));
             cc.log('userid type:',typeof(userid));
             var token = cc.sys.localStorage.getItem('token');
-            tip.string='token:'+token;
+            //tip.string='token:'+token;
             var username = cc.sys.localStorage.getItem('username');
             if(!userid || userid.length===0){
                 cc.director.loadScene('login');
@@ -78,6 +78,11 @@ cc.Class({
     // },
     searchOpponent:function(){
         var netInstance = Network.getInstance();
+        var tip=this.tip;
+        this.node.addChild(this.searchPreInst,1,1000);
+        //this.node.addChild(this.searchPreInst,1,1000);
+        var begin = new Date().getTime();
+        var that = this;
         netInstance.emit('searchOpponent', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
         netInstance.listeneOn('searchOpponent', function(obj){
             cc.log(obj);
@@ -85,12 +90,21 @@ cc.Class({
             if(result.error){
                 //提示
                 cc.log("search: "+result.error);
+                this.node.removeChildByTag(1000);
+                tip=result.error;
             }else{
                 //cc.audioEngine.stopMusic();
                 cc.log('search result');
                 cc.log(result);
                 globalsInfo.opponent = result;
-                cc.director.loadScene('mirrorFight');
+                var now = new Date().getTime();
+                var delta = now-begin;
+                if(delta<2000){
+                    that.schedule(function(){
+                        cc.director.loadScene('mirrorFight');
+                        cc.audioEngine.stopMusic();
+                    },(2000-delta)/1000);
+                }
             }
         });
     },

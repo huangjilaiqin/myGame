@@ -2,28 +2,29 @@ cc.Class({
     extends: cc.Component,
 
     properties:{
-        //个位数
-        singleLabel:{
-            default:null,
-            type:cc.Label,
-        },
-        //十位数
-        decadeLabel:{
+        //分数
+        scoreLabel:{
             default:null,
             type:cc.Label,
         },
         score:0,
+        records:[],
+        lastTime:null,
     },
 
     add:function(){
         this.score++;
         this.showScore();
+        
+        var currentTime=new Date().getTime();
+        this.records.push((currentTime-this.lastTime)/1000);
+        this.lastTime=currentTime;
+    },
+    getRecords:function(){
+        return this.records;
     },
     showScore:function(){
-        var single = Math.floor(this.score%10);
-        var decade = Math.floor(this.score/10);
-        this.singleLabel.string = single;
-        this.decadeLabel.string = decade;
+        this.scoreLabel.string = this.score;
     },
     setScore:function(score){
         this.score=score;
@@ -34,6 +35,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.showScore();
+        this.lastTime = new Date().getTime();
     },
 
     // called every frame, uncomment this function to activate update callback
