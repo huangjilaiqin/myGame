@@ -70,6 +70,9 @@ cc.Class({
                 globalsInfo.userid=userid;
                 globalsInfo.token=token;
                 globalsInfo.username=username;
+                globalsInfo.win=result.win;
+                globalsInfo.draw=result.draw;
+                globalsInfo.lost=result.lost;
     
                 //*
                 // android 有问题

@@ -22,6 +22,22 @@ cc.Class({
             default:null,
             visible:false,
         },
+        total:{
+            default:null,
+            type:cc.Label,
+        },
+        win:{
+            default:null,
+            type:cc.Label,
+        },
+        draw:{
+            default:null,
+            type:cc.Label,
+        },
+        lost:{
+            default:null,
+            type:cc.Label,
+        },
     },
 
     // use this for initialization
@@ -52,6 +68,7 @@ cc.Class({
                 cc.director.loadScene('login');
             }else{
                 //验证登录是否过期
+                cc.log('to verifyToken');
                 netInstance.emit('verifyToken', JSON.stringify({'userid':userid,'token':token}));
                 netInstance.listeneOn('verifyToken', function(obj){
                     console.log(obj);
@@ -63,8 +80,16 @@ cc.Class({
                         globalsInfo.userid=userid;
                         globalsInfo.token=token;
                         globalsInfo.username=username;
+                        globalsInfo.win=result.win;
+                        globalsInfo.draw=result.draw;
+                        globalsInfo.lost=result.lost;
+                        cc.log(globalsInfo);
                         //tip=token;
                         cc.log('verifyToken success');
+                        this.win.string=globalsInfo.win;
+                        this.draw.string=globalsInfo.draw;
+                        this.lost.string=globalsInfo.lost;
+                        this.total.string='总数:'+globalsInfo.total;
                     }
                 });
             }
