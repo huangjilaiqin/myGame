@@ -83,7 +83,15 @@ cc.Class({
         var userid = globalsInfo.userid;
         var token = globalsInfo.token;
         var opponentId = this.opponentInfo.userid;
-        netInstance.emit('uploadRecord', JSON.stringify({'userid':userid,'token':token,'opponentId':opponentId,'records':records}));
+        var requestObj = {
+            'userid':userid,
+            'token':token,
+            'opponentId':opponentId,
+            'oRecordId':this.opponentInfo.id,
+            'oRecordSize':this.opponentRecordsSize,
+            'records':records,
+        };
+        netInstance.emit('uploadRecord', JSON.stringify(requestObj));
         
         netInstance.listeneOn('uploadRecord', function(obj){
             cc.log(obj);
@@ -155,7 +163,7 @@ cc.Class({
         this.opponentName.string=this.opponentInfo.username;
         
         this.opponentRecordsSize=this.opponentInfo.records.length;
-        this.opponentNextTime=this.opponentInfo.records[this.opponentIndex++];
+        this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
         
         var fx = cc.instantiate(this.start_countdown);
         this.node.addChild(fx);

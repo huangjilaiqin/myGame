@@ -26,6 +26,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        cc.log('main onLoad');
         var tip = this.tip;
         this.searchPreInst=cc.instantiate(this.searchPre);
         this.searchPreInst.setPosition(cc.p(0,0));
