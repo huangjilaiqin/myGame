@@ -34,7 +34,12 @@ cc.Class({
         for (var i = 0; i < size; i++) {
             var data = rows[i];
             var item = cc.instantiate(this.prefabRankItem);
-            item.getComponent('rankItem').init(data['username']);
+            var player={
+                'rank':i+1,
+                'name':data.username,
+                'total':data.total,
+            };
+            item.getComponent('rankItem').init(player);
             this.content.addChild(item);
         }
     },
