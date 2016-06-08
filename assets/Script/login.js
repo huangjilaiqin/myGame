@@ -70,17 +70,21 @@ cc.Class({
                 globalsInfo.userid=userid;
                 globalsInfo.token=token;
                 globalsInfo.username=username;
+                
+                globalsInfo.value=result.value;
+                globalsInfo.total=result.total;
                 globalsInfo.win=result.win;
                 globalsInfo.draw=result.draw;
                 globalsInfo.lost=result.lost;
-    
+                //此次是否重新登录
+                globalsInfo.isLogin=true;
                 //*
                 // android 有问题
                 //that.tip.string='login success:'+userid;
                 cc.sys.localStorage.setItem('userid',userid);
                 cc.sys.localStorage.setItem('username',username);
                 cc.sys.localStorage.setItem('token',token);
-                that.tip.string=cc.sys.localStorage.getItem('userid');
+                //that.tip.string=cc.sys.localStorage.getItem('userid');
                 //*/
                 cc.director.loadScene('main');
             }

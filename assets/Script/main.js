@@ -47,7 +47,7 @@ cc.Class({
         this.searchPreInst=cc.instantiate(this.searchPre);
         this.searchPreInst.setPosition(cc.p(0,0));
         //this.node.addChild(this.searchPreInst,1,1000);
-        
+        var that = this;
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -55,10 +55,6 @@ cc.Class({
             //显示公告
             //显示更新
 
-            var response = netInstance.emit('testMessage','net test');
-            netInstance.listeneOn('testMessage', function(obj){
-                console.log('testMessage response:'+obj);
-            });
             var userid = parseInt(cc.sys.localStorage.getItem('userid'));
             cc.log('userid type:',typeof(userid));
             var token = cc.sys.localStorage.getItem('token');
@@ -71,29 +67,41 @@ cc.Class({
                 cc.log('to verifyToken');
                 netInstance.emit('verifyToken', JSON.stringify({'userid':userid,'token':token}));
                 netInstance.listeneOn('verifyToken', function(obj){
-                    console.log(obj);
+                    console.log('verifyToken',obj);
                     var result = JSON.parse(obj);
                     if(result.error){
                         cc.log("verifyToken: "+result.error);
                         cc.director.loadScene('login');
                     }else{
+                        cc.log('verifyToken success');
+                        
                         globalsInfo.userid=userid;
                         globalsInfo.token=token;
                         globalsInfo.username=username;
+                        
+                        globalsInfo.value=result.value;
+                        globalsInfo.total=result.total;
                         globalsInfo.win=result.win;
                         globalsInfo.draw=result.draw;
                         globalsInfo.lost=result.lost;
                         cc.log(globalsInfo);
                         //tip=token;
-                        cc.log('verifyToken success');
-                        this.win.string=globalsInfo.win;
-                        this.draw.string=globalsInfo.draw;
-                        this.lost.string=globalsInfo.lost;
-                        this.total.string='总数:'+globalsInfo.total;
+                        
+                        that.win.string=globalsInfo.win;
+                        that.draw.string=globalsInfo.draw;
+                        that.lost.string=globalsInfo.lost;
+                        that.total.string='总数:'+globalsInfo.total;
                     }
                 });
             }
         });
+        if(globalsInfo.isLogin){
+            //重新登录的情况
+            this.win.string=globalsInfo.win;
+            this.draw.string=globalsInfo.draw;
+            this.lost.string=globalsInfo.lost;
+            this.total.string='总数:'+globalsInfo.total;
+        }
         //*/
         cc.audioEngine.playMusic(this.bgAudio, true);
     },
@@ -133,5 +141,8 @@ cc.Class({
                 }
             }
         });
+    },
+    rank:function(){
+        cc.director.loadScene('rank');
     },
 });
