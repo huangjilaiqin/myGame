@@ -101,7 +101,11 @@ cc.Class({
                 cc.log("uploadRecord: "+result.error);
             }else{
                 cc.log('uploadRecord success');
-    
+                globalsInfo.value=result.value;
+                globalsInfo.total=result.total;
+                globalsInfo.win=result.win;
+                globalsInfo.draw=result.draw;
+                globalsInfo.lost=result.lost;
             }
         });
         //*/

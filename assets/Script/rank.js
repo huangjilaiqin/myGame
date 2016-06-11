@@ -1,47 +1,71 @@
 const globalsInfo = require('globalsInfo');
 const Network = require('Network');
-
+var that;
 cc.Class({
     extends: cc.Component,
-
     properties: {
         scrollView: cc.ScrollView,
         prefabRankItem: cc.Prefab,
+        myname:'huangji',
     },
 
     onLoad: function () {
-        var that = this;
+        //把that写成局部的多次加在这个场景 populateList里面的this会跟这个that不一样
+        //写到外面有变成全局的了
+         that = this;
+        globalsInfo.mythis = this;
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();
         netInstance.emit('rank', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
-        
-        netInstance.listeneOn('rank', function(obj){
-            cc.log(obj);
+        var rankCallback = function foo(obj){
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
                 cc.log("rank: "+result.error);
             }else{
-                cc.log('rank success');
+                cc.log('rank success',that);
+                that.populateList(result.rank);
+            }
+        };
+        netInstance.listeneOn('rank',rankCallback);
+        /*
+        netInstance.listeneOn('rank', function(obj){
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("rank: "+result.error);
+            }else{
+                cc.log('rank success',that);
                 that.populateList(result.rank);
             }
         });
-        
+        */
     },
 
     populateList: function(rows) {
         var size = rows.length;
+        if(globalsInfo.mythis==this)
+            cc.log('this is equal');
+        else
+            cc.log('this is not equal');
+        this.content.removeAllChildren();
         for (var i = 0; i < size; i++) {
             var data = rows[i];
             var item = cc.instantiate(this.prefabRankItem);
+            
             var player={
                 'rank':i+1,
                 'name':data.username,
                 'total':data.total,
             };
             item.getComponent('rankItem').init(player);
+            
             this.content.addChild(item);
+            cc.log('add rank item'+i);
         }
+    },
+    back:function(){
+        cc.director.loadScene('main');
     },
 
     // called every frame, uncomment this function to activate update callback

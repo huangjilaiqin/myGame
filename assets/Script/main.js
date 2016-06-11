@@ -101,6 +101,12 @@ cc.Class({
             this.draw.string=globalsInfo.draw;
             this.lost.string=globalsInfo.lost;
             this.total.string='总数:'+globalsInfo.total;
+            globalsInfo.isLogin=0;
+        }else{  
+            this.win.string=globalsInfo.win;
+            this.draw.string=globalsInfo.draw;
+            this.lost.string=globalsInfo.lost;
+            this.total.string='总数:'+globalsInfo.total;
         }
         //*/
         cc.audioEngine.playMusic(this.bgAudio, true);
@@ -144,5 +150,8 @@ cc.Class({
     },
     rank:function(){
         cc.director.loadScene('rank');
+    },
+    fightRecord:function(){
+        cc.director.loadScene('fightRecords');
     },
 });
