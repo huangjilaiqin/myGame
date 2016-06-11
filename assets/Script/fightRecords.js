@@ -1,6 +1,6 @@
 const globalsInfo = require('globalsInfo');
 const Network = require('Network');
-
+var that;
 cc.Class({
     extends: cc.Component,
 
@@ -10,7 +10,7 @@ cc.Class({
     },
 
     onLoad: function () {
-        var that = this;
+        that = this;
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();
         netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
@@ -25,21 +25,11 @@ cc.Class({
                 that.populateList(result.datas);
             }
         });
-        /*
-        for (var i = 0; i < 10; i++) {
-            var item = cc.instantiate(this.prefabRecordItem);
-            var record={
-                username:'唐三炮'+i,
-                score:'23:19',
-            };
-            item.getComponent('fightItem').init(record);
-            this.content.addChild(item);
-        }
-        */
     },
 
     populateList: function(rows) {
         var size = rows.length;
+        this.content.removeAllChildren();
         for (var i = 0; i < size; i++) {
             var data = rows[i];
             var item = cc.instantiate(this.prefabRecordItem);

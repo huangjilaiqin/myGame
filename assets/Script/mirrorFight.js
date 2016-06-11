@@ -128,7 +128,7 @@ cc.Class({
         
         //设置点击事件
         //this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup,this);
-        this.node.on(cc.Node.EventType.TOUCH_START,this.myPushup.bind(this));
+        this.node.on(cc.Node.EventType.TOUCH_END,this.myPushup.bind(this));
         
         var fx1 = cc.instantiate(this.myCountScorePre);
         this.node.addChild(fx1,1,1002);

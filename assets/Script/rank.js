@@ -1,6 +1,6 @@
 const globalsInfo = require('globalsInfo');
 const Network = require('Network');
-var that;
+//var that;
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -12,7 +12,7 @@ cc.Class({
     onLoad: function () {
         //把that写成局部的多次加在这个场景 populateList里面的this会跟这个that不一样
         //写到外面有变成全局的了
-         that = this;
+        var that = this;
         globalsInfo.mythis = this;
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();
@@ -27,7 +27,10 @@ cc.Class({
                 that.populateList(result.rank);
             }
         };
-        netInstance.listeneOn('rank',rankCallback);
+        if(globalsInfo.kk===0 || 1){
+            netInstance.listeneOn('rank',rankCallback);
+            globalsInfo.kk=1;
+        }
         /*
         netInstance.listeneOn('rank', function(obj){
             var result = JSON.parse(obj);
@@ -43,6 +46,7 @@ cc.Class({
     },
 
     populateList: function(rows) {
+        cc.log('populateList');
         var size = rows.length;
         if(globalsInfo.mythis==this)
             cc.log('this is equal');
@@ -61,7 +65,6 @@ cc.Class({
             item.getComponent('rankItem').init(player);
             
             this.content.addChild(item);
-            cc.log('add rank item'+i);
         }
     },
     back:function(){
