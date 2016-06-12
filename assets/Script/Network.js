@@ -1,3 +1,5 @@
+cc.log('socketio:',SocketIO);
+cc.log('window.io:',window.io);
 var SocketIO = SocketIO || window.io;
 var Test = {
     test:function(){
@@ -12,6 +14,7 @@ var Test = {
     
 	getNetworkInstance:function(){
         cc.log('getNetworkInstance '+this.ip+":"+this.port);
+        //var SocketIO = SocketIO || window.io;
         var socket = SocketIO.connect(this.ip+":"+this.port);
         socket.on("connect", this.onConnect);
         socket.on("disconnect", function() {

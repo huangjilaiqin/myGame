@@ -222,7 +222,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 510
+      "height": 520
     },
     "_children": [
       {
@@ -236,7 +236,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 5
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -279,7 +279,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 510
+      "height": 520
     },
     "_children": [
       {
@@ -345,7 +345,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 510
+      "height": 520
     },
     "_children": [
       {
@@ -540,7 +540,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 239
+      "y": 260
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -586,7 +586,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 510
+      "height": 520
     },
     "_children": [
       {
@@ -809,7 +809,7 @@
     "_left": 0,
     "_right": 0,
     "_top": 60,
-    "_bottom": 70,
+    "_bottom": 60,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -942,8 +942,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 20,
-    "_lineHeight": 20,
+    "_fontSize": 16,
+    "_lineHeight": 16,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1192,12 +1192,12 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 20,
-    "_lineHeight": 20,
+    "_fontSize": 16,
+    "_lineHeight": 16,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "踢馆名单",
+    "_N$string": "踢场名单",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$overflow": 1
@@ -1442,8 +1442,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 20,
-    "_lineHeight": 20,
+    "_fontSize": 16,
+    "_lineHeight": 16,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1695,6 +1695,13 @@
     },
     "loadingPrefab": {
       "__uuid__": "56761ff5-726a-4ea7-9cba-7f99fc9c3c8c"
-    }
+    },
+    "fightBt": {
+      "__id__": 27
+    },
+    "beFightBt": {
+      "__id__": 34
+    },
+    "netInstance": null
   }
 ]

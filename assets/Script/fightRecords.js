@@ -10,6 +10,21 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        fightBt:{
+            default:null,
+            type:cc.Button,
+        },
+        beFightBt:{
+            default:null,
+            type:cc.Button,
+        },
+        netInstance:null,
+        onFightRecords:{
+            visiable:false,
+        },
+        onBeFightRecords:{
+            visiable:false,
+        },
     },
 
     onLoad: function () {
@@ -17,42 +32,130 @@ cc.Class({
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);
         
+        this.fightBt.interactable=false;
+        
         var that = this;
         this.content = this.scrollView.content;
-        var netInstance = Network.getInstance();
-        netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
         
-        netInstance.listeneOn('fightRecords', function(obj){
+        this.onFightRecords = function(obj){
+            cc.log('onFightRecords');
+            if(that.fightBt.interactable)
+                return;
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
                 cc.log("fightRecords: "+result.error);
             }else{
-                that.populateList(result.datas);
+                that.fightList(result.datas);
             }
-        });
+        };
+        this.onBeFightRecords = function(obj){
+            cc.log('onBeFightRecords');
+            if(that.beFightBt.interactable)
+                return;
+            that.node.removeChildByTag(2000);
+            var result = JSON.parse(obj);
+            if(result.error){
+                //提示
+                cc.log("beFightRecords: "+result.error);
+            }else{
+                that.beFightList(result.datas);
+            }
+        };
+        this.netInstance = Network.getInstance();
+        this.netInstance.listeneOn('fightRecords', this.onFightRecords);
+        this.netInstance.listeneOn('beFightRecords', this.onBeFightRecords);
+        
+        this.netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
     },
 
-    populateList: function(rows) {
+    fightList: function(rows) {
         var size = rows.length;
         for (var i = 0; i < size; i++) {
             var data = rows[i];
             var item = cc.instantiate(this.prefabRecordItem);
             var record={
-                username:data.username,
-                score:data.uscore+':'+data.oscore,
+                opponentName:data.username,
+                score:data.uscore+":"+data.oscore,
+                result:this.getResultTip(data.uscore,data.oscore),
             };
             item.getComponent('fightItem').init(record);
             this.content.addChild(item);
         }
     },
+    beFightList: function(rows) {
+        var size = rows.length;
+        for (var i = 0; i < size; i++) {
+            var data = rows[i];
+            var item = cc.instantiate(this.prefabRecordItem);
+            var record={
+                opponentName:data.username,
+                score:data.oscore+":"+data.uscore,
+                result:this.getResultTip(data.oscore,data.uscore),
+            };
+            item.getComponent('fightItem').init(record);
+            this.content.addChild(item);
+        }
+    },
+    getResultTip:function(scorea,scoreb){
+        var delta=0;
+        if(scorea>scoreb){
+            delta = scorea-scoreb;
+            if(delta<=3){
+                return '险胜';
+            }else if(delta/scoreb>=0.5){
+                return '完勝';
+            }else{
+                return '胜';
+            }
+        }else if (scorea<scoreb){
+            delta = scoreb-scorea;
+            if(delta<=3){
+                return '惜败';
+            }else if(delta/scoreb>=0.5){
+                return '惨败';
+            }else{
+                return '败';
+            }
+        }else{
+            return '平';
+        }
+    },
     back:function(){
         cc.director.loadScene('main');
     },
-    fightRecords:function(){},
-    beFightRecords:function(){
+    fightRecords:function(){
+        //按钮状态切换
+        this.fightBt.interactable=false;
+        this.beFightBt.interactable=true;
+        //清楚列表数据
+        this.content.removeAllChildren();
+        this.node.removeChildByTag(2000);
+        //转圈圈
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,0));
+        this.node.addChild(loading,1,2000);
+        //请求数据
         
+        this.netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        this.netInstance.listeneOn('fightRecords', this.onFightRecords);
+        
+    },
+    beFightRecords:function(){
+        this.beFightBt.interactable=false;
+        this.fightBt.interactable=true;
+        //清楚列表数据
+        this.content.removeAllChildren();
+        this.node.removeChildByTag(2000);
+        //转圈圈
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,0));
+        this.node.addChild(loading,1,2000);
+        //请求数据
+        
+        this.netInstance.emit('beFightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        this.netInstance.listeneOn('beFightRecords', this.onBeFightRecords);
     },
 
     // called every frame, uncomment this function to activate update callback

@@ -163,6 +163,7 @@ cc.Class({
     onLoad: function () {
         
         cc.log(globalsInfo.opponent);
+        this.myName.string=globalsInfo.username;
         this.opponentInfo = globalsInfo.opponent;
         
         this.opponentName.string='瑟瑟饿发抖';

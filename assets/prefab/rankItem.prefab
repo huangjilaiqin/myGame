@@ -29,8 +29,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 948,
-      "height": 100
+      "width": 960,
+      "height": 60
     },
     "_children": [
       {
@@ -52,7 +52,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 474,
+      "x": 480,
       "y": 0
     },
     "_skewX": 0,
@@ -100,8 +100,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 53.39,
-      "height": 40
+      "width": 90,
+      "height": 20
     },
     "_children": [],
     "_rotationX": 0,
@@ -110,7 +110,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -427.305,
+      "x": -435,
       "y": 0
     },
     "_skewX": 0,
@@ -144,15 +144,15 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 32,
-    "_lineHeight": 40,
-    "_enableWrapText": true,
+    "_fontSize": 20,
+    "_lineHeight": 20,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "100",
+    "_N$string": "100000",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
-    "_N$overflow": 0
+    "_N$overflow": 1
   },
   {
     "__type__": "cc.Widget",
@@ -164,7 +164,7 @@
     "_enabled": true,
     "isAlignOnce": false,
     "_alignFlags": 8,
-    "_left": 20,
+    "_left": 0,
     "_right": 0,
     "_top": 0,
     "_bottom": 0,
@@ -208,8 +208,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 96,
-      "height": 40
+      "width": 200,
+      "height": 20
     },
     "_children": [],
     "_rotationX": 0,
@@ -218,7 +218,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -384,
+      "x": -390,
       "y": 0
     },
     "_skewX": 0,
@@ -252,15 +252,15 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 32,
-    "_lineHeight": 40,
-    "_enableWrapText": true,
+    "_fontSize": 20,
+    "_lineHeight": 20,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "唐三炮",
-    "_N$horizontalAlign": 1,
+    "_N$string": "唐三炮唐三炮唐三",
+    "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
-    "_N$overflow": 0
+    "_N$overflow": 1
   },
   {
     "__type__": "cc.Widget",
@@ -316,8 +316,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 53.39,
-      "height": 40
+      "width": 150,
+      "height": 20
     },
     "_children": [],
     "_rotationX": 0,
@@ -326,7 +326,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 454,
+      "x": 460,
       "y": 0
     },
     "_skewX": 0,
@@ -360,15 +360,15 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 32,
-    "_lineHeight": 40,
-    "_enableWrapText": true,
+    "_fontSize": 20,
+    "_lineHeight": 20,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "888",
-    "_N$horizontalAlign": 1,
+    "_N$string": "888888888",
+    "_N$horizontalAlign": 2,
     "_N$verticalAlign": 1,
-    "_N$overflow": 0
+    "_N$overflow": 1
   },
   {
     "__type__": "cc.Widget",
@@ -424,7 +424,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 938,
+      "width": 960,
       "height": 2
     },
     "_children": [],
@@ -434,8 +434,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -5,
-      "y": -49
+      "x": 0,
+      "y": -29
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -498,7 +498,7 @@
     "isAlignOnce": false,
     "_alignFlags": 44,
     "_left": 0,
-    "_right": 10,
+    "_right": 0,
     "_top": 0,
     "_bottom": 0,
     "_isAbsLeft": true,
@@ -547,7 +547,7 @@
     "isAlignOnce": false,
     "_alignFlags": 40,
     "_left": 0,
-    "_right": 12,
+    "_right": 0,
     "_top": 0,
     "_bottom": 0,
     "_isAbsLeft": true,

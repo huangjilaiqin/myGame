@@ -11,12 +11,16 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        result:{
+            default:null,
+            type:cc.Label,
+        },
     },
     
     init:function(record){
-        cc.log(record);
-        this.playerName.string=record.username;
+        this.playerName.string=record.opponentName;
         this.score.string=record.score;
+        this.result.string=record.result;
     },
 
     // use this for initialization
