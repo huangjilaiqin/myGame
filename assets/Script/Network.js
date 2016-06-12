@@ -45,7 +45,12 @@ var Test = {
                     if(/^"/.test(obj))
                         obj = eval(obj);
                     callback(obj);
+                    //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
+                    this.removeAllListeners(eventName);
                 });
+            },
+            removeAllListeners:function(event){
+                socket.removeAllListeners(event);  
             },
 		};
 		return networkInstance;

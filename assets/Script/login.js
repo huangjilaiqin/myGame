@@ -6,15 +6,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
         username:{
             default:null,
             type:cc.EditBox,
@@ -26,6 +17,10 @@ cc.Class({
         tip:{
             default:null,
             type:cc.Label,
+        },
+        loadingPrefab: {
+            default: null,
+            type: cc.Prefab
         },
     },
 
@@ -44,14 +39,15 @@ cc.Class({
         var netInstance = Network.getInstance();
         
         //转圈圈
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,0));
+        this.node.addChild(loading,1,2000);
+        
         var that = this;
         netInstance.emit('login', JSON.stringify({'username':username,'passwd':passwd}));
         netInstance.listeneOn('login', function(obj){
-            cc.log(obj);
-            /*
-            if(/^"/.test(obj))
-                obj = eval(obj);
-                */
+            that.node.removeChildByTag(2000);
+            
             var result = JSON.parse(obj);
             
             that.tip.string = 'token:'+result.token+"#";
@@ -95,10 +91,13 @@ cc.Class({
         var passwd = this.passwd.string;
         var netInstance = Network.getInstance();
         
-        cc.log('register()',this.username.string,this.passwd.string);
-        netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,0));
+        this.node.addChild(loading,1,2000);
         
+        netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
         netInstance.listeneOn('register', function(obj){
+            that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);
             if(result.error){
                 //提示

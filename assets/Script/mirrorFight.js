@@ -66,6 +66,11 @@ cc.Class({
         opponentNextTime:0,
         //opponent 在update中累计的时间
         opponentUpdateTime:0,
+        //我上次做俯卧撑的时间
+        lastPushupTime:{
+            default:0,
+            visible:false,
+        }
     },
     gameOver:function(){
         cc.log('gameover');
@@ -179,6 +184,12 @@ cc.Class({
     myPushup:function(){
         if(this.countdownTime===0)
             return;
+        var now = new Date().getTime();
+        if(now-this.lastPushupTime<350){
+            cc.log('delta',now-this.lastPushupTime);
+            return;
+        }        
+        this.lastPushupTime=now;
         this.myCountScore.add();
         cc.audioEngine.playMusic(this.myPushupAudio);
     },
