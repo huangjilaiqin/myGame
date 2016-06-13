@@ -1,5 +1,11 @@
+
+if (!window.io) {
+    window.io = require('socket-io');
+    cc.log('use local socket-io.js');
+}
 cc.log('socketio:',SocketIO);
 cc.log('window.io:',window.io);
+cc.log(window);
 var SocketIO = SocketIO || window.io;
 var Test = {
     test:function(){

@@ -18,12 +18,17 @@ cc.Class({
             default:null,
             type:cc.Button,
         },
-        netInstance:null,
+        netInstance:{
+            default:null,
+            visible:false,
+        },
         onFightRecords:{
-            visiable:false,
+            default:null,
+            visible:false,
         },
         onBeFightRecords:{
-            visiable:false,
+            default:null,
+            visible:false,
         },
     },
 
