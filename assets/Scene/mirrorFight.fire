@@ -813,7 +813,7 @@
     "opponentPushupAudio": {
       "__uuid__": "82d848ea-52e6-4866-b23f-711e23703d89"
     },
-    "countdownTime": 20,
+    "countdownTime": 30,
     "gameStatus": 0,
     "opponentInfo": null,
     "opponentIndex": 0,

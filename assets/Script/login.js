@@ -14,6 +14,7 @@ cc.Class({
             default:null,
             type:cc.EditBox,
         },
+        
         tip:{
             default:null,
             type:cc.Label,
@@ -26,7 +27,9 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        
+        cc.log('globalsInfo.username',globalsInfo.username);
+        if(globalsInfo.username!==undefined)
+            this.username.string=globalsInfo.username;
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -36,6 +39,12 @@ cc.Class({
     login:function(){
         var username = this.username.string;
         var passwd = this.passwd.string;
+        this.tip.string=" ";
+        if(username.length===0 || passwd.length===0){
+            this.tip.string = "账号密码不能为空";
+            return;
+        }
+        
         var netInstance = Network.getInstance();
         
         //转圈圈
@@ -50,7 +59,7 @@ cc.Class({
             
             var result = JSON.parse(obj);
             
-            that.tip.string = 'token:'+result.token+"#";
+            //that.tip.string = 'token:'+result.token+"#";
             //that.tip2.string = 'ok';
             
             if(result.error){
@@ -87,29 +96,6 @@ cc.Class({
         });   
     },
     register:function(){
-        var username = this.username.string;
-        var passwd = this.passwd.string;
-        var netInstance = Network.getInstance();
-        
-        var loading = cc.instantiate(this.loadingPrefab);
-        loading.setPosition(cc.p(0,0));
-        this.node.addChild(loading,1,2000);
-        
-        var that = this;
-        netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
-        netInstance.listeneOn('register', function(obj){
-            that.node.removeChildByTag(2000);
-            var result = JSON.parse(obj);
-            if(result.error){
-                //提示
-                cc.log("register: "+result.error);
-                that.tip.string = result.error;
-            }else{
-                var userid = result.userid;
-                cc.log('register success, userid:'+userid);
-                that.tip.string = '注册成功,请登录';
-                //播放注册成功动画
-            }
-        });   
+          cc.director.loadScene('register');
     },
 });

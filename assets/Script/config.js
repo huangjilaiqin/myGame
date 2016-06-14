@@ -8,4 +8,4 @@ var onlineConfig = {
     serverPort:5002,
 };
 
-module.exports= publish?onlineConfig:config;
+module.exports=publish?onlineConfig:config;

@@ -113,14 +113,6 @@ cc.Class({
                 globalsInfo.lost=result.lost;
             }
         });
-        //*/
-        /*
-        var fx = cc.instantiate(this.start_countdown);
-        this.node.addChild(fx);
-        fx.setPosition(cc.p(0,0));
-        var tt = fx.getComponent('start_countdown');
-        tt.init(this);
-        //*/
     },
     
     gameStart:function(){
@@ -192,13 +184,14 @@ cc.Class({
         }        
         this.lastPushupTime=now;
         this.myCountScore.add();
-        cc.audioEngine.playMusic(this.myPushupAudio);
+        if(globalsInfo.isVolumeOpen)
+            cc.audioEngine.playMusic(this.myPushupAudio);
     },
     opponentPushup:function(){
         this.opponentCountScore.add();
-        //this.unschedule(this.opponentPushup);
         this.opponentCallbackWork=0;
-        cc.audioEngine.playEffect(this.opponentPushupAudio);
+        if(globalsInfo.isVolumeOpen)
+            cc.audioEngine.playEffect(this.opponentPushupAudio);
     },
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {

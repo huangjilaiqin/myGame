@@ -38,20 +38,59 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        volumeSettingBt:{
+            default:null,
+            type:cc.Button,
+        },
+        volumeOff:{
+            default:null,
+            type:cc.Sprite,
+        },
+        volumeOn:{
+            default:null,
+            type:cc.Sprite,
+        },
+        loadingPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
     },
-
+    changeVolumeBg:function(isOpen){
+        if(isOpen){
+            this.volumeOn.node.opacity=255;
+            this.volumeOff.node.opacity=0;
+        }else{
+            this.volumeOn.node.opacity=0;
+            this.volumeOff.node.opacity=255;
+        }
+    },
     // use this for initialization
     onLoad: function () {
         cc.log('main onLoad');
-
+        
+        var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
+        if(isVolumeOpen===null){
+            cc.sys.localStorage.setItem('isVolumeOpen',1);
+            isVolumeOpen='1';
+        }
+        isVolumeOpen=parseInt(isVolumeOpen);
+        cc.log('isVolumeOpen',isVolumeOpen);
+        globalsInfo.isVolumeOpen=isVolumeOpen;
+        this.changeVolumeBg(isVolumeOpen);
         
         var tip = this.tip;
         this.searchPreInst=cc.instantiate(this.searchPre);
         this.searchPreInst.setPosition(cc.p(0,0));
         //this.node.addChild(this.searchPreInst,1,1000);
+        if(globalsInfo.isStartUp===undefined){
+            var loading = cc.instantiate(this.loadingPrefab);
+            loading.setPosition(cc.p(0,50));
+            this.node.addChild(loading,1,2000);
+            globalsInfo.isStartUp=1;
+        }
         var that = this;
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
-            
+            that.node.removeChildByTag(2000);
             cc.log('onconnect');
             //显示广告
             //显示公告
@@ -104,14 +143,18 @@ cc.Class({
             this.lost.string=globalsInfo.lost;
             this.total.string='总数:'+globalsInfo.total;
             globalsInfo.isLogin=0;
+            this.node.removeChildByTag(2000);
         }else{  
-            this.win.string=globalsInfo.win;
-            this.draw.string=globalsInfo.draw;
-            this.lost.string=globalsInfo.lost;
-            this.total.string='总数:'+globalsInfo.total;
+            this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
+            this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
+            this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
+            var total = globalsInfo.total!==undefined?globalsInfo.total:0;
+            this.total.string='总数:'+total;
         }
         //*/
-        cc.audioEngine.playMusic(this.bgAudio, true);
+        if(globalsInfo.isVolumeOpen)
+            cc.audioEngine.playMusic(this.bgAudio, true);
+        
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -135,7 +178,6 @@ cc.Class({
                 this.node.removeChildByTag(1000);
                 tip=result.error;
             }else{
-                //cc.audioEngine.stopMusic();
                 cc.log('search result');
                 cc.log(result);
                 globalsInfo.opponent = result;
@@ -155,5 +197,18 @@ cc.Class({
     },
     fightRecord:function(){
         cc.director.loadScene('fightRecords');
+    },
+    volumeSetting:function(){
+        if(globalsInfo.isVolumeOpen==1){
+            globalsInfo.isVolumeOpen=0;
+            cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
+            cc.audioEngine.stopMusic();
+            this.changeVolumeBg(globalsInfo.isVolumeOpen);
+        }else{
+            globalsInfo.isVolumeOpen=1;
+            cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
+            cc.audioEngine.playMusic(this.bgAudio, true);
+            this.changeVolumeBg(globalsInfo.isVolumeOpen);
+        }
     },
 });
