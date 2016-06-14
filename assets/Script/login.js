@@ -95,6 +95,7 @@ cc.Class({
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);
         
+        var that = this;
         netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
         netInstance.listeneOn('register', function(obj){
             that.node.removeChildByTag(2000);
@@ -102,10 +103,11 @@ cc.Class({
             if(result.error){
                 //提示
                 cc.log("register: "+result.error);
+                that.tip.string = result.error;
             }else{
                 var userid = result.userid;
                 cc.log('register success, userid:'+userid);
-    
+                that.tip.string = '注册成功,请登录';
                 //播放注册成功动画
             }
         });   

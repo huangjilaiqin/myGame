@@ -75,6 +75,8 @@ var Test = {
         else
             this.port=port;
             
+        cc.log('ip:',this.ip,' port:'+this.port);
+            
         if(onConnect===undefined && this.onConnect===undefined)
             this.onConnect=function(){
                 cc.log('default onConnect');
