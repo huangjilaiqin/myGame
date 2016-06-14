@@ -1,4 +1,4 @@
-var publish=0;
+var publish=1;
 var config = {
     serverIp:"123.59.40.113",
     serverPort:5002,
