@@ -18,10 +18,6 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        searchPreInst:{
-            default:null,
-            visible:false,
-        },
         total:{
             default:null,
             type:cc.Label,
@@ -66,7 +62,11 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        cc.log('main onLoad');
+        
+        cc.log('main onLoad',location);
+        if(location.search.length===0){
+            cc.log('search is undefined');
+        }
         
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
@@ -79,9 +79,7 @@ cc.Class({
         this.changeVolumeBg(isVolumeOpen);
         
         var tip = this.tip;
-        this.searchPreInst=cc.instantiate(this.searchPre);
-        this.searchPreInst.setPosition(cc.p(0,0));
-        //this.node.addChild(this.searchPreInst,1,1000);
+        
         if(globalsInfo.isStartUp===undefined){
             var loading = cc.instantiate(this.loadingPrefab);
             loading.setPosition(cc.p(0,50));
@@ -164,12 +162,16 @@ cc.Class({
     searchOpponent:function(){
         var netInstance = Network.getInstance();
         var tip=this.tip;
-        this.node.addChild(this.searchPreInst,1,1000);
-        //this.node.addChild(this.searchPreInst,1,1000);
+        
+        var searchPre=cc.instantiate(this.searchPre);
+        searchPre.setPosition(cc.p(0,0));
+        this.node.addChild(searchPre,1,1000);
+        
         var begin = new Date().getTime();
         var that = this;
         netInstance.emit('searchOpponent', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
         netInstance.listeneOn('searchOpponent', function(obj){
+            
             cc.log(obj);
             var result = JSON.parse(obj);
             if(result.error){
@@ -185,6 +187,7 @@ cc.Class({
                 var delta = now-begin;
                 if(delta<2000){
                     that.schedule(function(){
+                        that.node.removeChildByTag(1000);
                         cc.director.loadScene('mirrorFight');
                         cc.audioEngine.stopMusic();
                     },(2000-delta)/1000);
