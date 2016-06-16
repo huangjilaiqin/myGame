@@ -17,6 +17,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        dialogPre: {
+            default: null,
+            type: cc.Prefab
+        },
         myCountScore:{
             default:null,
             visible:false,
@@ -167,12 +171,28 @@ cc.Class({
         this.opponentRecordsSize=this.opponentInfo.records.length;
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
         
+        if(globalsInfo.isShowFightTip!=1){
+            var dialogPre = cc.instantiate(this.dialogPre);
+            dialogPre.setPosition(cc.p(0,50));
+            this.node.addChild(dialogPre,1,3000);
+            var dialog = dialogPre.getComponent('dialog');
+            var that = this;
+            dialog.init("1.请将手机平放在地上\n2.用下巴或鼻子触摸屏幕\n\n为了荣誉，战斗吧！",function(){
+                that.node.removeChildByTag(3000);
+                that.startCountDown();
+                globalsInfo.isShowFightTip=1;
+                cc.sys.localStorage.setItem('isShowFightTip',1);
+            });
+        }else{
+            this.startCountDown();
+        }
+    },
+    startCountDown:function(){
         var fx = cc.instantiate(this.start_countdown);
         this.node.addChild(fx);
         fx.setPosition(cc.p(0,0));
         var tt = fx.getComponent('start_countdown');
         tt.init(this);
-        
     },
     myPushup:function(){
         if(this.countdownTime===0)

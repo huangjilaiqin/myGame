@@ -790,6 +790,9 @@
     "myCountScorePre": {
       "__uuid__": "7741ec88-1642-4b11-b902-6f89a6280ecb"
     },
+    "dialogPre": {
+      "__uuid__": "8f69b66c-67db-4412-ae23-ec589ce12154"
+    },
     "myCountScore": null,
     "opponentCountScorePre": {
       "__uuid__": "7741ec88-1642-4b11-b902-6f89a6280ecb"

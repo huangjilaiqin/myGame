@@ -70,7 +70,6 @@ cc.Class({
         };
         this.netInstance = Network.getInstance();
         this.netInstance.listeneOn('fightRecords', this.onFightRecords);
-        this.netInstance.listeneOn('beFightRecords', this.onBeFightRecords);
         
         this.netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
     },

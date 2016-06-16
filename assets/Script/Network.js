@@ -3,20 +3,14 @@ if (!window.io) {
     window.io = require('socket-io');
     cc.log('use local socket-io.js');
 }
-cc.log('socketio:',SocketIO);
-cc.log('window.io:',window.io);
-cc.log(window);
 var SocketIO = SocketIO || window.io;
 var Test = {
-    test:function(){
-        cc.log('Test.test()');
-        return 'Test return';
-    },
     ip:"",
     port:null,
     instance:null,
     socket:null,
     onConnect:null,
+    multiCallbackMap:{},
     
 	getNetworkInstance:function(){
         cc.log('getNetworkInstance '+this.ip+":"+this.port);
@@ -50,6 +44,18 @@ var Test = {
             },
             listeneOn:function(eventName,callback){
                 //socket.on(eventName,callback);
+                socket.on(eventName,function(obj){
+                    if(/^"/.test(obj))
+                        obj = eval(obj);
+                    callback(obj);
+                    //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
+                    this.removeAllListeners(eventName);
+                });
+            },
+            appendOn:function(eventName,callback){
+                if(multiCallbackMap.eventName===undefined)
+                    multiCallbackMap.eventName={};
+                multiCallbackMap.eventName
                 socket.on(eventName,function(obj){
                     if(/^"/.test(obj))
                         obj = eval(obj);
