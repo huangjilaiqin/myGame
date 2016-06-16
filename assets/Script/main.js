@@ -3,6 +3,7 @@ const Network = require('Network');
 const globalsInfo = require('globalsInfo');
 const config = require('config');
 
+
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -62,10 +63,11 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        
-        cc.log('main onLoad',location);
-        if(location.search.length===0){
-            cc.log('search is undefined');
+        if (!cc.sys.isNative) {
+            cc.log('main onLoad',location);
+            if(location.search.length===0){
+                cc.log('search is undefined');
+            }
         }
         
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
@@ -80,6 +82,7 @@ cc.Class({
         
         var tip = this.tip;
         
+        //第一次启动
         if(globalsInfo.isStartUp===undefined){
             var loading = cc.instantiate(this.loadingPrefab);
             loading.setPosition(cc.p(0,50));
@@ -87,12 +90,16 @@ cc.Class({
             globalsInfo.isStartUp=1;
         }
         var that = this;
+        //重连加载数据,1.加载全局数据 2.本场景相关操作
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             that.node.removeChildByTag(2000);
             cc.log('onconnect');
             //显示广告
             //显示公告
             //显示更新
+
+            var isShowFightTip = cc.sys.localStorage.getItem('isShowFightTip');
+            globalsInfo.isShowFightTip=isShowFightTip;
 
             var userid = parseInt(cc.sys.localStorage.getItem('userid'));
             cc.log('userid type:',typeof(userid));
@@ -133,6 +140,9 @@ cc.Class({
                     }
                 });
             }
+        });
+        netInstance.listeneOn('reconnect',function(){
+            cc.log('main onreconnect');
         });
         if(globalsInfo.isLogin){
             //重新登录的情况
@@ -196,9 +206,17 @@ cc.Class({
         });
     },
     rank:function(){
+        
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,50));
+        this.node.addChild(loading,1,2000);
         cc.director.loadScene('rank');
+        
     },
     fightRecord:function(){
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,50));
+        this.node.addChild(loading,1,2000);
         cc.director.loadScene('fightRecords');
     },
     volumeSetting:function(){
