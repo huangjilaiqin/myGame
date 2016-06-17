@@ -1,5 +1,6 @@
 const Network = require('Network');
 const globalsInfo = require('globalsInfo');
+const config = require('config');
 
 cc.Class({
     extends: cc.Component,
@@ -9,7 +10,7 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        fightResult: {
+        invitationFightResult: {
             default: null,
             type: cc.Prefab
         },
@@ -18,6 +19,10 @@ cc.Class({
             type: cc.Prefab
         },
         dialogPre: {
+            default: null,
+            type: cc.Prefab
+        },
+        loadingPrefab: {
             default: null,
             type: cc.Prefab
         },
@@ -77,12 +82,13 @@ cc.Class({
         //*
         this.node.removeChildByTag(1002);
         this.node.removeChildByTag(1001);
-        var fx = cc.instantiate(this.fightResult);
-        var tt = fx.getComponent('fightResult');
+        var fx = cc.instantiate(this.invitationFightResult);
+        var tt = fx.getComponent('invitationFightResult');
         tt.init(this.myCountScore.getScore(),this.opponentCountScore.getScore());
         fx.setPosition(cc.p(0,0));
         this.node.addChild(fx);
-        
+
+        /*
         var records = this.myCountScore.getRecords();
         var netInstance = Network.getInstance();
         var userid = globalsInfo.userid;
@@ -96,6 +102,7 @@ cc.Class({
             'oRecordSize':this.opponentRecordsSize,
             'records':records,
         };
+        
         netInstance.emit('uploadRecord', JSON.stringify(requestObj));
         
         netInstance.listeneOn('uploadRecord', function(obj){
@@ -113,6 +120,7 @@ cc.Class({
                 globalsInfo.lost=result.lost;
             }
         });
+        */
     },
     
     gameStart:function(){
@@ -153,35 +161,50 @@ cc.Class({
     },
     
     onLoad: function () {
-        
-        cc.log(globalsInfo.opponent);
-        this.myName.string=globalsInfo.username;
-        this.opponentInfo = globalsInfo.opponent;
-        
-        this.opponentName.string='瑟瑟饿发抖';
-        
-        this.countdown.string=this.countdownTime;
-        //*
-        this.opponentName.string=this.opponentInfo.username;
-        
-        this.opponentRecordsSize=this.opponentInfo.records.length;
-        this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
-        
-        if(globalsInfo.isShowFightTip!=1){
-            var dialogPre = cc.instantiate(this.dialogPre);
-            dialogPre.setPosition(cc.p(0,50));
-            this.node.addChild(dialogPre,1,3000);
-            var dialog = dialogPre.getComponent('dialog');
-            var that = this;
-            dialog.init("1.请将手机平放在地上\n2.用下巴或鼻子触摸屏幕\n\n为了荣誉，战斗吧！",function(){
-                that.node.removeChildByTag(3000);
-                that.startCountDown();
-                globalsInfo.isShowFightTip=1;
-                cc.sys.localStorage.setItem('isShowFightTip',1);
-            });
+
+        var userid=1;
+        var recordid=30;
+        if (!cc.sys.isNative) {
+            cc.log('main onLoad',location);
+            if(location.search.length===0){
+                cc.log('search is undefined');
+            }
         }else{
-            this.startCountDown();
+            return;
         }
+        this.myName.string='本少侠';
+        //总时间
+        this.countdown.string=this.countdownTime;
+
+        var that = this;
+        //转圈圈
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,50));
+        this.node.addChild(loading,1,2000);
+
+        var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
+            netInstance.emit('record', JSON.stringify({'userid':userid,'recordid':recordid}));
+            netInstance.listeneOn('record',function(obj){
+                that.node.removeChildByTag(2000);
+
+                that.opponentInfo = JSON.parse(obj);
+                cc.log(that.opponentInfo);  
+                
+                that.opponentName.string=that.opponentInfo.username;
+                that.opponentRecordsSize=that.opponentInfo.record.length;
+                that.opponentNextTime=that.opponentInfo.record[that.opponentIndex];
+                cc.log(that.opponentIndex,that.opponentInfo.record);
+                cc.log('opponentNextTime',that.opponentNextTime);
+                var dialogPre = cc.instantiate(that.dialogPre);
+                dialogPre.setPosition(cc.p(0,50));
+                that.node.addChild(dialogPre,1,3000);
+                var dialog = dialogPre.getComponent('dialog');
+                dialog.init("1.请将手机平放在地上\n2.用下巴或鼻子触摸屏幕\n\n为了荣誉，战斗吧！",function(){
+                    that.node.removeChildByTag(3000);
+                    that.startCountDown();
+                });
+            });
+        });
     },
     startCountDown:function(){
         var fx = cc.instantiate(this.start_countdown);
@@ -215,9 +238,7 @@ cc.Class({
         //*
         if(this.oppponentStatus===1){
             this.opponentUpdateTime+=dt;
-            
             if(this.opponentUpdateTime>=this.opponentNextTime){
-                cc.log(this.opponentUpdateTime,this.opponentNextTime);
                 this.opponentPushup();
                 //重新计时准备下一次调用,把多出来的时间计入到下一轮减少误差
                 this.opponentUpdateTime=this.opponentUpdateTime-this.opponentNextTime;
@@ -229,7 +250,7 @@ cc.Class({
                     if(this.gameStatus===3)
                         this.gameOver();
                 }else{
-                    this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
+                    this.opponentNextTime=this.opponentInfo.record[this.opponentIndex];
                 }
             }
         }

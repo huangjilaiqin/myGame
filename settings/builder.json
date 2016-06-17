@@ -1,5 +1,12 @@
 {
-  "excludeScenes": [],
+  "excludeScenes": [
+    "6b5a627c-42b5-40a6-a5c3-32fc272bac21",
+    "20a21d17-4428-44cd-9f32-7686832acabc",
+    "c20d96bf-60ae-4d61-9be5-94726e0b7fc4",
+    "55ff26f7-3f8f-4445-861d-103315a21e99",
+    "342cf730-bf80-4fc3-a80c-e8c8e28111c5",
+    "7c8e6578-3df5-4f10-94e6-9750f6d0e2da"
+  ],
   "orientation": {
     "landscapeLeft": false,
     "landscapeRight": false,
@@ -7,7 +14,7 @@
     "upsideDown": false
   },
   "packageName": "org.cocos2d.myGame",
-  "startScene": "c20d96bf-60ae-4d61-9be5-94726e0b7fc4",
+  "startScene": "6469ede0-c30b-47b9-9ab0-e3a2cf324fbe",
   "title": "myGame",
   "webOrientation": "portrait"
 }
