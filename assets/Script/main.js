@@ -92,7 +92,7 @@ cc.Class({
         var that = this;
         //重连加载数据,1.加载全局数据 2.本场景相关操作
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
-            that.node.removeChildByTag(2000);
+            
             cc.log('onconnect');
             //显示广告
             //显示公告
@@ -133,6 +133,9 @@ cc.Class({
                         cc.log(globalsInfo);
                         //tip=token;
                         
+                        if(!that.node)
+                            return;
+                        that.node.removeChildByTag(2000);
                         that.win.string=globalsInfo.win;
                         that.draw.string=globalsInfo.draw;
                         that.lost.string=globalsInfo.lost;
@@ -140,9 +143,6 @@ cc.Class({
                     }
                 });
             }
-        });
-        netInstance.listeneOn('reconnect',function(){
-            cc.log('main onreconnect');
         });
         if(globalsInfo.isLogin){
             //重新登录的情况
@@ -196,8 +196,14 @@ cc.Class({
                 var now = new Date().getTime();
                 var delta = now-begin;
                 if(delta<2000){
-                    that.schedule(function(){
+                    that.scheduleOnce(function(){
                         that.node.removeChildByTag(1000);
+                        
+                        //处理web版第一次加载对战场景慢的问题
+                        var loading = cc.instantiate(this.loadingPrefab);
+                        loading.setPosition(cc.p(0,50));
+                        that.node.addChild(loading,1,2000);
+                        
                         cc.director.loadScene('mirrorFight');
                         cc.audioEngine.stopMusic();
                     },(2000-delta)/1000);

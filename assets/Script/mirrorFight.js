@@ -206,6 +206,7 @@ cc.Class({
     opponentPushup:function(){
         this.opponentCountScore.add();
         this.opponentCallbackWork=0;
+        cc.log('globalsInfo.isVolumeOpen',globalsInfo.isVolumeOpen);
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playEffect(this.opponentPushupAudio);
     },

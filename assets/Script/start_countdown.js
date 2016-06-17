@@ -35,11 +35,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        cc.log('countdown onLOad');
-        /*
-        this.start3.node.active=true;
-        this.start3.node.runAction(cc.sequence(cc.scaleTo(0.6, 2, 2),cc.fadeOut(0.4)));
-        */
+        
         //*
         this.scheduleOnce(function(){
             this.start3.node.active=true;
@@ -60,27 +56,6 @@ cc.Class({
                 },this)));
         },0);
         //*/
-        /*
-        this.scheduleOnce(function(){
-                        this.start2.node.active=true;
-                        this.start2.node.runAction(cc.sequence(cc.scaleTo(0.6, 2, 2),cc.fadeOut(0.4),cc.callFunc(function(){
-                                this.start2.node.opacity=0;
-                                this.start2.node.active=false;
-                            },this)));
-                        cc.audioEngine.playEffect(this.readygoAudio);
-                    },1.05);
-                    */
-                    /*
-        var game = this.game;
-        this.scheduleOnce(function(){
-            this.start1.node.active=true;
-            this.start1.node.runAction(cc.sequence(cc.scaleTo(0.6, 2, 2),cc.fadeOut(0.4),
-            cc.callFunc(function(){
-                this.start1.node.opacity=1;  
-                this.game.gameStart();
-            },this)));
-        },2.05);
-        */
     },
     
 
