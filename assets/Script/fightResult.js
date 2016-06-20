@@ -1,3 +1,4 @@
+const globalsInfo = require('globalsInfo');
 cc.Class({
     extends: cc.Component,
 
@@ -127,7 +128,8 @@ cc.Class({
         
         if(this.myScore>this.opponentScore){
             //播放动画
-            cc.audioEngine.playEffect(this.winAudio);
+            if(globalsInfo.isVolumeOpen)
+                cc.audioEngine.playEffect(this.winAudio);
             delta = this.myScore-this.opponentScore;
             if(delta<=3){
                 //险胜
@@ -153,7 +155,8 @@ cc.Class({
                 },this)));
             }
         }else if (this.myScore<this.opponentScore){
-            cc.audioEngine.playEffect(this.loseAudio);
+            if(globalsInfo.isVolumeOpen)
+                cc.audioEngine.playEffect(this.loseAudio);
             delta = this.opponentScore-this.myScore;
             cc.log('delta:', delta);
             cc.log('rate',delta/this.opponentScore);

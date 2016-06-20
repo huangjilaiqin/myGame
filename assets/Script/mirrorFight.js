@@ -129,12 +129,12 @@ cc.Class({
         
         var fx1 = cc.instantiate(this.myCountScorePre);
         this.node.addChild(fx1,1,1002);
-        fx1.setPosition(cc.p(-55,0));
+        fx1.setPosition(cc.p(-100,0));
         this.myCountScore = fx1.getComponent('countScore');
         
         var fx2 = cc.instantiate(this.opponentCountScorePre);
         this.node.addChild(fx2,1,1001);
-        fx2.setPosition(cc.p(55,0));
+        fx2.setPosition(cc.p(100,0));
         this.opponentCountScore = fx2.getComponent('countScore');
     },
     ticktack:function(){

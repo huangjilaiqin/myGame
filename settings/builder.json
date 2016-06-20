@@ -9,5 +9,5 @@
   "packageName": "org.cocos2d.myGame",
   "startScene": "c20d96bf-60ae-4d61-9be5-94726e0b7fc4",
   "title": "myGame",
-  "webOrientation": "portrait"
+  "webOrientation": "auto"
 }

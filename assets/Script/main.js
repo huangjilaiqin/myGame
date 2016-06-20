@@ -130,7 +130,6 @@ cc.Class({
                         globalsInfo.win=result.win;
                         globalsInfo.draw=result.draw;
                         globalsInfo.lost=result.lost;
-                        cc.log(globalsInfo);
                         //tip=token;
                         
                         if(!that.node)
@@ -237,5 +236,13 @@ cc.Class({
             cc.audioEngine.playMusic(this.bgAudio, true);
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
         }
+    },
+    quit:function(){
+        cc.sys.localStorage.removeItem('isVolumeOpen');
+        cc.sys.localStorage.removeItem('userid');
+        cc.sys.localStorage.removeItem('token');
+        cc.sys.localStorage.removeItem('isShowFightTip');
+        cc.sys.localStorage.removeItem('username');
+        cc.director.loadScene('login');
     },
 });

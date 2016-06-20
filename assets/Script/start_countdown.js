@@ -1,3 +1,4 @@
+const globalsInfo = require('globalsInfo');
 cc.Class({
     extends: cc.Component,
 
@@ -44,7 +45,8 @@ cc.Class({
                     this.start3.node.active=false;
                     
                     this.start2.node.active=true;
-                    cc.audioEngine.playEffect(this.readygoAudio);
+                    if(globalsInfo.isVolumeOpen)
+                        cc.audioEngine.playEffect(this.readygoAudio);
                     this.start2.node.runAction(cc.sequence(cc.scaleTo(0.6, 2, 2),cc.fadeOut(0.4),cc.callFunc(function(){
                         cc.log('fock');
                         this.start1.node.active=true;

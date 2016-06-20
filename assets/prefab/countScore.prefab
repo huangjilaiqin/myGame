@@ -88,8 +88,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 44.49,
-      "height": 80
+      "width": 55.62,
+      "height": 100
     },
     "_children": [],
     "_rotationX": 0,
@@ -129,8 +129,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 80,
-    "_lineHeight": 80,
+    "_fontSize": 100,
+    "_lineHeight": 100,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -160,7 +160,9 @@
     "scoreLabel": {
       "__id__": 3
     },
-    "score": 0
+    "score": 0,
+    "records": [],
+    "lastTime": null
   },
   {
     "__type__": "cc.PrefabInfo",

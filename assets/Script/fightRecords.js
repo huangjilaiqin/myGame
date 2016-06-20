@@ -44,10 +44,12 @@ cc.Class({
         
         this.onFightRecords = function(obj){
             cc.log('onFightRecords');
+            
             if(that.fightBt.interactable)
                 return;
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);
+            cc.log(result);
             if(result.error){
                 //提示
                 cc.log("fightRecords: "+result.error);
@@ -61,6 +63,7 @@ cc.Class({
                 return;
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);
+            cc.log(result);
             if(result.error){
                 //提示
                 cc.log("beFightRecords: "+result.error);
@@ -83,6 +86,7 @@ cc.Class({
                 opponentName:data.username,
                 score:data.uscore+":"+data.oscore,
                 result:this.getResultTip(data.uscore,data.oscore),
+                time:data.fighttime,
             };
             item.getComponent('fightItem').init(record);
             this.content.addChild(item);
@@ -97,6 +101,7 @@ cc.Class({
                 opponentName:data.username,
                 score:data.oscore+":"+data.uscore,
                 result:this.getResultTip(data.oscore,data.uscore),
+                time:data.fighttime,
             };
             item.getComponent('fightItem').init(record);
             this.content.addChild(item);
@@ -135,6 +140,7 @@ cc.Class({
         this.beFightBt.interactable=true;
         //清楚列表数据
         this.content.removeAllChildren();
+        this.scrollView.scrollToTop();
         this.node.removeChildByTag(2000);
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);
@@ -151,6 +157,7 @@ cc.Class({
         this.fightBt.interactable=true;
         //清楚列表数据
         this.content.removeAllChildren();
+        this.scrollView.scrollToTop();
         this.node.removeChildByTag(2000);
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);
