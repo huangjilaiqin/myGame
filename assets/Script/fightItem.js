@@ -35,6 +35,8 @@ cc.Class({
         var nowHour = now.getHours();
         var nowMinute = now.getMinutes();
         var nowSecond = now.getSeconds();
+        var todayBegin = new Date(nowYear,nowMonth,nowDay);
+
         var time = new Date(Date.parse(timeStr));
         var oldYear = time.getFullYear();
         var oldMonth = time.getMonth();
@@ -42,18 +44,11 @@ cc.Class({
         var oldHour = time.getHours();
         var oldMinute = time.getMinutes();
         var oldSecond = time.getSeconds();
-        cc.log(time);
-        cc.log(oldYear);
-        cc.log(oldMonth);
-        cc.log(oldDay);
-        cc.log(oldHour);
-        cc.log(oldMinute);
-        cc.log(oldSecond);
         if(nowYear==oldYear && nowMonth==oldMonth && nowDay==oldDay){
             if(nowHour==oldHour){
                 if(nowMinute==oldMinute){
                     if(nowSecond==oldSecond){
-                        return '刚才';
+                        return '刚刚';
                     }else{
                         return (nowSecond-oldSecond)+"秒前";
                     }
@@ -61,10 +56,50 @@ cc.Class({
                     return (nowMinute-oldMinute)+"分钟前";
                 }
             }else{
-                return (nowHour-oldHour)+"小时前";
+                var timeName = '';
+                if(oldHour>=0 && oldHour<5){
+                    timeName='凌晨';
+                }else if(oldHour>=5 && oldHour<9){
+                    timeName='早上';
+                }else if(oldHour>=9 && oldHour<12){
+                    timeName='上午';
+                }else if(oldHour>=12 && oldHour<15){
+                    timeName='中午';
+                }else if(oldHour>=15 && oldHour<18){
+                    timeName='下午';
+                }else if(oldHour>=18 && oldHour<24){
+                    timeName='晚上';
+                }
+                return timeName+" "+oldHour+":"+oldMinute;
             }
+        }else if((todayBegin.getTime()-time.getTime())/3600000<=24){
+            cc.log((time.getTime()-todayBegin.getTime())/3600000);
+            cc.log(time);
+            var timeName = '';
+            if(oldHour>=0 && oldHour<5){
+                timeName='凌晨';
+            }else if(oldHour>=5 && oldHour<9){
+                timeName='早上';
+            }else if(oldHour>=9 && oldHour<12){
+                timeName='上午';
+            }else if(oldHour>=12 && oldHour<15){
+                timeName='中午';
+            }else if(oldHour>=15 && oldHour<18){
+                timeName='下午';
+            }else if(oldHour>=18 && oldHour<24){
+                timeName='晚上';
+            }
+            if(oldMinute<10)
+                oldMinute="0"+oldMinute;
+            if(oldHour<10)
+                oldHour="0"+oldHour;
+            return "昨天 "+timeName+" "+oldHour+":"+oldMinute;
         }else{
-            return oldYear+"-"+oldMonth+"-"+oldDay+" "+oldHour+":"+oldMinute+":"+oldSecond;
+            if(oldMinute<10)
+                oldMinute="0"+oldMinute;
+            if(oldHour<10)
+                oldHour="0"+oldHour;
+            return oldMonth+"月"+oldDay+"日 "+oldHour+":"+oldMinute;
         }
     },
     // use this for initialization

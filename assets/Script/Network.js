@@ -10,7 +10,6 @@ var Test = {
     instance:null,
     socket:null,
     onConnect:null,
-    multiCallbackMap:{},
     
 	getNetworkInstance:function(){
         cc.log('getNetworkInstance '+this.ip+":"+this.port);
@@ -44,27 +43,28 @@ var Test = {
             },
             listeneOn:function(eventName,callback){
                 //socket.on(eventName,callback);
+                var that = this;
                 socket.on(eventName,function(obj){
                     if(/^"/.test(obj))
                         obj = eval(obj);
                     callback(obj);
                     //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
-                    this.removeAllListeners(eventName);
+                    that.removeAllListeners(eventName);
                 });
             },
             appendOn:function(eventName,callback){
-                if(multiCallbackMap.eventName===undefined)
-                    multiCallbackMap.eventName={};
-                multiCallbackMap.eventName
+                
+                var that = this;
                 socket.on(eventName,function(obj){
                     if(/^"/.test(obj))
                         obj = eval(obj);
                     callback(obj);
                     //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
-                    this.removeAllListeners(eventName);
+                    that.removeAllListeners(eventName);
                 });
             },
             removeAllListeners:function(event){
+                //这里有平台问题
                 socket.removeAllListeners(event);  
             },
 		};
