@@ -4,6 +4,9 @@ if (!window.io) {
     cc.log('use local socket-io.js');
 }
 var SocketIO = SocketIO || window.io;
+
+const config = require('config');
+
 var Test = {
     ip:"",
     port:null,
@@ -72,12 +75,12 @@ var Test = {
 	},
 	getInstance:function(ip,port,onConnect){
         if(ip===undefined && this.ip===undefined)
-            this.ip="123.59.40.113";
+            this.ip=config.serverIp;
         else
             this.ip=ip;
             
         if(port===undefined && this.port===undefined)
-            this.port=5002;
+            this.port=config.serverPort;
         else
             this.port=port;
             

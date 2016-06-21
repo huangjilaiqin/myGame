@@ -2531,7 +2531,7 @@
   {
     "__type__": "cc.Canvas",
     "_name": "",
-    "_objFlags": 3670016,
+    "_objFlags": 0,
     "node": {
       "__id__": 2
     },
@@ -2552,7 +2552,9 @@
       "__id__": 2
     },
     "_enabled": true,
-    "bgAudio": "/Users/laiqin/Documents/git/myGame/assets/audio/background.mp3",
+    "bgAudio": {
+      "__uuid__": "1c86cd6c-8179-45a5-977d-85fef59856e9"
+    },
     "tip": {
       "__id__": 33
     },
