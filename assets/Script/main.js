@@ -19,10 +19,6 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        hpPre: {
-            default: null,
-            type: cc.Prefab
-        },
         total:{
             default:null,
             type:cc.Label,
@@ -55,6 +51,30 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        hpPercent:{
+            default:0,
+            visible:false,
+        },
+        hpValueLabel:{
+            default:null,
+            type:cc.Label,
+        },
+        totalPercent:{
+            default:0,
+            visible:false,
+        },
+        totalValueLabel:{
+            default:null,
+            type:cc.Label,
+        },
+        hpProgressBar:{
+            default:null,
+            type:cc.ProgressBar,
+        },
+        totalProgressBar:{
+            default:null,
+            type:cc.ProgressBar,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -73,7 +93,7 @@ cc.Class({
                 cc.log('search is undefined');
             }
         }
-        
+        cc.log('hpPercent',this.hpPercent);
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
             cc.sys.localStorage.setItem('isVolumeOpen',1);
@@ -143,6 +163,14 @@ cc.Class({
                         that.draw.string=globalsInfo.draw;
                         that.lost.string=globalsInfo.lost;
                         that.total.string=globalsInfo.total;
+                        
+                        cc.log(result.remainhp);
+                        cc.log(result.hp);
+                        
+                        that.hpPercent=result.remainhp/result.hp;
+                        that.hpValueLabel.string=result.remainhp+"/"+result.hp
+                        that.totalPercent=result.total/(result.total+100);
+                        that.totalValueLabel.string=result.total+"/"+(result.total+100)
                     }
                 });
             }
@@ -169,9 +197,20 @@ cc.Class({
     },
 
     // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
+    update: function (dt) {
+        if(this.totalPercent!==0)
+            this._updateProgressBar(this.totalProgressBar,this.totalPercent,dt);
+        if(this.hpPercent!==0)
+            this._updateProgressBar(this.hpProgressBar,this.hpPercent,dt);
+    },
+    
+    _updateProgressBar: function(progressBar,percent,dt){
+        var progress = progressBar.progress;
+        if(progress < percent){
+            progress += dt/2;
+            progressBar.progress = progress;
+        }
+    },
     searchOpponent:function(){
         var netInstance = Network.getInstance();
         var tip=this.tip;
