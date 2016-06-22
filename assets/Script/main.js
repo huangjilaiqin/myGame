@@ -19,6 +19,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        hpPre: {
+            default: null,
+            type: cc.Prefab
+        },
         total:{
             default:null,
             type:cc.Label,
@@ -138,7 +142,7 @@ cc.Class({
                         that.win.string=globalsInfo.win;
                         that.draw.string=globalsInfo.draw;
                         that.lost.string=globalsInfo.lost;
-                        that.total.string='总数:'+globalsInfo.total;
+                        that.total.string=globalsInfo.total;
                     }
                 });
             }
@@ -148,7 +152,7 @@ cc.Class({
             this.win.string=globalsInfo.win;
             this.draw.string=globalsInfo.draw;
             this.lost.string=globalsInfo.lost;
-            this.total.string='总数:'+globalsInfo.total;
+            this.total.string=globalsInfo.total;
             globalsInfo.isLogin=0;
             this.node.removeChildByTag(2000);
         }else{  
@@ -156,7 +160,7 @@ cc.Class({
             this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
             var total = globalsInfo.total!==undefined?globalsInfo.total:0;
-            this.total.string='总数:'+total;
+            this.total.string=total;
         }
         //*/
         if(globalsInfo.isVolumeOpen)
