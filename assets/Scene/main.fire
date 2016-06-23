@@ -1159,7 +1159,7 @@
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "2/5",
+    "_N$string": "0/0",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
@@ -1723,7 +1723,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 130.13,
+      "width": 50.04,
       "height": 36
     },
     "_children": [],
@@ -1770,7 +1770,7 @@
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "381/390",
+    "_N$string": "0/0",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
