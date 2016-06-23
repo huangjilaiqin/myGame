@@ -26,7 +26,7 @@ cc.Class({
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
-                cc.log("rank: "+result.error);
+                cc.log("rank error: "+result);
             }else{
                 that.populateList(result.rank);
             }

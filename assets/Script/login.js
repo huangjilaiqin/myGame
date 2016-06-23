@@ -30,6 +30,12 @@ cc.Class({
         cc.log('globalsInfo.username',globalsInfo.username);
         if(globalsInfo.username!==undefined)
             this.username.string=globalsInfo.username;
+        else{
+            var username = cc.sys.localStorage.getItem('username');
+            cc.log(username);
+            if(username!==null)
+                this.username.string=username;
+        }
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -81,6 +87,11 @@ cc.Class({
                 globalsInfo.win=result.win;
                 globalsInfo.draw=result.draw;
                 globalsInfo.lost=result.lost;
+                
+                globalsInfo.todaytask=result.todaytask;
+                globalsInfo.todayamount=result.todayamount;
+                globalsInfo.remainhp=result.remainhp;
+                globalsInfo.hp=result.hp;
                 //此次是否重新登录
                 globalsInfo.isLogin=true;
                 //*

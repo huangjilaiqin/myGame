@@ -154,6 +154,11 @@ cc.Class({
                         globalsInfo.win=result.win;
                         globalsInfo.draw=result.draw;
                         globalsInfo.lost=result.lost;
+                                
+                        globalsInfo.todaytask=result.todaytask;
+                        globalsInfo.todayamount=result.todayamount;
+                        globalsInfo.remainhp=result.remainhp;
+                        globalsInfo.hp=result.hp;
                         //tip=token;
                         
                         if(!that.node)
@@ -164,13 +169,11 @@ cc.Class({
                         that.lost.string=globalsInfo.lost;
                         that.total.string=globalsInfo.total;
                         
-                        cc.log(result.remainhp);
-                        cc.log(result.hp);
-                        
                         that.hpPercent=result.remainhp/result.hp;
                         that.hpValueLabel.string=result.remainhp+"/"+result.hp
-                        that.totalPercent=result.total/(result.total+100);
-                        that.totalValueLabel.string=result.total+"/"+(result.total+100)
+                        
+                        that.totalPercent=result.todayamount/result.todaytask;
+                        that.totalValueLabel.string=result.todayamount+"/"+result.todaytask;
                     }
                 });
             }
@@ -181,6 +184,14 @@ cc.Class({
             this.draw.string=globalsInfo.draw;
             this.lost.string=globalsInfo.lost;
             this.total.string=globalsInfo.total;
+            
+            
+            this.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+            this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp
+            
+            this.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+            this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
+            
             globalsInfo.isLogin=0;
             this.node.removeChildByTag(2000);
         }else{  
@@ -189,6 +200,16 @@ cc.Class({
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
             var total = globalsInfo.total!==undefined?globalsInfo.total:0;
             this.total.string=total;
+            
+            //*
+            if(globalsInfo.hp!==undefined){
+                this.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+                this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp
+                
+                this.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+                this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
+            }
+            //*/
         }
         //*/
         if(globalsInfo.isVolumeOpen)
@@ -207,7 +228,7 @@ cc.Class({
     _updateProgressBar: function(progressBar,percent,dt){
         var progress = progressBar.progress;
         if(progress < percent){
-            progress += dt/2;
+            progress += dt;
             progressBar.progress = progress;
         }
     },
@@ -285,7 +306,7 @@ cc.Class({
         cc.sys.localStorage.removeItem('userid');
         cc.sys.localStorage.removeItem('token');
         cc.sys.localStorage.removeItem('isShowFightTip');
-        cc.sys.localStorage.removeItem('username');
+        //cc.sys.localStorage.removeItem('username');
         cc.director.loadScene('login');
     },
 });

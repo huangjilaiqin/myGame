@@ -99,18 +99,21 @@ cc.Class({
         netInstance.emit('uploadRecord', JSON.stringify(requestObj));
         
         netInstance.listeneOn('uploadRecord', function(obj){
-            cc.log(obj);
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
-                cc.log("uploadRecord: "+result.error);
+                cc.log("uploadRecord error: "+result);
             }else{
-                cc.log('uploadRecord success');
+                cc.log('uploadRecord success',result);
                 globalsInfo.value=result.value;
                 globalsInfo.total=result.total;
                 globalsInfo.win=result.win;
                 globalsInfo.draw=result.draw;
                 globalsInfo.lost=result.lost;
+                globalsInfo.todaytask=result.todaytask;
+                globalsInfo.todayamount=result.todayamount;
+                globalsInfo.remainhp=result.remainhp;
+                globalsInfo.hp=result.hp;
             }
         });
     },

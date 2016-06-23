@@ -6,7 +6,7 @@
     "portrait": true,
     "upsideDown": false
   },
-  "packageName": "com.lessask.pushup1",
+  "packageName": "com.lessask.pushup",
   "startScene": "c20d96bf-60ae-4d61-9be5-94726e0b7fc4",
   "title": "pushup",
   "webOrientation": "auto"

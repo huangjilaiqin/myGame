@@ -1953,8 +1953,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 1578,
+      "y": -311
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -2637,7 +2637,7 @@
     "_alignFlags": 1,
     "_left": 0,
     "_right": 0,
-    "_top": 640,
+    "_top": 951,
     "_bottom": 0,
     "_isAbsLeft": true,
     "_isAbsRight": true,
@@ -4217,7 +4217,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 927,
+      "x": 1560,
       "y": -101
     },
     "_skewX": 0,
