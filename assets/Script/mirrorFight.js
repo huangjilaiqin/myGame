@@ -89,14 +89,12 @@ cc.Class({
         var token = globalsInfo.token;
         var opponentId = this.opponentInfo.userid;
         var requestObj = {
-            'userid':userid,
-            'token':token,
             'opponentId':opponentId,
             'oRecordId':this.opponentInfo.id,
             'oRecordSize':this.opponentRecordsSize,
             'records':records,
         };
-        netInstance.emit('uploadRecord', JSON.stringify(requestObj));
+        netInstance.emit('uploadRecord', requestObj);
         
         netInstance.listeneOn('uploadRecord', function(obj){
             var result = JSON.parse(obj);
@@ -172,7 +170,7 @@ cc.Class({
         
         if(globalsInfo.isShowFightTip!=1){
             var dialogPre = cc.instantiate(this.dialogPre);
-            dialogPre.setPosition(cc.p(0,50));
+            
             this.node.addChild(dialogPre,1,3000);
             var dialog = dialogPre.getComponent('dialog');
             var that = this;
@@ -182,6 +180,15 @@ cc.Class({
                 globalsInfo.isShowFightTip=1;
                 cc.sys.localStorage.setItem('isShowFightTip',1);
             });
+            /*
+            //动画
+            dialogPre.setPosition(cc.p(0,640));
+           
+            var moveAction = cc.moveBy(1,0,-200);
+            moveAction.easing(cc.easeBounceOut(3));
+            dialogPre.runAction(cc.sequence(moveAction));
+            */
+            
         }else{
             this.startCountDown();
         }

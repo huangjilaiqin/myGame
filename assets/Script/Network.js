@@ -6,6 +6,7 @@ if (!window.io) {
 var SocketIO = SocketIO || window.io;
 
 const config = require('config');
+const globalsInfo = require('globalsInfo');
 
 var Test = {
     ip:"",
@@ -41,8 +42,16 @@ var Test = {
             
 		var networkInstance = {
             emit:function(eventName,obj){
-                cc.log(eventName,obj);
-                socket.emit(eventName,obj);
+                cc.log('emit:'+eventName,obj);
+                cc.log('global',globalsInfo);
+                //添加公共参数
+                obj.versionCode=config.versionCode;
+                obj.versionName=config.versionName;
+                obj.userid=globalsInfo.userid,
+                obj.token=globalsInfo.token;
+                
+                //JSON.stringify({'userid':userid,'token':token})
+                socket.emit(eventName,JSON.stringify(obj));
             },
             listeneOn:function(eventName,callback){
                 //socket.on(eventName,callback);

@@ -88,39 +88,6 @@ cc.Class({
         fx.setPosition(cc.p(0,0));
         this.node.addChild(fx);
 
-        /*
-        var records = this.myCountScore.getRecords();
-        var netInstance = Network.getInstance();
-        var userid = globalsInfo.userid;
-        var token = globalsInfo.token;
-        var opponentId = this.opponentInfo.userid;
-        var requestObj = {
-            'userid':userid,
-            'token':token,
-            'opponentId':opponentId,
-            'oRecordId':this.opponentInfo.id,
-            'oRecordSize':this.opponentRecordsSize,
-            'records':records,
-        };
-        
-        netInstance.emit('uploadRecord', JSON.stringify(requestObj));
-        
-        netInstance.listeneOn('uploadRecord', function(obj){
-            cc.log(obj);
-            var result = JSON.parse(obj);
-            if(result.error){
-                //提示
-                cc.log("uploadRecord: "+result.error);
-            }else{
-                cc.log('uploadRecord success');
-                globalsInfo.value=result.value;
-                globalsInfo.total=result.total;
-                globalsInfo.win=result.win;
-                globalsInfo.draw=result.draw;
-                globalsInfo.lost=result.lost;
-            }
-        });
-        */
     },
     
     gameStart:function(){
@@ -183,7 +150,7 @@ cc.Class({
         this.node.addChild(loading,1,2000);
 
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
-            netInstance.emit('record', JSON.stringify({'userid':userid,'recordid':recordid}));
+            netInstance.emit('record', {'recordid':recordid});
             netInstance.listeneOn('record',function(obj){
                 that.node.removeChildByTag(2000);
 

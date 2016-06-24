@@ -60,7 +60,7 @@ cc.Class({
         this.node.addChild(loading,1,2000);
         
         var that = this;
-        netInstance.emit('register', JSON.stringify({'username':username,'passwd':passwd}));
+        netInstance.emit('register', {'username':username,'passwd':passwd});
         netInstance.listeneOn('register', function(obj){
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);

@@ -20,7 +20,7 @@ cc.Class({
         var that = this;
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();
-        netInstance.emit('rank', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        netInstance.emit('rank', {});
         netInstance.listeneOn('rank', function(obj){
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);

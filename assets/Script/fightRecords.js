@@ -74,7 +74,7 @@ cc.Class({
         this.netInstance = Network.getInstance();
         this.netInstance.listeneOn('fightRecords', this.onFightRecords);
         
-        this.netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        this.netInstance.emit('fightRecords', {});
     },
 
     fightList: function(rows) {
@@ -148,7 +148,7 @@ cc.Class({
         this.node.addChild(loading,1,2000);
         //请求数据
         
-        this.netInstance.emit('fightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        this.netInstance.emit('fightRecords', {});
         this.netInstance.listeneOn('fightRecords', this.onFightRecords);
         
     },
@@ -165,7 +165,7 @@ cc.Class({
         this.node.addChild(loading,1,2000);
         //请求数据
         
-        this.netInstance.emit('beFightRecords', JSON.stringify({'userid':globalsInfo.userid,'token':globalsInfo.token}));
+        this.netInstance.emit('beFightRecords', {});
         this.netInstance.listeneOn('beFightRecords', this.onBeFightRecords);
     },
 
