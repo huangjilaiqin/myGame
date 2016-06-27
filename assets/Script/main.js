@@ -225,16 +225,19 @@ cc.Class({
                     }
                 });
                 netInstance.onOneEventOneFunc('bonus',function(datas){
+                    cc.log('bonus', datas);
                     if(globalsInfo.bonus===undefined){
                         globalsInfo.bonus=datas;
-                    }else
+                    }else{
                         globalsInfo.bonus=globalsInfo.bonus.concat(datas);
+                    }
+                    cc.log(globalsInfo.bonus);
+                    
                 });
-                netInstance.emit('checkBonus',{});
+                //netInstance.emit('checkBonus',{});
             }
         });
         
-        netInstance.emit('bonus',{});
         if(globalsInfo.isLogin){
             //重新登录的情况
             this.win.string=globalsInfo.win;
@@ -269,6 +272,12 @@ cc.Class({
         }
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playMusic(this.bgAudio, true);
+            
+        if(globalsInfo.bonus!==undefined && globalsInfo.bonus.length>0){
+            var toast = cc.instantiate(that.toastPrefab);
+            toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
+            that.node.addChild(toast,1);
+        }
         
     },
 
@@ -317,9 +326,12 @@ cc.Class({
             if(result.error){
                 //提示
                 cc.log("search: "+result.error);
-                this.node.removeChildByTag(1000);
+                that.node.removeChildByTag(1000);
                 if(result.errno==100){
                     //提示体力值不够
+                    var toast = cc.instantiate(that.toastPrefab);
+                    toast.getComponent('toast').init('体力值不足，请完成今日任务,赚取体力值',3);
+                    that.node.addChild(toast,1);
                 }else{
                     tip=result.error;
                 }
