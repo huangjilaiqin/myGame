@@ -109,14 +109,9 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         
-        
+        //界面动效
         this.initAction();
-        if (!cc.sys.isNative) {
-            cc.log('main onLoad',location);
-            if(location.search.length===0){
-                cc.log('search is undefined');
-            }
-        }
+        
         cc.log('hpPercent',this.hpPercent);
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
@@ -130,13 +125,38 @@ cc.Class({
         
         var tip = this.tip;
         
+        
+        
         //第一次启动
+        cc.log('isStartUp:',globalsInfo.isStartUp);
+        this.showAimation=1;
+        this.checkBonus=1;
         if(globalsInfo.isStartUp===undefined){
             var loading = cc.instantiate(this.loadingPrefab);
             loading.setPosition(cc.p(0,50));
             this.node.addChild(loading,1,2000);
+            
+            //第一次启动让这两个进度条从0开始增加到指定值
+            this.hpProgressBar.progress=0;
+            this.totalProgressBar.progress=0;
+            
             globalsInfo.isStartUp=1;
+            this.checkBonus=0;
+        }else{
+            cc.log('else',globalsInfo.hpPercent);
+            cc.log('else',globalsInfo.totalPercent);
+            this.hpProgressBar.progress=globalsInfo.hpPercent!==undefined?globalsInfo.hpPercent:0;
+            this.totalProgressBar.progress=globalsInfo.totalPercent!==undefined?globalsInfo.totalPercent:0;
+            //做一个动画开关,1秒后播放掉血和每日任务进度条
+            this.showAimation=0;
+            
+            this.scheduleOnce(function(){
+                cc.log('before',this.showAimation);
+                this.showAimation=1;
+                cc.log('after',this.showAimation);
+            },0.5);
         }
+        cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
         //重连加载数据,1.加载全局数据 2.本场景相关操作
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
@@ -196,14 +216,25 @@ cc.Class({
                         that.total.string=globalsInfo.total;
                         
                         that.hpPercent=result.remainhp/result.hp;
-                        that.hpValueLabel.string=result.remainhp+"/"+result.hp
+                        globalsInfo.hpPercent=that.hpPercent;
+                        that.hpValueLabel.string=result.remainhp+"/"+result.hp;
                         
                         that.totalPercent=result.todayamount/result.todaytask;
+                        globalsInfo.totalPercent=that.totalPercent;
                         that.totalValueLabel.string=result.todayamount+"/"+result.todaytask;
                     }
                 });
+                netInstance.onOneEventOneFunc('bonus',function(datas){
+                    if(globalsInfo.bonus===undefined){
+                        globalsInfo.bonus=datas;
+                    }else
+                        globalsInfo.bonus=globalsInfo.bonus.concat(datas);
+                });
+                netInstance.emit('checkBonus',{});
             }
         });
+        
+        netInstance.emit('bonus',{});
         if(globalsInfo.isLogin){
             //重新登录的情况
             this.win.string=globalsInfo.win;
@@ -212,10 +243,10 @@ cc.Class({
             this.total.string=globalsInfo.total;
             
             
-            this.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
-            this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp
+            globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+            this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
             
-            this.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+            globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
             this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
             
             globalsInfo.isLogin=0;
@@ -229,15 +260,13 @@ cc.Class({
             
             //*
             if(globalsInfo.hp!==undefined){
-                this.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
-                this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp
+                globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+                this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
                 
-                this.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+                globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
                 this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
             }
-            //*/
         }
-        //*/
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playMusic(this.bgAudio, true);
         
@@ -245,16 +274,28 @@ cc.Class({
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
-        if(this.totalPercent!==0)
-            this._updateProgressBar(this.totalProgressBar,this.totalPercent,dt);
-        if(this.hpPercent!==0)
-            this._updateProgressBar(this.hpProgressBar,this.hpPercent,dt);
+        if(this.showAimation===1)
+            this._updateProgressBar(this.totalProgressBar,globalsInfo.totalPercent,dt);
+        if(this.showAimation===1)
+            this._updateProgressBar(this.hpProgressBar,globalsInfo.hpPercent,dt);
     },
     
     _updateProgressBar: function(progressBar,percent,dt){
         var progress = progressBar.progress;
         if(progress < percent){
-            progress += dt;
+            if(globalsInfo.isStartUp===1)
+                progress += dt;
+            else
+                progress+= dt/3;
+            if(progress>percent){
+                progress=percent;
+                globalsInfo.isStartUp=2;
+            }
+            progressBar.progress = progress;
+        }else if(progress>percent){
+            progress -= dt/4;
+            if(progress<percent)
+                progress=percent;
             progressBar.progress = progress;
         }
     },

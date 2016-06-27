@@ -75,6 +75,17 @@ var Test = {
                     that.removeAllListeners(eventName);
                 });
             },
+            //一个事件只有一个回调
+            onOneEventOneFunc:function(eventName,callback){
+                socket.removeAllListeners(eventName);
+                cc.log('==========on=============');
+                socket.on(eventName,function(obj){
+                    if(/^"/.test(obj))
+                        obj = eval(obj);
+                    callback(obj);
+                    //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
+                });
+            },
             removeAllListeners:function(event){
                 //这里有平台问题
                 socket.removeAllListeners(event);  

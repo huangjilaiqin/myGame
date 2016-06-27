@@ -31,6 +31,7 @@ cc.Class({
                 that.populateList(result.rank);
             }
         });
+        netInstance.emit('bonus',{});
     },
 
     populateList: function(rows) {
