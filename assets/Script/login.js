@@ -90,8 +90,12 @@ cc.Class({
                 
                 globalsInfo.todaytask=result.todaytask;
                 globalsInfo.todayamount=result.todayamount;
+                globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+                
                 globalsInfo.remainhp=result.remainhp;
                 globalsInfo.hp=result.hp;
+                globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+                
                 //此次是否重新登录
                 globalsInfo.isLogin=true;
                 //*

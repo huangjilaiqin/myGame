@@ -112,7 +112,6 @@ cc.Class({
         //界面动效
         this.initAction();
         
-        cc.log('hpPercent',this.hpPercent);
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
             cc.sys.localStorage.setItem('isVolumeOpen',1);
@@ -143,8 +142,6 @@ cc.Class({
             globalsInfo.isStartUp=1;
             this.checkBonus=0;
         }else{
-            cc.log('else',globalsInfo.hpPercent);
-            cc.log('else',globalsInfo.totalPercent);
             this.hpProgressBar.progress=globalsInfo.hpPercent!==undefined?globalsInfo.hpPercent:0;
             this.totalProgressBar.progress=globalsInfo.totalPercent!==undefined?globalsInfo.totalPercent:0;
             //做一个动画开关,1秒后播放掉血和每日任务进度条
@@ -203,58 +200,31 @@ cc.Class({
                                 
                         globalsInfo.todaytask=result.todaytask;
                         globalsInfo.todayamount=result.todayamount;
+                        globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+                        
                         globalsInfo.remainhp=result.remainhp;
                         globalsInfo.hp=result.hp;
+                        globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
                         //tip=token;
                         
                         if(!that.node)
                             return;
                         that.node.removeChildByTag(2000);
-                        that.win.string=globalsInfo.win;
-                        that.draw.string=globalsInfo.draw;
-                        that.lost.string=globalsInfo.lost;
-                        that.total.string=globalsInfo.total;
-                        
-                        that.hpPercent=result.remainhp/result.hp;
-                        globalsInfo.hpPercent=that.hpPercent;
-                        that.hpValueLabel.string=result.remainhp+"/"+result.hp;
-                        
-                        that.totalPercent=result.todayamount/result.todaytask;
-                        globalsInfo.totalPercent=that.totalPercent;
-                        that.totalValueLabel.string=result.todayamount+"/"+result.todaytask;
+            
+                        that.initVerifyOrRelogin(that);
                     }
                 });
-                netInstance.onOneEventOneFunc('bonus',function(datas){
-                    cc.log('bonus', datas);
-                    if(globalsInfo.bonus===undefined){
-                        globalsInfo.bonus=datas;
-                    }else{
-                        globalsInfo.bonus=globalsInfo.bonus.concat(datas);
-                    }
-                    cc.log(globalsInfo.bonus);
-                    
-                });
-                //netInstance.emit('checkBonus',{});
             }
         });
         
         if(globalsInfo.isLogin){
             //重新登录的情况
-            this.win.string=globalsInfo.win;
-            this.draw.string=globalsInfo.draw;
-            this.lost.string=globalsInfo.lost;
-            this.total.string=globalsInfo.total;
-            
-            
-            globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
-            this.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
-            
-            globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
-            this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
             
             globalsInfo.isLogin=0;
             this.node.removeChildByTag(2000);
-        }else{  
+            
+            this.initVerifyOrRelogin(this);
+        }else{
             this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
             this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
@@ -277,10 +247,32 @@ cc.Class({
             var toast = cc.instantiate(that.toastPrefab);
             toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
             that.node.addChild(toast,1);
+            //展示领取,领取后移除
         }
-        
     },
-
+    
+    //重新登录或验证token成后初始化
+    initVerifyOrRelogin:function(that){
+        var netInstance = Network.getInstance();
+        
+        that.win.string=globalsInfo.win;
+        that.draw.string=globalsInfo.draw;
+        that.lost.string=globalsInfo.lost;
+        that.total.string=globalsInfo.total;
+        
+        that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
+        that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
+        
+        netInstance.onOneEventOneFunc('bonus',function(datas){
+            if(globalsInfo.bonus===undefined){
+                globalsInfo.bonus=datas;
+            }else{
+                globalsInfo.bonus=globalsInfo.bonus.concat(datas);
+            }
+        });
+        netInstance.emit('bonus',{});
+    },
+    
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         if(this.showAimation===1)
