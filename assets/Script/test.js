@@ -15,13 +15,22 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        receivePre:{
+            default: null,
+            type: cc.Prefab
+        },
     },
 
     // use this for initialization
     onLoad: function () {
+        /*
         var broadcast = cc.instantiate(this.broadcastPre);
         broadcast.setPosition(cc.p(0,0));
         this.node.addChild(broadcast,1);
+        */
+        var receive = cc.instantiate(this.receivePre);
+        receive.setPosition(cc.p(0,0));
+        this.node.addChild(receive,1);
     },
 
     // called every frame, uncomment this function to activate update callback
