@@ -272,8 +272,7 @@ cc.Class({
                 var bonusId = datas['bonusId'];
                 delete globalsInfo.bonus.bonusId;
                 that.node.removeChildByTag(3000);
-                that.node.removeChildByTag(2000);
-                cc.log(typeof(globalsInfo.bonus));
+                that.node.removeChildByTag(2000);S
                 cc.log(globalsInfo.bonus);
                 if(globalsInfo.bonus.length>0)
                     that.getBonus();
