@@ -1,4 +1,4 @@
-
+const Utils = require('Utils');
 const Network = require('Network');
 const globalsInfo = require('globalsInfo');
 const config = require('config');
@@ -255,13 +255,37 @@ cc.Class({
         }
     },
     
-    getBonus:function(){
+    showBonus:function(bonusId){
+        var bonus = globalsInfo.bonus[bonusId];
+        this.showAimation=1;
+        cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
+        cc.log(bonus);
+        globalsInfo.remainhp+=bonus.items[0].num;
+        globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+        this.hpValueLabel.string=globalsInfo.remainhp+'/'+globalsInfo.hp;
+        cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
+        
+        var that=this;
+        var myBonusId=bonusId;
+        that.scheduleOnce(function(){
+            console.log('scheduleOnce',myBonusId);
+            delete globalsInfo.bonus[myBonusId];
+            cc.log(bonusId,globalsInfo.bonus);
+            for(var bonusId in globalsInfo.bonus){
+                that.getBonus(bonusId);
+                break;
+            }
+        },1);
+        
+    },
+    
+    getBonus:function(bonusId){
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
         var that = this;
         receive.getComponent('receiveBonus').init(function(){
             var netInstance = Network.getInstance();
-            netInstance.emit('receiveBonus', {'bonusId':1});
+            netInstance.emit('receiveBonus', {'bonusId':bonusId});
             //loading
             var loading = cc.instantiate(that.loadingPrefab);
             //loading.setPosition(cc.p(0,0));
@@ -270,12 +294,11 @@ cc.Class({
             netInstance.listeneOn('receiveBonus',function(obj){
                 var datas = JSON.parse(obj);
                 var bonusId = datas['bonusId'];
-                delete globalsInfo.bonus.bonusId;
                 that.node.removeChildByTag(3000);
-                that.node.removeChildByTag(2000);S
-                cc.log(globalsInfo.bonus);
-                if(globalsInfo.bonus.length>0)
-                    that.getBonus();
+                that.node.removeChildByTag(2000);
+                
+                that.showBonus(bonusId);
+                
             });
         });
         this.node.addChild(receive,1,2000);
@@ -298,7 +321,9 @@ cc.Class({
             if(globalsInfo.bonus===undefined){
                 globalsInfo.bonus=datas;
             }else{
-                globalsInfo.bonus=globalsInfo.bonus.concat(datas);
+                for(var bonusId in datas){
+                    globalsInfo.bonus[bonusId]=datas[bonusId];
+                }
             }
             if(that.name=='Canvas<main>'){
                 /*
@@ -306,7 +331,10 @@ cc.Class({
                 toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
                 that.node.addChild(toast,1);
                 */
-                that.getBonus();
+                for(var bonusId in globalsInfo.bonus){
+                    that.getBonus(bonusId);
+                    break;
+                }
             }
         });
         netInstance.emit('bonus',{});
