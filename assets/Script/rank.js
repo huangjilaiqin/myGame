@@ -16,7 +16,7 @@ cc.Class({
         var loading = cc.instantiate(this.loadingPrefab);
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);
-        
+        cc.log(this.name);
         var that = this;
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();

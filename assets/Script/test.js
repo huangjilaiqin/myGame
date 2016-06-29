@@ -1,3 +1,6 @@
+
+const Network = require('Network');
+
 cc.Class({
     extends: cc.Component,
 
@@ -19,6 +22,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        loadingPrefab:{
+            default: null,
+            type: cc.Prefab
+        },
     },
 
     // use this for initialization
@@ -28,9 +35,26 @@ cc.Class({
         broadcast.setPosition(cc.p(0,0));
         this.node.addChild(broadcast,1);
         */
+        
+        //*领取奖励
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
-        this.node.addChild(receive,1);
+        var that = this;
+        receive.getComponent('receiveBonus').init(function(){
+            var netInstance = Network.getInstance();
+            netInstance.emit('getBonus', {'bonusId':1});
+            //loading
+            var loading = cc.instantiate(that.loadingPrefab);
+            //loading.setPosition(cc.p(0,0));
+            that.node.addChild(loading,1,3000);
+            
+            netInstance.listenOn('getBonus',function(){
+                that.node.removeChildByTag(3000);
+                that.node.removeChildByTag(2000);
+            });
+        });
+        this.node.addChild(receive,1,2000);
+        //*/
     },
 
     // called every frame, uncomment this function to activate update callback

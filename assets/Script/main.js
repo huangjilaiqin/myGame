@@ -87,6 +87,10 @@ cc.Class({
             default:null,
             type:cc.Sprite,
         },
+        receivePre:{
+            default: null,
+            type: cc.Prefab
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -251,6 +255,33 @@ cc.Class({
         }
     },
     
+    getBonus:function(){
+        var receive = cc.instantiate(this.receivePre);
+        receive.setPosition(cc.p(0,0));
+        var that = this;
+        receive.getComponent('receiveBonus').init(function(){
+            var netInstance = Network.getInstance();
+            netInstance.emit('receiveBonus', {'bonusId':1});
+            //loading
+            var loading = cc.instantiate(that.loadingPrefab);
+            //loading.setPosition(cc.p(0,0));
+            that.node.addChild(loading,1,3000);
+            
+            netInstance.listeneOn('receiveBonus',function(obj){
+                var datas = JSON.parse(obj);
+                var bonusId = datas['bonusId'];
+                delete globalsInfo.bonus.bonusId;
+                that.node.removeChildByTag(3000);
+                that.node.removeChildByTag(2000);
+                cc.log(typeof(globalsInfo.bonus));
+                cc.log(globalsInfo.bonus);
+                if(globalsInfo.bonus.length>0)
+                    that.getBonus();
+            });
+        });
+        this.node.addChild(receive,1,2000);
+    },
+    
     //重新登录或验证token成后初始化
     initVerifyOrRelogin:function(that){
         var netInstance = Network.getInstance();
@@ -263,11 +294,20 @@ cc.Class({
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
         
-        netInstance.onOneEventOneFunc('bonus',function(datas){
+        netInstance.onOneEventOneFunc('bonus',function(obj){
+            var datas = JSON.parse(obj);
             if(globalsInfo.bonus===undefined){
                 globalsInfo.bonus=datas;
             }else{
                 globalsInfo.bonus=globalsInfo.bonus.concat(datas);
+            }
+            if(that.name=='Canvas<main>'){
+                /*
+                var toast = cc.instantiate(that.toastPrefab);
+                toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
+                that.node.addChild(toast,1);
+                */
+                that.getBonus();
             }
         });
         netInstance.emit('bonus',{});
@@ -313,11 +353,9 @@ cc.Class({
         netInstance.emit('searchOpponent', {});
         netInstance.listeneOn('searchOpponent', function(obj){
             
-            cc.log(obj);
             var result = JSON.parse(obj);
             if(result.error){
                 //提示
-                cc.log("search: "+result.error);
                 that.node.removeChildByTag(1000);
                 if(result.errno==100){
                     //提示体力值不够
@@ -328,8 +366,6 @@ cc.Class({
                     tip=result.error;
                 }
             }else{
-                cc.log('search result');
-                cc.log(result);
                 globalsInfo.opponent = result;
                 var now = new Date().getTime();
                 var delta = now-begin;
