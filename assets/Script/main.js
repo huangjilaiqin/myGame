@@ -247,11 +247,11 @@ cc.Class({
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playMusic(this.bgAudio, true);
             
-        if(globalsInfo.bonus!==undefined && globalsInfo.bonus.length>0){
-            var toast = cc.instantiate(that.toastPrefab);
-            toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
-            that.node.addChild(toast,1);
-            //展示领取,领取后移除
+        if(globalsInfo.bonus!==undefined){
+            for(var bonusId in globalsInfo.bonus){
+                this.getBonus(bonusId);
+                break;
+            }
         }
     },
     
@@ -282,8 +282,9 @@ cc.Class({
     getBonus:function(bonusId){
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
+        cc.log(globalsInfo.bonus);
         var that = this;
-        receive.getComponent('receiveBonus').init(function(){
+        receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusId],function(){
             var netInstance = Network.getInstance();
             netInstance.emit('receiveBonus', {'bonusId':bonusId});
             //loading
@@ -318,6 +319,7 @@ cc.Class({
         
         netInstance.onOneEventOneFunc('bonus',function(obj){
             var datas = JSON.parse(obj);
+            cc.log('bonus',datas);
             if(globalsInfo.bonus===undefined){
                 globalsInfo.bonus=datas;
             }else{
@@ -326,11 +328,6 @@ cc.Class({
                 }
             }
             if(that.name=='Canvas<main>'){
-                /*
-                var toast = cc.instantiate(that.toastPrefab);
-                toast.getComponent('toast').init("奖励："+JSON.stringify(globalsInfo.bonus),5);
-                that.node.addChild(toast,1);
-                */
                 for(var bonusId in globalsInfo.bonus){
                     that.getBonus(bonusId);
                     break;
@@ -448,15 +445,13 @@ cc.Class({
         cc.director.loadScene('login');
     },
     totalToast:function(){
-        
         var toast = cc.instantiate(this.toastPrefab);
-        toast.getComponent('toast').init('完成后奖励3点体力值\n战斗吧,勇士！',3);
+        toast.getComponent('toast').init('完成每日任务奖励3点体力值\n战斗吧,勇士！',3);
         this.node.addChild(toast,1);
-        
     },
     hpToast:function(){
         var toast = cc.instantiate(this.toastPrefab);
-        toast.getComponent('toast').init('1.赢一局增加1点体力值\n2.输一局减少1点体力值\n3.每10min恢复1点体力',3);
-        this.node.addChild(toast,1,2500);
+        toast.getComponent('toast').init('1.对战消耗一点体力值\n2.赢一局奖励2点体力值\n3.每天凌晨重置体力值',3);
+        this.node.addChild(toast,1);
     },
 });

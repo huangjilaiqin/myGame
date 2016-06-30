@@ -1463,7 +1463,8 @@
     "reason": {
       "__id__": 13
     },
-    "callback": null
+    "callback": null,
+    "bonus": null
   },
   {
     "__type__": "cc.PrefabInfo",

@@ -29,17 +29,29 @@ cc.Class({
         callback:{
             default:null,
             visible:false,
-        }
+        },
+        bonus:{
+            default:null,
+            visible:false,
+        },
     },
-    init:function(callback){
+    init:function(bonus,callback){
         this.callback=callback;
+        this.bonus=bonus;
+        cc.log(bonus);
     },
     receiveBonus:function(){
-        cc.log(this.node);
         this.callback();
     },
     // use this for initialization
     onLoad: function () {
+        
+        this.title.string=this.bonus.bonusname;
+        this.reason.string=this.bonus.reason+"将获得以下奖励:";
+        var item = this.bonus.items[0];
+        this.goodname.string=item.goodname;
+        this.goodnum.string='x'+item.num;
+        
         this.node.setPosition(cc.p(0,0));
         
         var scaleAction = cc.scaleTo(0.2, 1, 1);
