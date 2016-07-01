@@ -559,8 +559,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 320,
-      "height": 64
+      "width": 350,
+      "height": 70
     },
     "_children": [
       {
@@ -704,7 +704,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -746,10 +746,10 @@
     },
     "duration": 0.1,
     "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "clickEvents": [
       {
@@ -772,10 +772,10 @@
       "a": 255
     },
     "_N$normalSprite": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$disabledSprite": {
-      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$target": {
       "__id__": 14
@@ -1149,7 +1149,7 @@
   {
     "__type__": "cc.Canvas",
     "_name": "",
-    "_objFlags": 3932160,
+    "_objFlags": 0,
     "node": {
       "__id__": 2
     },

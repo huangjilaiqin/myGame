@@ -177,6 +177,7 @@ cc.Class({
             if(!userid || userid.length===0){
                 cc.director.loadScene('login');
             }else{
+                
                 //验证登录是否过期
                 globalsInfo.userid=userid;
                 globalsInfo.token=token;
@@ -218,6 +219,7 @@ cc.Class({
                         that.initVerifyOrRelogin(that);
                     }
                 });
+                
             }
         });
         
@@ -246,17 +248,20 @@ cc.Class({
         }
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playMusic(this.bgAudio, true);
-            
+           
+        
         if(globalsInfo.bonus!==undefined){
-            for(var bonusId in globalsInfo.bonus){
-                this.getBonus(bonusId);
+            for(var bonusRecordId in globalsInfo.bonus){
+                this.getBonus(bonusRecordId);
                 break;
             }
         }
+        
     },
     
-    showBonus:function(bonusId){
-        var bonus = globalsInfo.bonus[bonusId];
+    //领奖励动画
+    showBonus:function(bonusRecordId){
+        var bonus = globalsInfo.bonus[bonusRecordId];
         this.showAimation=1;
         cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
         cc.log(bonus);
@@ -266,27 +271,27 @@ cc.Class({
         cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
         
         var that=this;
-        var myBonusId=bonusId;
+        var myBonusId=bonusRecordId;
         that.scheduleOnce(function(){
             console.log('scheduleOnce',myBonusId);
             delete globalsInfo.bonus[myBonusId];
-            cc.log(bonusId,globalsInfo.bonus);
-            for(var bonusId in globalsInfo.bonus){
-                that.getBonus(bonusId);
+            cc.log(bonusRecordId,globalsInfo.bonus);
+            for(var bonusRecordId in globalsInfo.bonus){
+                that.getBonus(bonusRecordId);
                 break;
             }
         },1);
         
     },
     
-    getBonus:function(bonusId){
+    getBonus:function(bonusRecordId){
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
         cc.log(globalsInfo.bonus);
         var that = this;
-        receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusId],function(){
+        receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusRecordId],function(){
             var netInstance = Network.getInstance();
-            netInstance.emit('receiveBonus', {'bonusId':bonusId});
+            netInstance.emit('receiveBonus', {'bonusRecordId':bonusRecordId});
             //loading
             var loading = cc.instantiate(that.loadingPrefab);
             //loading.setPosition(cc.p(0,0));
@@ -294,11 +299,11 @@ cc.Class({
             
             netInstance.listeneOn('receiveBonus',function(obj){
                 var datas = JSON.parse(obj);
-                var bonusId = datas['bonusId'];
+                var bonusRecordId = datas['bonusRecordId'];
                 that.node.removeChildByTag(3000);
                 that.node.removeChildByTag(2000);
                 
-                that.showBonus(bonusId);
+                that.showBonus(bonusRecordId);
                 
             });
         });
@@ -323,18 +328,18 @@ cc.Class({
             if(globalsInfo.bonus===undefined){
                 globalsInfo.bonus=datas;
             }else{
-                for(var bonusId in datas){
-                    globalsInfo.bonus[bonusId]=datas[bonusId];
+                for(var bonusRecordId in datas){
+                    globalsInfo.bonus[bonusRecordId]=datas[bonusRecordId];
                 }
             }
             if(that.name=='Canvas<main>'){
-                for(var bonusId in globalsInfo.bonus){
-                    that.getBonus(bonusId);
+                for(var bonusRecordId in globalsInfo.bonus){
+                    that.getBonus(bonusRecordId);
                     break;
                 }
             }
         });
-        netInstance.emit('bonus',{});
+        //netInstance.emit('bonus',{});
     },
     
     // called every frame, uncomment this function to activate update callback
