@@ -78,7 +78,6 @@ var Test = {
             //一个事件只有一个回调
             onOneEventOneFunc:function(eventName,callback){
                 socket.removeAllListeners(eventName);
-                cc.log('==========on=============');
                 socket.on(eventName,function(obj){
                     if(/^"/.test(obj))
                         obj = eval(obj);

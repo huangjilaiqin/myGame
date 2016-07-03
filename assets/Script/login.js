@@ -1,6 +1,7 @@
 
 const Network = require('Network');
 const globalsInfo = require('globalsInfo');
+const config = require('config');
 
 cc.Class({
     extends: cc.Component,
@@ -36,6 +37,11 @@ cc.Class({
             if(username!==null)
                 this.username.string=username;
         }
+        /*
+        var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
+            cc.log('login connect success');
+        });
+        */
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -51,7 +57,7 @@ cc.Class({
             return;
         }
         
-        var netInstance = Network.getInstance();
+        var netInstance = Network.getInstance(config.serverIp,config.serverPort);
         
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);
