@@ -866,7 +866,7 @@
   {
     "__type__": "cc.Canvas",
     "_name": "",
-    "_objFlags": 3670016,
+    "_objFlags": 0,
     "node": {
       "__id__": 2
     },
@@ -898,6 +898,9 @@
     },
     "dialogPre": {
       "__uuid__": "8f69b66c-67db-4412-ae23-ec589ce12154"
+    },
+    "learnTipPre": {
+      "__uuid__": "75a9b29c-0a8c-4162-8fee-b03cdee7d3f1"
     },
     "myCountScore": null,
     "opponentCountScorePre": {

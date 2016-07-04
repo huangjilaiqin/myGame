@@ -64,6 +64,7 @@ var Test = {
                     that.removeAllListeners(eventName);
                 });
             },
+            /*
             appendOn:function(eventName,callback){
                 
                 var that = this;
@@ -75,14 +76,17 @@ var Test = {
                     that.removeAllListeners(eventName);
                 });
             },
-            //一个事件只有一个回调
+            */
+            //一个事件只有一个回调，这里没有做预防,只能是调用的地方做（目前是）
             onOneEventOneFunc:function(eventName,callback){
-                socket.removeAllListeners(eventName);
+                //web版,对同一个eventName添加事件是不会覆盖的，是通过连接存起来的。android中socket.on每个eventName只有一个回调事件
+                if (!cc.sys.isNative) {
+                    socket.removeAllListeners(eventName);
+                }
                 socket.on(eventName,function(obj){
                     if(/^"/.test(obj))
                         obj = eval(obj);
                     callback(obj);
-                    //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
                 });
             },
             removeAllListeners:function(event){

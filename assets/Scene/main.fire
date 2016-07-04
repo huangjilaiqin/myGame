@@ -324,7 +324,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "name",
+    "_name": "username",
     "_objFlags": 0,
     "_opacity": 255,
     "_color": {
@@ -4333,8 +4333,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 1560,
-      "y": -101
+      "x": 1529,
+      "y": -687
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -4953,7 +4953,7 @@
     "_alignFlags": 1,
     "_left": 0,
     "_right": 0,
-    "_top": 741,
+    "_top": 1327,
     "_bottom": 0,
     "_isAbsLeft": true,
     "_isAbsRight": true,
@@ -4986,6 +4986,9 @@
       "__id__": 2
     },
     "_enabled": true,
+    "bgAudio": {
+      "__uuid__": "1c86cd6c-8179-45a5-977d-85fef59856e9"
+    },
     "tip": {
       "__id__": 82
     },
@@ -5041,6 +5044,12 @@
     },
     "receivePre": {
       "__uuid__": "7aaaed50-1f9c-4522-838b-28a75de92e60"
+    },
+    "learnTipPre": {
+      "__uuid__": "75a9b29c-0a8c-4162-8fee-b03cdee7d3f1"
+    },
+    "username": {
+      "__id__": 9
     }
   }
 ]

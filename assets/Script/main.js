@@ -91,6 +91,14 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        learnTipPre:{
+            default: null,
+            type: cc.Prefab
+        },
+        username:{
+            default:null,
+            type:cc.Label,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -128,7 +136,18 @@ cc.Class({
         
         var tip = this.tip;
         
-        
+        //*
+        var learnTipPre = cc.instantiate(this.learnTipPre);
+        this.node.addChild(learnTipPre,1,3100);
+        var learnTip = learnTipPre.getComponent('learnTip');
+        var that = this;
+        learnTip.init("葵花宝典","1. 请将手机平放在地上\n2. 用下巴或鼻子触摸屏幕\n\n 为了荣誉，战斗吧！",function(){
+            that.node.removeChildByTag(3100);
+            //that.startCountDown();
+            globalsInfo.isShowFightTip=1;
+            cc.sys.localStorage.setItem('isShowFightTip',1);
+        });
+        //*/
         
         //第一次启动
         cc.log('isStartUp:',globalsInfo.isStartUp);
@@ -152,9 +171,7 @@ cc.Class({
             this.showAimation=0;
             
             this.scheduleOnce(function(){
-                cc.log('before',this.showAimation);
                 this.showAimation=1;
-                cc.log('after',this.showAimation);
             },0.5);
         }
         cc.log('hpProgressBar:',this.hpProgressBar.progress);
@@ -263,19 +280,16 @@ cc.Class({
     showBonus:function(bonusRecordId){
         var bonus = globalsInfo.bonus[bonusRecordId];
         this.showAimation=1;
-        cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
-        cc.log(bonus);
+        
         globalsInfo.remainhp+=bonus.items[0].num;
         globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
         this.hpValueLabel.string=globalsInfo.remainhp+'/'+globalsInfo.hp;
-        cc.log(globalsInfo.remainhp,globalsInfo.hpPercent);
         
         var that=this;
         var myBonusId=bonusRecordId;
         that.scheduleOnce(function(){
             console.log('scheduleOnce',myBonusId);
             delete globalsInfo.bonus[myBonusId];
-            cc.log(bonusRecordId,globalsInfo.bonus);
             for(var bonusRecordId in globalsInfo.bonus){
                 that.getBonus(bonusRecordId);
                 break;
@@ -287,7 +301,6 @@ cc.Class({
     getBonus:function(bonusRecordId){
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
-        cc.log(globalsInfo.bonus);
         var that = this;
         receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusRecordId],function(){
             var netInstance = Network.getInstance();
@@ -313,7 +326,7 @@ cc.Class({
     //重新登录或验证token成后初始化
     initVerifyOrRelogin:function(that){
         var netInstance = Network.getInstance();
-        
+        that.username.string=globalsInfo.username;
         that.win.string=globalsInfo.win;
         that.draw.string=globalsInfo.draw;
         that.lost.string=globalsInfo.lost;
@@ -322,9 +335,11 @@ cc.Class({
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
         
+        //*
         netInstance.onOneEventOneFunc('bonus',function(obj){
             var datas = JSON.parse(obj);
             cc.log('bonus',datas);
+
             if(globalsInfo.bonus===undefined){
                 globalsInfo.bonus=datas;
             }else{
@@ -339,7 +354,8 @@ cc.Class({
                 }
             }
         });
-        //netInstance.emit('bonus',{});
+        //*/
+        netInstance.emit('bonus',{});
     },
     
     // called every frame, uncomment this function to activate update callback

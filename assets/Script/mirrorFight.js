@@ -7,19 +7,23 @@ cc.Class({
     properties: {
         start_countdown: {
             default: null,
-            type: cc.Prefab
+            type: cc.Prefab,
         },
         fightResult: {
             default: null,
-            type: cc.Prefab
+            type: cc.Prefab,
         },
         myCountScorePre: {
             default: null,
-            type: cc.Prefab
+            type: cc.Prefab,
         },
         dialogPre: {
             default: null,
-            type: cc.Prefab
+            type: cc.Prefab,
+        },
+        learnTipPre: {
+            default: null,
+            type: cc.Prefab,
         },
         myCountScore:{
             default:null,
@@ -168,7 +172,8 @@ cc.Class({
         this.opponentRecordsSize=this.opponentInfo.records.length;
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
         
-        if(globalsInfo.isShowFightTip!=1){
+        if(globalsInfo.isShowFightTip!=1 || 1){
+           /*
             var dialogPre = cc.instantiate(this.dialogPre);
             
             this.node.addChild(dialogPre,1,3000);
@@ -180,14 +185,8 @@ cc.Class({
                 globalsInfo.isShowFightTip=1;
                 cc.sys.localStorage.setItem('isShowFightTip',1);
             });
-            /*
-            //动画
-            dialogPre.setPosition(cc.p(0,640));
-           
-            var moveAction = cc.moveBy(1,0,-200);
-            moveAction.easing(cc.easeBounceOut(3));
-            dialogPre.runAction(cc.sequence(moveAction));
-            */
+            //*/
+            
             
         }else{
             this.startCountDown();
