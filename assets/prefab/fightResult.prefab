@@ -1210,8 +1210,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 168,
-      "height": 42
+      "width": 144,
+      "height": 36
     },
     "_children": [],
     "_rotationX": 0,
@@ -1251,9 +1251,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 42,
-    "_lineHeight": 42,
-    "_enableWrapText": false,
+    "_fontSize": 36,
+    "_lineHeight": 36,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "休息一下",
@@ -1280,7 +1280,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -1322,10 +1322,10 @@
     },
     "duration": 0.1,
     "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "clickEvents": [
       {
@@ -1348,10 +1348,10 @@
       "a": 255
     },
     "_N$normalSprite": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$disabledSprite": {
-      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$target": {
       "__id__": 36
@@ -1484,8 +1484,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 168,
-      "height": 42
+      "width": 144,
+      "height": 36
     },
     "_children": [],
     "_rotationX": 0,
@@ -1525,9 +1525,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_fontSize": 42,
-    "_lineHeight": 42,
-    "_enableWrapText": false,
+    "_fontSize": 36,
+    "_lineHeight": 36,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "再战一次",
@@ -1554,7 +1554,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -1596,10 +1596,10 @@
     },
     "duration": 0.1,
     "pressedSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "hoverSprite": {
-      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "clickEvents": [
       {
@@ -1622,10 +1622,10 @@
       "a": 255
     },
     "_N$normalSprite": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$disabledSprite": {
-      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
+      "__uuid__": "5286cfd9-d52c-462b-ad3f-6684e6d68a83"
     },
     "_N$target": {
       "__id__": 45

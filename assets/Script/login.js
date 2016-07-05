@@ -42,6 +42,8 @@ cc.Class({
             cc.log('login connect success');
         });
         */
+        //var netInstance = Network.getInstance();
+        //netInstance.close();
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -56,8 +58,10 @@ cc.Class({
             this.tip.string = "账号密码不能为空";
             return;
         }
+        cc.log('login',username);
         
-        var netInstance = Network.getInstance(config.serverIp,config.serverPort);
+        //var netInstance = Network.getInstance(config.serverIp,config.serverPort);
+        var netInstance = Network.getInstance();
         
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);

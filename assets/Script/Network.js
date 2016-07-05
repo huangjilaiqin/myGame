@@ -18,12 +18,18 @@ var Test = {
 	getNetworkInstance:function(){
         cc.log('getNetworkInstance '+this.ip+":"+this.port);
         //var SocketIO = SocketIO || window.io;
-        var socket = SocketIO.connect(this.ip+":"+this.port);
+        var socket = SocketIO.connect(this.ip+":"+this.port, {"force new connection" : true});
         socket.on("connect", this.onConnect);
+        var that = this;
         socket.on("disconnect", function() {
+            that.instance=null;
+            globalsInfo.netstaus=88;
+            window.netstaus=88;
             cc.log('disconnect');
+            cc.log('globalsInfo.netstaus:',window.netstaus);
         });
         socket.on("connect_timeout", function() {
+            that.instance=null;
             cc.log('connect_timeout');
         });
         socket.on("error", function() {
@@ -41,6 +47,9 @@ var Test = {
 
             
 		var networkInstance = {
+		    close:function(){
+		        socket.close();
+		    },
             emit:function(eventName,obj){
                 cc.log('emit:'+eventName,obj);
                 cc.log('global',globalsInfo);
@@ -99,9 +108,10 @@ var Test = {
 	getInstance:function(ip,port,onConnect){
         if(ip===undefined && this.ip===undefined)
             this.ip=config.serverIp;
-        else
+        else{
             this.ip=ip;
-            
+            window.netstaus=0;
+        }
         if(port===undefined && this.port===undefined)
             this.port=config.serverPort;
         else
@@ -116,9 +126,15 @@ var Test = {
         else
             this.onConnect = onConnect;
         
-		if(this.instance === null){
-			this.instance = this.getNetworkInstance(this.ip,this.port,this.onConnect);
+		if(this.instance === null || 1){
+		    
+		    globalsInfo.netstaus=-4;
+		    //window.netstaus=-4;
+		    cc.log('new networkInstance',window.netstaus);
+			this.instance = this.getNetworkInstance();
 		}
+		if(globalsInfo.netstaus!==88)
+		    window.netstaus--;
 		return this.instance;
 	},
 };

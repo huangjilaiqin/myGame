@@ -117,6 +117,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         
+        
         //界面动效
         this.initAction();
         
@@ -129,7 +130,8 @@ cc.Class({
         cc.log('isVolumeOpen',isVolumeOpen);
         globalsInfo.isVolumeOpen=isVolumeOpen;
         this.changeVolumeBg(isVolumeOpen);
-        
+        cc.log('globalsInfo.netstaus',window.netstaus);
+        this.win.string=window.netstaus;
         var tip = this.tip;
         
         //第一次启动
@@ -166,6 +168,7 @@ cc.Class({
             //显示广告
             //显示公告
             //显示更新
+            //that.win.string=-2;
 
             var isShowFightTip = cc.sys.localStorage.getItem('isShowFightTip');
             globalsInfo.isShowFightTip=isShowFightTip;
@@ -175,6 +178,7 @@ cc.Class({
             var username = cc.sys.localStorage.getItem('username');
 
             if(!userid || userid.length===0){
+                cc.log('login');
                 cc.director.loadScene('login');
             }else{
                 
@@ -231,7 +235,8 @@ cc.Class({
             
             this.initVerifyOrRelogin(this);
         }else{
-            this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
+            
+            //this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
             this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
             var total = globalsInfo.total!==undefined?globalsInfo.total:0;
@@ -310,7 +315,7 @@ cc.Class({
     initVerifyOrRelogin:function(that){
         var netInstance = Network.getInstance();
         that.username.string=globalsInfo.username;
-        that.win.string=globalsInfo.win;
+        //that.win.string=globalsInfo.win;
         that.draw.string=globalsInfo.draw;
         that.lost.string=globalsInfo.lost;
         that.total.string=globalsInfo.total;
@@ -435,6 +440,8 @@ cc.Class({
         cc.director.loadScene('fightRecords');
     },
     volumeSetting:function(){
+        cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
+        this.win.string=window.netstaus;
         if(globalsInfo.isVolumeOpen==1){
             globalsInfo.isVolumeOpen=0;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
