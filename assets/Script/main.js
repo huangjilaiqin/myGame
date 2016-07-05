@@ -91,10 +91,6 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        learnTipPre:{
-            default: null,
-            type: cc.Prefab
-        },
         username:{
             default:null,
             type:cc.Label,
@@ -135,19 +131,6 @@ cc.Class({
         this.changeVolumeBg(isVolumeOpen);
         
         var tip = this.tip;
-        
-        //*
-        var learnTipPre = cc.instantiate(this.learnTipPre);
-        this.node.addChild(learnTipPre,1,3100);
-        var learnTip = learnTipPre.getComponent('learnTip');
-        var that = this;
-        learnTip.init("葵花宝典","1. 请将手机平放在地上\n2. 用下巴或鼻子触摸屏幕\n\n 为了荣誉，战斗吧！",function(){
-            that.node.removeChildByTag(3100);
-            //that.startCountDown();
-            globalsInfo.isShowFightTip=1;
-            cc.sys.localStorage.setItem('isShowFightTip',1);
-        });
-        //*/
         
         //第一次启动
         cc.log('isStartUp:',globalsInfo.isStartUp);
@@ -431,12 +414,19 @@ cc.Class({
         });
     },
     rank:function(){
-        
-        var loading = cc.instantiate(this.loadingPrefab);
-        loading.setPosition(cc.p(0,50));
-        this.node.addChild(loading,1,2000);
-        cc.director.loadScene('rank');
-        
+
+        var raceSize = globalsInfo.win+globalsInfo.draw+globalsInfo.lost;
+        if(raceSize<3){
+            var toast = cc.instantiate(this.toastPrefab);
+            var remainSize = 3-raceSize;
+            toast.getComponent('toast').init('再战'+remainSize+'次即可解锁排行榜\n战斗吧,勇士！',3);
+            this.node.addChild(toast,1);
+        }else{
+            var loading = cc.instantiate(this.loadingPrefab);
+            loading.setPosition(cc.p(0,50));
+            this.node.addChild(loading,1,2000);
+            cc.director.loadScene('rank');
+        }
     },
     fightRecord:function(){
         var loading = cc.instantiate(this.loadingPrefab);
@@ -472,7 +462,7 @@ cc.Class({
     },
     hpToast:function(){
         var toast = cc.instantiate(this.toastPrefab);
-        toast.getComponent('toast').init('1.对战消耗一点体力值\n2.赢一局奖励2点体力值\n3.每天凌晨重置体力值',3);
+        toast.getComponent('toast').init('1. 对战消耗一点体力值\n2. 赢一局奖励2点体力值\n3. 每天凌晨重置体力值',3);
         this.node.addChild(toast,1);
     },
 });

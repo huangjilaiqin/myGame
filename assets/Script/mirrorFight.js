@@ -172,14 +172,14 @@ cc.Class({
         this.opponentRecordsSize=this.opponentInfo.records.length;
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
         
-        if(globalsInfo.isShowFightTip!=1 || 1){
-           /*
-            var dialogPre = cc.instantiate(this.dialogPre);
+        if(globalsInfo.isShowFightTip!=1){
+           //*
+            var learnTipPre = cc.instantiate(this.learnTipPre);
             
-            this.node.addChild(dialogPre,1,3000);
-            var dialog = dialogPre.getComponent('dialog');
+            this.node.addChild(learnTipPre,1,3000);
+            var learnTip = learnTipPre.getComponent('learnTip');
             var that = this;
-            dialog.init("1.请将手机平放在地上\n2.用下巴或鼻子触摸屏幕\n\n为了荣誉，战斗吧！",function(){
+            learnTip.init("俯卧撑学院","1. 请将手机平放在地上\n2. 用下巴或鼻子触摸屏幕\n\n为了荣誉，战斗吧！",function(){
                 that.node.removeChildByTag(3000);
                 that.startCountDown();
                 globalsInfo.isShowFightTip=1;
