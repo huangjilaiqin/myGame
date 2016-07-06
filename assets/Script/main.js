@@ -95,6 +95,10 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        ws:{
+            default:null,
+            visible:false,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -116,12 +120,18 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        /*
-        var ws = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
-        ws.onopen = function (event) {
-            cc.log("Send Text WS was opened.");
+        //*
+        this.ws = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
+        this.ws.onopen = function (event) {
+            cc.log("Send Text WS was opened.",event);
+            this.send('test asdfasdf');
         };
-        */
+        this.ws.onmessage=function(event){
+            cc.log('onmessage',event);  
+        };
+        
+        
+        //*/
         //界面动效
         this.initAction();
         
@@ -166,7 +176,7 @@ cc.Class({
         cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
         //重连加载数据,1.加载全局数据 2.本场景相关操作
-        
+        /*
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -184,7 +194,7 @@ cc.Class({
 
             if(!userid || userid.length===0){
                 cc.log('login');
-                //cc.director.loadScene('login');
+                cc.director.loadScene('login');
             }else{
                 
                 //验证登录是否过期
@@ -231,7 +241,7 @@ cc.Class({
                 
             }
         });
-        
+        //*/
         if(globalsInfo.isLogin){
             //重新登录的情况
             
@@ -445,6 +455,7 @@ cc.Class({
         cc.director.loadScene('fightRecords');
     },
     volumeSetting:function(){
+        this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
         this.win.string=window.netstaus;
         if(globalsInfo.isVolumeOpen==1){

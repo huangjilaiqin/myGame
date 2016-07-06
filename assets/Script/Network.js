@@ -1,9 +1,18 @@
 
+/*
 if (!window.io) {
     window.io = require('socket-io');
     cc.log('use local socket-io.js');
 }
 var SocketIO = SocketIO || window.io;
+*/
+var MySocketIO;
+if(!cc.sys.isNative){
+    MySocketIO=require('socket-io');
+}else{
+    MySocketIO = SocketIO;
+}
+
 
 const config = require('config');
 const globalsInfo = require('globalsInfo');
@@ -14,8 +23,8 @@ var Test = {
     
 	getNetworkInstance:function(ip,port,onConnect){
         cc.log('getNetworkInstance '+ip+":"+port);
-        //var SocketIO = SocketIO || window.io;
-        var socket = SocketIO.connect(ip+":"+port, {"forceNew" : true,"reconnection":true,"transports":["websocket","polling"]});
+        //var socket = MySocketIO.connect(ip+":"+port, {"forceNew" : true,"reconnection":true,"transports":["websocket","polling"]});
+        var socket = MySocketIO.connect(ip+":"+port);
         socket.on("connect", onConnect);
         
         var that = this;
