@@ -9,27 +9,29 @@ const config = require('config');
 const globalsInfo = require('globalsInfo');
 
 var Test = {
-    ip:"",
-    port:null,
-    instance:null,
-    socket:null,
-    onConnect:null,
+    instance:undefined,
+    onConnect:undefined,
     
-	getNetworkInstance:function(){
-        cc.log('getNetworkInstance '+this.ip+":"+this.port);
+	getNetworkInstance:function(ip,port,onConnect){
+        cc.log('getNetworkInstance '+ip+":"+port);
         //var SocketIO = SocketIO || window.io;
-        var socket = SocketIO.connect(this.ip+":"+this.port, {"force new connection" : true});
-        socket.on("connect", this.onConnect);
+        var socket = SocketIO.connect(ip+":"+port, {"forceNew" : true,"reconnection":true,"transports":["websocket","polling"]});
+        socket.on("connect", onConnect);
+        
         var that = this;
         socket.on("disconnect", function() {
-            that.instance=null;
+            that.instance=undefined;
             globalsInfo.netstaus=88;
             window.netstaus=88;
-            cc.log('disconnect');
-            cc.log('globalsInfo.netstaus:',window.netstaus);
+            cc.log('disconnect window.netstaus:',window.netstaus);
+            if(that.instance === undefined){
+                cc.log('instance is undefined');
+            }else{
+                cc.log('instance is not undefined');
+            }
         });
         socket.on("connect_timeout", function() {
-            that.instance=null;
+            that.instance=undefined;
             cc.log('connect_timeout');
         });
         socket.on("error", function() {
@@ -38,14 +40,7 @@ var Test = {
         socket.on("connect_error", function() {
             cc.log('connect_error');
         });
-        socket.on("ping", function() {
-            cc.log('ping');
-        });
-        socket.on("pong", function() {
-            cc.log('pong');
-        });
-
-            
+        
 		var networkInstance = {
 		    close:function(){
 		        socket.close();
@@ -73,19 +68,6 @@ var Test = {
                     that.removeAllListeners(eventName);
                 });
             },
-            /*
-            appendOn:function(eventName,callback){
-                
-                var that = this;
-                socket.on(eventName,function(obj){
-                    if(/^"/.test(obj))
-                        obj = eval(obj);
-                    callback(obj);
-                    //因为网络连接是全局的,多次调用on事件新的回调不会覆盖之前的导致callback中this对象跟他外面组成的闭包不对应
-                    that.removeAllListeners(eventName);
-                });
-            },
-            */
             //一个事件只有一个回调，这里没有做预防,只能是调用的地方做（目前是）
             onOneEventOneFunc:function(eventName,callback){
                 //web版,对同一个eventName添加事件是不会覆盖的，是通过连接存起来的。android中socket.on每个eventName只有一个回调事件
@@ -106,32 +88,25 @@ var Test = {
 		return networkInstance;
 	},
 	getInstance:function(ip,port,onConnect){
-        if(ip===undefined && this.ip===undefined)
-            this.ip=config.serverIp;
+        if(ip===undefined)
+            ip=config.serverIp;
         else{
-            this.ip=ip;
             window.netstaus=0;
         }
-        if(port===undefined && this.port===undefined)
-            this.port=config.serverPort;
-        else
-            this.port=port;
-            
-        cc.log('ip:',this.ip,' port:'+this.port);
+        if(port===undefined)
+            port=config.serverPort;
             
         if(onConnect===undefined && this.onConnect===undefined)
-            this.onConnect=function(){
+            onConnect=function(){
                 cc.log('default onConnect');
             };
         else
-            this.onConnect = onConnect;
+            this.onConnect=onConnect;
         
-		if(this.instance === null || 1){
-		    
-		    globalsInfo.netstaus=-4;
-		    //window.netstaus=-4;
-		    cc.log('new networkInstance',window.netstaus);
-			this.instance = this.getNetworkInstance();
+		if(this.instance === undefined){
+		    window.netstaus=-4;
+		    cc.log('new networkInstance ',window.netstaus,ip,port);
+			this.instance = this.getNetworkInstance(ip,port,onConnect);
 		}
 		if(globalsInfo.netstaus!==88)
 		    window.netstaus--;

@@ -116,8 +116,12 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        
-        
+        /*
+        var ws = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
+        ws.onopen = function (event) {
+            cc.log("Send Text WS was opened.");
+        };
+        */
         //界面动效
         this.initAction();
         
@@ -162,6 +166,7 @@ cc.Class({
         cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
         //重连加载数据,1.加载全局数据 2.本场景相关操作
+        
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -179,7 +184,7 @@ cc.Class({
 
             if(!userid || userid.length===0){
                 cc.log('login');
-                cc.director.loadScene('login');
+                //cc.director.loadScene('login');
             }else{
                 
                 //验证登录是否过期

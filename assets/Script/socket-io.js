@@ -1698,7 +1698,8 @@ if (!CC_JSB && !cc.sys.isNative) {
             this.enablesXDR = !!opts.enablesXDR;
             this.timestampParam = opts.timestampParam || 't';
             this.timestampRequests = opts.timestampRequests;
-            this.transports = opts.transports || ['polling', 'websocket'];
+            //this.transports = opts.transports || ['polling', 'websocket'];
+            this.transports = opts.transports || ['websocket','polling'];
             this.readyState = '';
             this.writeBuffer = [];
             this.callbackBuffer = [];
