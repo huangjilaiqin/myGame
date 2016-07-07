@@ -120,17 +120,15 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        //*
+        /*
         this.ws = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
         this.ws.onopen = function (event) {
             cc.log("Send Text WS was opened.",event);
             this.send('test asdfasdf');
         };
         this.ws.onmessage=function(event){
-            cc.log('onmessage',event);  
+            cc.log('onmessage',event);
         };
-        
-        
         //*/
         //界面动效
         this.initAction();
@@ -176,7 +174,7 @@ cc.Class({
         cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
         //重连加载数据,1.加载全局数据 2.本场景相关操作
-        /*
+        //*
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             
             cc.log('onconnect');
@@ -203,6 +201,7 @@ cc.Class({
 
                 cc.log('to verifyToken');
                 netInstance.emit('verifyToken', {});
+                /*
                 netInstance.listeneOn('verifyToken', function(obj){
                     console.log('verifyToken',obj);
                     var result = JSON.parse(obj);
@@ -238,7 +237,7 @@ cc.Class({
                         that.initVerifyOrRelogin(that);
                     }
                 });
-                
+                */
             }
         });
         //*/
