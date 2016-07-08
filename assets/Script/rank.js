@@ -23,12 +23,11 @@ cc.Class({
         netInstance.emit('rank', {});
         netInstance.listeneOn('rank', function(obj){
             that.node.removeChildByTag(2000);
-            var result = JSON.parse(obj);
-            if(result.error){
+            if(obj.error){
                 //提示
-                cc.log("rank error: "+result);
+                cc.log("rank error: "+obj);
             }else{
-                that.populateList(result.rank);
+                that.populateList(obj.rank);
             }
         });
     },

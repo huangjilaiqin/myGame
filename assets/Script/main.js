@@ -201,10 +201,9 @@ cc.Class({
 
                 cc.log('to verifyToken');
                 netInstance.emit('verifyToken', {});
-                /*
-                netInstance.listeneOn('verifyToken', function(obj){
-                    console.log('verifyToken',obj);
-                    var result = JSON.parse(obj);
+                //*
+                netInstance.listeneOn('verifyToken', function(result){
+                    console.log('verifyToken',result);
                     if(result.error){
                         cc.log("verifyToken: "+result.error);
                         cc.director.loadScene('login');
@@ -237,7 +236,7 @@ cc.Class({
                         that.initVerifyOrRelogin(that);
                     }
                 });
-                */
+                //*/
             }
         });
         //*/
@@ -312,9 +311,8 @@ cc.Class({
             //loading.setPosition(cc.p(0,0));
             that.node.addChild(loading,1,3000);
             
-            netInstance.listeneOn('receiveBonus',function(obj){
-                var datas = JSON.parse(obj);
-                var bonusRecordId = datas['bonusRecordId'];
+            netInstance.listeneOn('receiveBonus',function(data){
+                var bonusRecordId = data['bonusRecordId'];
                 that.node.removeChildByTag(3000);
                 that.node.removeChildByTag(2000);
                 
@@ -338,15 +336,14 @@ cc.Class({
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
         
         //*
-        netInstance.onOneEventOneFunc('bonus',function(obj){
-            var datas = JSON.parse(obj);
-            cc.log('bonus',datas);
+        netInstance.onOneEventOneFunc('bonus',function(data){
+            cc.log('bonus',data);
 
             if(globalsInfo.bonus===undefined){
-                globalsInfo.bonus=datas;
+                globalsInfo.bonus=data;
             }else{
-                for(var bonusRecordId in datas){
-                    globalsInfo.bonus[bonusRecordId]=datas[bonusRecordId];
+                for(var bonusRecordId in data){
+                    globalsInfo.bonus[bonusRecordId]=data[bonusRecordId];
                 }
             }
             if(that.name=='Canvas<main>'){
@@ -398,9 +395,7 @@ cc.Class({
         var begin = new Date().getTime();
         var that = this;
         netInstance.emit('searchOpponent', {});
-        netInstance.listeneOn('searchOpponent', function(obj){
-            
-            var result = JSON.parse(obj);
+        netInstance.listeneOn('searchOpponent', function(result){
             if(result.error){
                 //提示
                 that.node.removeChildByTag(1000);

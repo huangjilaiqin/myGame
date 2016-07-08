@@ -20,7 +20,6 @@ var Test = {
     instance:undefined,
     onConnect:undefined,
     
-    
 	getInstance:function(ip,port,onConnect){
         cc.log('getNetworkInstance '+ip+":"+port);
         
@@ -41,13 +40,13 @@ var Test = {
                 onConnect();
             };
             _webSocket.onmessage=function(message){
-                cc.log('onmessage',message);
+                cc.log('onmessage',message.data);
                 /*
                 if(/^"/.test(obj))
                     obj = eval(obj);
                     */
-                var msg = JSON.parse(message);
-                var eventName = msg.event;
+                var msg = JSON.parse(message.data);
+                var eventName = msg.eventName;
                 var callbacks = listeners[eventName];
                 if(callbacks){
                     for(var i=0;i<callbacks.length;i++){
@@ -74,11 +73,13 @@ var Test = {
                 _webSocket.send(JSON.stringify(obj));
             };
             _webSocket.listeneOn=function(eventName,callback){
-                //socket.on(eventName,callback);
                 if(listeners[eventName]===undefined)
                     listeners[eventName]=[];
                 listeners[eventName].push(callback);
             };
+            _webSocket.onOneEventOneFunc=function(eventName,callback) {
+                listeners[eventName]=[callback];
+            }
         }
         return _webSocket;
 	}

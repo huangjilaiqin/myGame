@@ -70,10 +70,9 @@ cc.Class({
         
         var that = this;
         netInstance.emit('login', {'username':username,'passwd':passwd});
-        netInstance.listeneOn('login', function(obj){
+        netInstance.listeneOn('login', function(result){
             that.node.removeChildByTag(2000);
             
-            var result = JSON.parse(obj);
             
             //that.tip.string = 'token:'+result.token+"#";
             //that.tip2.string = 'ok';
