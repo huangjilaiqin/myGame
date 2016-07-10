@@ -42,13 +42,13 @@ cc.Class({
         var that = this;
         this.content = this.scrollView.content;
         
-        this.onFightRecords = function(obj){
+        this.onFightRecords = function(result){
             cc.log('onFightRecords');
             
             if(that.fightBt.interactable)
                 return;
             that.node.removeChildByTag(2000);
-            var result = JSON.parse(obj);
+            //var result = JSON.parse(obj);
             cc.log(result);
             if(result.error){
                 //提示
@@ -57,12 +57,12 @@ cc.Class({
                 that.fightList(result.datas);
             }
         };
-        this.onBeFightRecords = function(obj){
+        this.onBeFightRecords = function(result){
             cc.log('onBeFightRecords');
             if(that.beFightBt.interactable)
                 return;
             that.node.removeChildByTag(2000);
-            var result = JSON.parse(obj);
+            //var result = JSON.parse(obj);
             cc.log(result);
             if(result.error){
                 //提示

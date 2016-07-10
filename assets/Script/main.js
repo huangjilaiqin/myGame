@@ -340,14 +340,16 @@ cc.Class({
             cc.log('bonus',data);
 
             if(globalsInfo.bonus===undefined){
-                globalsInfo.bonus=data;
+                globalsInfo.bonus=data.datas;
             }else{
-                for(var bonusRecordId in data){
-                    globalsInfo.bonus[bonusRecordId]=data[bonusRecordId];
+                for(var bonusRecordId in data.datas){
+                    globalsInfo.bonus[bonusRecordId]=data.datas[bonusRecordId];
                 }
             }
             if(that.name=='Canvas<main>'){
+                cc.log('globalsInfo.bonus ',globalsInfo.bonus);
                 for(var bonusRecordId in globalsInfo.bonus){
+                    cc.log('bonusRecordId ',bonusRecordId);
                     that.getBonus(bonusRecordId);
                     break;
                 }
@@ -449,7 +451,7 @@ cc.Class({
         cc.director.loadScene('fightRecords');
     },
     volumeSetting:function(){
-        this.ws.send('restart test asdfasdf');
+        //this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
         this.win.string=window.netstaus;
         if(globalsInfo.isVolumeOpen==1){

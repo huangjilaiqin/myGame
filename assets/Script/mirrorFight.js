@@ -100,8 +100,8 @@ cc.Class({
         };
         netInstance.emit('uploadRecord', requestObj);
         
-        netInstance.listeneOn('uploadRecord', function(obj){
-            var result = JSON.parse(obj);
+        netInstance.listeneOn('uploadRecord', function(result){
+            //var result = JSON.parse(obj);
             if(result.error){
                 //提示
                 cc.log("uploadRecord error: "+result);

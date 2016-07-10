@@ -48,6 +48,7 @@ cc.Class({
         
         this.title.string=this.bonus.bonusname;
         this.reason.string=this.bonus.reason+"将获得以下奖励:";
+        cc.log(this.bonus);
         var item = this.bonus.items[0];
         this.goodname.string=item.goodname;
         this.goodnum.string='x'+item.num;
