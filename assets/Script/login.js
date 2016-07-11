@@ -37,13 +37,7 @@ cc.Class({
             if(username!==null)
                 this.username.string=username;
         }
-        /*
-        var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
-            cc.log('login connect success');
-        });
-        */
-        //var netInstance = Network.getInstance();
-        //netInstance.close();
+        
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -60,7 +54,6 @@ cc.Class({
         }
         cc.log('login',username);
         
-        //var netInstance = Network.getInstance(config.serverIp,config.serverPort);
         var netInstance = Network.getInstance();
         
         //转圈圈

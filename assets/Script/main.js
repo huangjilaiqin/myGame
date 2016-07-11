@@ -173,73 +173,92 @@ cc.Class({
         }
         cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
-        //重连加载数据,1.加载全局数据 2.本场景相关操作
-        //*
-        var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
+        var netInstance=null;
+        var cbs = {
+            onConnect:function(){
             
-            cc.log('onconnect');
-            //显示广告
-            //显示公告
-            //显示更新
-            //that.win.string=-2;
+                cc.log('onconnect');
+                //显示广告
+                //显示公告
+                //显示更新
+                //that.win.string=-2;
 
-            var isShowFightTip = cc.sys.localStorage.getItem('isShowFightTip');
-            globalsInfo.isShowFightTip=isShowFightTip;
+                var isShowFightTip = cc.sys.localStorage.getItem('isShowFightTip');
+                globalsInfo.isShowFightTip=isShowFightTip;
 
-            var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
-            var token = cc.sys.localStorage.getItem('token');
-            var username = cc.sys.localStorage.getItem('username');
+                var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
+                var token = cc.sys.localStorage.getItem('token');
+                var username = cc.sys.localStorage.getItem('username');
 
-            if(!userid || userid.length===0){
-                cc.log('login');
-                cc.director.loadScene('login');
-            }else{
+                if(!userid || userid.length===0){
+                    cc.log('login');
+                    cc.director.loadScene('login');
+                }else{
+                    
+                    //验证登录是否过期
+                    globalsInfo.userid=userid;
+                    globalsInfo.token=token;
+
+                    cc.log('to verifyToken');
+                    netInstance.emit('verifyToken', {});
+                    //*
+                    netInstance.onOneEventOneFunc('verifyToken', function(result){
+                        console.log('verifyToken',result);
+                        if(result.error){
+                            cc.log("verifyToken: "+result.error);
+                            cc.director.loadScene('login');
+                        }else{
+                            cc.log('verifyToken success');
+                            
+                            globalsInfo.userid=userid;
+                            globalsInfo.token=token;
+                            globalsInfo.username=username;
+                            
+                            globalsInfo.value=result.value;
+                            globalsInfo.total=result.total;
+                            globalsInfo.win=result.win;
+                            globalsInfo.draw=result.draw;
+                            globalsInfo.lost=result.lost;
+                                    
+                            globalsInfo.todaytask=result.todaytask;
+                            globalsInfo.todayamount=result.todayamount;
+                            globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
+                            
+                            globalsInfo.remainhp=result.remainhp;
+                            globalsInfo.hp=result.hp;
+                            globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+                            //tip=token;
+                            
+                            if(!that.node)
+                                return;
+                            that.node.removeChildByTag(2000);
                 
-                //验证登录是否过期
-                globalsInfo.userid=userid;
-                globalsInfo.token=token;
+                            that.initVerifyOrRelogin(that);
+                            cc.log('new cbs');
+                        }
+                    });
+                    //*/
+                }
+            },
+            onError:function(args) {
+                cc.log('onError');
+                cc.log(args);
+                that.node.removeChildByTag(3000);
+                var toast = cc.instantiate(that.toastPrefab);
+                toast.getComponent('toast').init('网络错误请检查网络',3);
+                that.node.addChild(toast,1);
+                
+            },
+            onClose:function(){
+                cc.log('main onClose');
+            },
+            onNotValid:function(){
+                cc.director.loadScene('main');
+            },
+        };
+        //重连加载数据,1.加载全局数据 2.本场景相关操作
+        netInstance = Network.getInstance(config.serverIp,config.serverPort,cbs);
 
-                cc.log('to verifyToken');
-                netInstance.emit('verifyToken', {});
-                //*
-                netInstance.onOneEventOneFunc('verifyToken', function(result){
-                    console.log('verifyToken',result);
-                    if(result.error){
-                        cc.log("verifyToken: "+result.error);
-                        cc.director.loadScene('login');
-                    }else{
-                        cc.log('verifyToken success');
-                        
-                        globalsInfo.userid=userid;
-                        globalsInfo.token=token;
-                        globalsInfo.username=username;
-                        
-                        globalsInfo.value=result.value;
-                        globalsInfo.total=result.total;
-                        globalsInfo.win=result.win;
-                        globalsInfo.draw=result.draw;
-                        globalsInfo.lost=result.lost;
-                                
-                        globalsInfo.todaytask=result.todaytask;
-                        globalsInfo.todayamount=result.todayamount;
-                        globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
-                        
-                        globalsInfo.remainhp=result.remainhp;
-                        globalsInfo.hp=result.hp;
-                        globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
-                        //tip=token;
-                        
-                        if(!that.node)
-                            return;
-                        that.node.removeChildByTag(2000);
-            
-                        that.initVerifyOrRelogin(that);
-                    }
-                });
-                //*/
-            }
-        });
-        //*/
         if(globalsInfo.isLogin){
             //重新登录的情况
             
