@@ -3,6 +3,7 @@ const Network = require('Network');
 const globalsInfo = require('globalsInfo');
 const config = require('config');
 
+var netInstance;
 
 cc.Class({
     extends: cc.Component,
@@ -120,16 +121,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        /*
-        this.ws = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
-        this.ws.onopen = function (event) {
-            cc.log("Send Text WS was opened.",event);
-            this.send('test asdfasdf');
-        };
-        this.ws.onmessage=function(event){
-            cc.log('onmessage',event);
-        };
-        //*/
+        
         //界面动效
         this.initAction();
         
@@ -171,9 +163,16 @@ cc.Class({
                 this.showAimation=1;
             },0.5);
         }
-        cc.log('hpProgressBar:',this.hpProgressBar.progress);
         var that = this;
-        var netInstance=null;
+        
+        var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
+        var token = cc.sys.localStorage.getItem('token');
+        var username = cc.sys.localStorage.getItem('username');
+        globalsInfo.userid=userid;
+        globalsInfo.token=token;
+        globalsInfo.username=username;
+        
+        //var netInstance=null;
         var cbs = {
             onConnect:function(){
             
@@ -186,18 +185,13 @@ cc.Class({
                 var isShowFightTip = cc.sys.localStorage.getItem('isShowFightTip');
                 globalsInfo.isShowFightTip=isShowFightTip;
 
-                var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
-                var token = cc.sys.localStorage.getItem('token');
-                var username = cc.sys.localStorage.getItem('username');
-
                 if(!userid || userid.length===0){
                     cc.log('login');
                     cc.director.loadScene('login');
                 }else{
                     
                     //验证登录是否过期
-                    globalsInfo.userid=userid;
-                    globalsInfo.token=token;
+                    
 
                     cc.log('to verifyToken');
                     netInstance.emit('verifyToken', {});
@@ -206,14 +200,10 @@ cc.Class({
                         console.log('verifyToken',result);
                         if(result.error){
                             cc.log("verifyToken: "+result.error);
-                            cc.director.loadScene('login');
+                            //cc.director.loadScene('login');
                         }else{
                             cc.log('verifyToken success');
-                            
-                            globalsInfo.userid=userid;
-                            globalsInfo.token=token;
-                            globalsInfo.username=username;
-                            
+                            /*
                             globalsInfo.value=result.value;
                             globalsInfo.total=result.total;
                             globalsInfo.win=result.win;
@@ -227,6 +217,7 @@ cc.Class({
                             globalsInfo.remainhp=result.remainhp;
                             globalsInfo.hp=result.hp;
                             globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
+                            //*/
                             //tip=token;
                             
                             if(!that.node)
@@ -241,18 +232,18 @@ cc.Class({
                 }
             },
             onError:function(args) {
-                cc.log('onError');
-                cc.log(args);
-                that.node.removeChildByTag(3000);
+                cc.log('onError main');
+                that.node.removeChildByTag(2000);
                 var toast = cc.instantiate(that.toastPrefab);
-                toast.getComponent('toast').init('网络错误请检查网络',3);
+                toast.getComponent('toast').init('网络错误,请检查网络',3);
                 that.node.addChild(toast,1);
-                
             },
             onClose:function(){
                 cc.log('main onClose');
+                //cc.director.loadScene('main');
             },
             onNotValid:function(){
+                //globalsInfo.netStatus=false;
                 cc.director.loadScene('main');
             },
         };
@@ -268,7 +259,7 @@ cc.Class({
             this.initVerifyOrRelogin(this);
         }else{
             
-            //this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
+            this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
             this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
             var total = globalsInfo.total!==undefined?globalsInfo.total:0;
@@ -293,9 +284,16 @@ cc.Class({
                 break;
             }
         }
+        if(globalsInfo.netStatus===false){
+            this.onNotValid();
+        }
         
     },
-    
+    onNotValid:function(){
+        var toast = cc.instantiate(this.toastPrefab);
+        toast.getComponent('toast').init('网络错误,请检查网络',3);
+        this.node.addChild(toast,1);
+    },  
     //领奖励动画
     showBonus:function(bonusRecordId){
         var bonus = globalsInfo.bonus[bonusRecordId];
@@ -323,7 +321,7 @@ cc.Class({
         receive.setPosition(cc.p(0,0));
         var that = this;
         receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusRecordId],function(){
-            var netInstance = Network.getInstance();
+            //var netInstance = Network.getInstance();
             netInstance.emit('receiveBonus', {'bonusRecordId':bonusRecordId});
             //loading
             var loading = cc.instantiate(that.loadingPrefab);
@@ -344,7 +342,7 @@ cc.Class({
     
     //重新登录或验证token成后初始化
     initVerifyOrRelogin:function(that){
-        var netInstance = Network.getInstance();
+        //var netInstance = Network.getInstance();
         that.username.string=globalsInfo.username;
         //that.win.string=globalsInfo.win;
         that.draw.string=globalsInfo.draw;
@@ -406,7 +404,7 @@ cc.Class({
         }
     },
     searchOpponent:function(){
-        var netInstance = Network.getInstance();
+        //var netInstance = Network.getInstance();
         var tip=this.tip;
         
         var searchPre=cc.instantiate(this.searchPre);

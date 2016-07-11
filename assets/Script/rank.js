@@ -19,6 +19,9 @@ cc.Class({
         cc.log(this.name);
         var that = this;
         this.content = this.scrollView.content;
+        var cbs = {
+            onNotValid:function(){},
+        };
         var netInstance = Network.getInstance();
         netInstance.emit('rank', {});
         netInstance.onOneEventOneFunc('rank', function(obj){
