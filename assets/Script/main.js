@@ -202,7 +202,7 @@ cc.Class({
                 cc.log('to verifyToken');
                 netInstance.emit('verifyToken', {});
                 //*
-                netInstance.listeneOn('verifyToken', function(result){
+                netInstance.onOneEventOneFunc('verifyToken', function(result){
                     console.log('verifyToken',result);
                     if(result.error){
                         cc.log("verifyToken: "+result.error);
@@ -311,7 +311,7 @@ cc.Class({
             //loading.setPosition(cc.p(0,0));
             that.node.addChild(loading,1,3000);
             
-            netInstance.listeneOn('receiveBonus',function(data){
+            netInstance.onOneEventOneFunc('receiveBonus',function(data){
                 var bonusRecordId = data['bonusRecordId'];
                 that.node.removeChildByTag(3000);
                 that.node.removeChildByTag(2000);
@@ -397,7 +397,7 @@ cc.Class({
         var begin = new Date().getTime();
         var that = this;
         netInstance.emit('searchOpponent', {});
-        netInstance.listeneOn('searchOpponent', function(result){
+        netInstance.onOneEventOneFunc('searchOpponent', function(result){
             if(result.error){
                 //提示
                 that.node.removeChildByTag(1000);

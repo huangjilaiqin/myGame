@@ -151,10 +151,10 @@ cc.Class({
 
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             netInstance.emit('record', {'recordid':recordid});
-            netInstance.listeneOn('record',function(obj){
+            netInstance.onOneEventOneFunc('record',function(obj){
                 that.node.removeChildByTag(2000);
 
-                that.opponentInfo = JSON.parse(obj);
+                that.opponentInfo = obj;
                 cc.log(that.opponentInfo);  
                 
                 that.opponentName.string=that.opponentInfo.username;

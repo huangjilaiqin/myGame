@@ -61,7 +61,7 @@ cc.Class({
         
         var that = this;
         netInstance.emit('register', {'username':username,'passwd':passwd});
-        netInstance.listeneOn('register', function(obj){
+        netInstance.onOneEventOneFunc('register', function(obj){
             that.node.removeChildByTag(2000);
             var result = JSON.parse(obj);
             if(result.error){

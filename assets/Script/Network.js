@@ -72,6 +72,9 @@ var Test = {
                 
                 _webSocket.send(JSON.stringify(obj));
             };
+            /*
+            回调函数为全局函数,不涉及this,不会重复添加
+            */
             _webSocket.listeneOn=function(eventName,callback){
                 if(listeners[eventName]===undefined)
                     listeners[eventName]=[];

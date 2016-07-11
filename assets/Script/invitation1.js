@@ -22,8 +22,7 @@ cc.Class({
         var that = this;
         var netInstance = Network.getInstance(config.serverIp,config.serverPort,function(){
             netInstance.emit('record', {'recordid':recordid});
-            netInstance.listeneOn('record',function(obj){
-                var result = JSON.parse(obj);
+            netInstance.onOneEventOneFunc('record',function(result){
                 var opponentName = result.username;
                 var opponentRecord = result.record;
             });

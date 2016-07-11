@@ -21,7 +21,7 @@ cc.Class({
         this.content = this.scrollView.content;
         var netInstance = Network.getInstance();
         netInstance.emit('rank', {});
-        netInstance.listeneOn('rank', function(obj){
+        netInstance.onOneEventOneFunc('rank', function(obj){
             that.node.removeChildByTag(2000);
             if(obj.error){
                 //提示

@@ -100,7 +100,7 @@ cc.Class({
         };
         netInstance.emit('uploadRecord', requestObj);
         
-        netInstance.listeneOn('uploadRecord', function(result){
+        netInstance.onOneEventOneFunc('uploadRecord', function(result){
             //var result = JSON.parse(obj);
             if(result.error){
                 //提示

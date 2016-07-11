@@ -72,7 +72,7 @@ cc.Class({
             }
         };
         this.netInstance = Network.getInstance();
-        this.netInstance.listeneOn('fightRecords', this.onFightRecords);
+        this.netInstance.onOneEventOneFunc('fightRecords', this.onFightRecords);
         
         this.netInstance.emit('fightRecords', {});
     },
@@ -149,7 +149,7 @@ cc.Class({
         //请求数据
         
         this.netInstance.emit('fightRecords', {});
-        this.netInstance.listeneOn('fightRecords', this.onFightRecords);
+        this.netInstance.onOneEventOneFunc('fightRecords', this.onFightRecords);
         
     },
     beFightRecords:function(){
@@ -166,7 +166,7 @@ cc.Class({
         //请求数据
         
         this.netInstance.emit('beFightRecords', {});
-        this.netInstance.listeneOn('beFightRecords', this.onBeFightRecords);
+        this.netInstance.onOneEventOneFunc('beFightRecords', this.onBeFightRecords);
     },
 
     // called every frame, uncomment this function to activate update callback
