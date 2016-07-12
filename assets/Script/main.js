@@ -225,7 +225,6 @@ cc.Class({
                             that.node.removeChildByTag(2000);
                 
                             that.initVerifyOrRelogin(that);
-                            cc.log('new cbs');
                         }
                     });
                     //*/

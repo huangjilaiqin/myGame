@@ -22,7 +22,6 @@ var callbacks;
 
 var resetWebSocet=function(){
     _webSocket.onopen = function (event) {
-        cc.log("Send Text WS was opened AAAA.");
         netStatus=true;
         globalsInfo.netStatus=true;
         while(toSendMsgs.length){
@@ -35,6 +34,7 @@ var resetWebSocet=function(){
     _webSocket.onNotValid=function(){};
     listeners={};
     toSendMsgs=[];
+    cc.log('resetWebSocet');
 };
 
 var initWebSocket=function(cbs) {
@@ -46,43 +46,39 @@ var initWebSocket=function(cbs) {
         CLOSING	2
         CLOSED	3
         */
-        cc.log(cbs);
+
         if(callbacks.onConnect){
-            cc.log('init onopen');
             _webSocket.onopen = function (event) {
                 cc.log("Send Text WS was opened.");
                 netStatus=true;
                 globalsInfo.netStatus=true;
-                cc.log(callbacks.onConnect);
                 callbacks.onConnect();
                 while(toSendMsgs.length){
                     var datas = toSendMsgs.shift();
                     _webSocket.emit(datas.eventName,datas.obj);
                 }
             };
-        }else{
-            cc.log('no cbs.onConnect');
         }
         
         if(callbacks.onError){
             //*
             _webSocket.onerror=function(arg){
-                cc.log('onerror',arg);
                 callbacks.onError(arg);
+                netStatus=false;
+                globalsInfo.netStatus=false;
+                resetWebSocet();
             };
             //*/
-            netStatus=false;
-            globalsInfo.netStatus=false;
-            resetWebSocet();
+            
         }
         if(callbacks.onClose){
             _webSocket.onclose=function(arg){
-                cc.log('onclose',arguments);
                 callbacks.onClose();
+                netStatus=false;
+                globalsInfo.netStatus=false;
+                resetWebSocet();
             };
-            netStatus=false;
-            globalsInfo.netStatus=false;
-            resetWebSocet();
+            
         }
         if(callbacks.onNotValid){
             _webSocket.onNotValid=function(arg){
@@ -97,14 +93,29 @@ var initWebSocket=function(cbs) {
         if(/^"/.test(obj))
             obj = eval(obj);
             */
-        var msg = JSON.parse(message.data);
+        try{
+            var msg = JSON.parse(message.data);
+        }catch(e){
+            console.log(e);
+            return;
+        }
         var eventName = msg.eventName;
-        var cbs = listeners[eventName];
+
+        //全局监听函数,全局优先处理
+        var cbs = globalListeners[eventName];
         if(cbs){
             for(var i=0;i<cbs.length;i++){
                 cbs[i](msg);
             }
         }
+
+        cbs = listeners[eventName];
+        if(cbs){
+            for(var i=0;i<cbs.length;i++){
+                cbs[i](msg);
+            }
+        }
+        
     };
     
     _webSocket.emit=function(eventName,obj){
@@ -117,14 +128,10 @@ var initWebSocket=function(cbs) {
             obj.userid=globalsInfo.userid;
             obj.token=globalsInfo.token;
             
-            cc.log('send:',obj);
-            _webSocket.send('client emit');
             _webSocket.send(JSON.stringify(obj));
         }else if(_webSocket.readyState==0){
             toSendMsgs.push({eventName:eventName,obj:obj});
-            cc.log('toSendMsgs',toSendMsgs);
         }else{
-            cc.log('readyState',_webSocket.readyState);
             _webSocket.onNotValid();
         }
     };
@@ -132,9 +139,9 @@ var initWebSocket=function(cbs) {
     回调函数为全局函数,不涉及this,不会重复添加
     */
     _webSocket.listeneOn=function(eventName,callback){
-        if(listeners[eventName]===undefined)
-            listeners[eventName]=[];
-        listeners[eventName].push(callback);
+        if(globalListeners[eventName]===undefined)
+            globalListeners[eventName]=[];
+        globalListeners[eventName].push(callback);
     };
     _webSocket.onOneEventOneFunc=function(eventName,callback) {
         listeners[eventName]=[callback];
