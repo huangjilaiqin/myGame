@@ -23,6 +23,8 @@ cc.Class({
             onNotValid:function(){},
         };
         var netInstance = Network.getInstance();
+        cc.log('netInstance id' ,netInstance.id);
+        netInstance.emit('ranktest', {});
         netInstance.emit('rank', {});
         netInstance.onOneEventOneFunc('rank', function(obj){
             that.node.removeChildByTag(2000);

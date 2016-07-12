@@ -1,15 +1,4 @@
 
-/*
-if (!window.io) {
-    window.io = require('socket-io');
-    cc.log('use local socket-io.js');
-}
-var SocketIO = SocketIO || window.io;
-*/
-
-
-
-
 const config = require('config');
 const globalsInfo = require('globalsInfo');
 
@@ -33,6 +22,7 @@ var resetWebSocet=function(){
     _webSocket.onclose=function(arg){};
     _webSocket.onNotValid=function(){};
     listeners={};
+    globalListeners={};
     toSendMsgs=[];
     cc.log('resetWebSocet');
 };
@@ -88,13 +78,14 @@ var initWebSocket=function(cbs) {
     }
     
     _webSocket.onmessage=function(message){
-        cc.log('onmessage',message);
+        //cc.log('onmessage',message);
         /*
         if(/^"/.test(obj))
             obj = eval(obj);
             */
+        var msg;
         try{
-            var msg = JSON.parse(message.data);
+            msg = JSON.parse(message.data);
         }catch(e){
             console.log(e);
             return;
@@ -120,7 +111,7 @@ var initWebSocket=function(cbs) {
     
     _webSocket.emit=function(eventName,obj){
         //_webSocket.send('client emit');
-        if(cc.sys.isObjectValid(_webSocket) && netStatus && _webSocket.readyState==1){
+        if(cc.sys.isObjectValid(_webSocket) && netStatus && _webSocket.readyState===1){
             //添加公共参数
             obj.eventName=eventName;
             obj.versionCode=config.versionCode;
@@ -129,7 +120,7 @@ var initWebSocket=function(cbs) {
             obj.token=globalsInfo.token;
             cc.log('emit socket:', JSON.stringify(obj));
             _webSocket.send(JSON.stringify(obj));
-        }else if(_webSocket.readyState==0){
+        }else if(_webSocket.readyState===0){
             cc.log('emit not ready socket:', JSON.stringify(obj));
             toSendMsgs.push({eventName:eventName,obj:obj});
         }else{
@@ -153,14 +144,18 @@ var initWebSocket=function(cbs) {
 var Test = {
     
 	getInstance:function(ip,port,cbs){
-        cc.log('getNetworkInstance '+ip+":"+port);
+        cc.log('getNetworkInstance '+ip+":"+port,netStatus);
         if(cc.sys.isObjectValid(_webSocket) && netStatus){
             if(cbs){
                 initWebSocket(cbs);
             }
         }else{
+            if(cc.sys.isObjectValid(_webSocket)){
+                _webSocket.close();
+                cc.log('close _webSocket');
+            }
             _webSocket = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
-            
+            _webSocket.myid=new Date().getTime();
             cc.log('new _webSocket');
             resetWebSocet();
             initWebSocket(cbs);
@@ -168,6 +163,7 @@ var Test = {
             //初始化全局监听函数
             globalsInfo.initGlobalListeners(_webSocket);
         }
+        
         return _webSocket;
 	}
 };

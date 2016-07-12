@@ -55,14 +55,12 @@ cc.Class({
         cc.log('login',username);
         
         var netInstance = Network.getInstance();
-        
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);
         
         var that = this;
-        netInstance.emit('logintest', {'username':username,'passwd':passwd});
         netInstance.emit('login', {'username':username,'passwd':passwd});
         netInstance.listeneOn('login', function(result){
             that.node.removeChildByTag(2000);

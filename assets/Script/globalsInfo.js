@@ -4,10 +4,8 @@ var globalsInfo = {
     initGlobalListeners:function(netInstance){
         cc.log('initGlobalListeners');
         netInstance.listeneOn('verifyToken', function(result){
-            console.log('verifyToken',result);
             if(result.error){
                 cc.log("verifyToken: "+result.error);
-                cc.log('globalsInfo listener');
                 cc.director.loadScene('login');
             }else{
                 cc.log('verifyToken success');
