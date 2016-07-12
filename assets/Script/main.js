@@ -92,6 +92,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        settingPre:{
+            default: null,
+            type: cc.Prefab
+        },
         username:{
             default:null,
             type:cc.Label,
@@ -118,6 +122,29 @@ cc.Class({
         var scaleAction2 =cc.scaleBy(0.5, 0.8, 0.8);
         var scaleAction3 =cc.scaleBy(0.5, 1.25, 1.25);
         this.todaytask.node.runAction(cc.repeatForever(cc.sequence(scaleAction2,scaleAction3)));
+    },
+    initListener:function() {
+        var that = this;
+        netInstance.onOneEventOneFunc('bonus',function(data){
+            cc.log('bonus',data);
+
+            if(globalsInfo.bonus===undefined){
+                globalsInfo.bonus=data.datas;
+            }else{
+                for(var bonusRecordId in data.datas){
+                    globalsInfo.bonus[bonusRecordId]=data.datas[bonusRecordId];
+                }
+            }
+            if(that.name=='Canvas<main>'){
+                cc.log('globalsInfo.bonus ',globalsInfo.bonus);
+                for(var bonusRecordId in globalsInfo.bonus){
+                    cc.log('bonusRecordId ',bonusRecordId);
+                    that.getBonus(bonusRecordId);
+                    break;
+                }
+            }
+        });
+        netInstance.emit('bonus',{});
     },
     // use this for initialization
     onLoad: function () {
@@ -286,7 +313,7 @@ cc.Class({
         if(globalsInfo.netStatus===false){
             this.onNotValid();
         }
-        
+        this.initListener();
     },
     onNotValid:function(){
         var toast = cc.instantiate(this.toastPrefab);
@@ -351,7 +378,7 @@ cc.Class({
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
         
-        //*
+        /*
         netInstance.onOneEventOneFunc('bonus',function(data){
             cc.log('bonus',data);
 
@@ -371,8 +398,9 @@ cc.Class({
                 }
             }
         });
-        //*/
         netInstance.emit('bonus',{});
+        //*/
+        
     },
     
     // called every frame, uncomment this function to activate update callback
@@ -467,6 +495,7 @@ cc.Class({
         cc.director.loadScene('fightRecords');
     },
     volumeSetting:function(){
+
         //this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
         this.win.string=window.netstaus;
@@ -483,12 +512,25 @@ cc.Class({
         }
     },
     quit:function(){
-        cc.sys.localStorage.removeItem('isVolumeOpen');
-        cc.sys.localStorage.removeItem('userid');
-        cc.sys.localStorage.removeItem('token');
-        cc.sys.localStorage.removeItem('isShowFightTip');
-        //cc.sys.localStorage.removeItem('username');
-        cc.director.loadScene('login');
+        var setting = cc.instantiate(this.settingPre);
+        setting.setPosition(cc.p(0,0));
+        this.node.addChild(setting,1,2230);
+        var that = this;
+        setting.getComponent('setting').init({
+            quit:function() {
+                cc.sys.localStorage.removeItem('isVolumeOpen');
+                cc.sys.localStorage.removeItem('userid');
+                cc.sys.localStorage.removeItem('token');
+                cc.sys.localStorage.removeItem('isShowFightTip');
+                //cc.sys.localStorage.removeItem('username');
+               
+                that.node.removeChildByTag(2230);
+                cc.director.loadScene('login');
+            },
+            confirm:function(){
+                that.node.removeChildByTag(2230);
+            },
+        });
     },
     totalToast:function(){
         var toast = cc.instantiate(this.toastPrefab);

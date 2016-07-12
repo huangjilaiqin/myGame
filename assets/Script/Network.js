@@ -127,11 +127,13 @@ var initWebSocket=function(cbs) {
             obj.versionName=config.versionName;
             obj.userid=globalsInfo.userid;
             obj.token=globalsInfo.token;
-            
+            //cc.log('emit socket:', JSON.stringify(obj));
             _webSocket.send(JSON.stringify(obj));
         }else if(_webSocket.readyState==0){
+            //cc.log('emit not ready socket:', JSON.stringify(obj));
             toSendMsgs.push({eventName:eventName,obj:obj});
         }else{
+            //cc.log('emit onNotValid');
             _webSocket.onNotValid();
         }
     };
