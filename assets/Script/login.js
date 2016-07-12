@@ -28,16 +28,16 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        cc.log('globalsInfo.username',globalsInfo.username);
-        if(globalsInfo.username!==undefined)
-            this.username.string=globalsInfo.username;
-        else{
-            var username = cc.sys.localStorage.getItem('username');
-            cc.log(username);
-            if(username!==null)
-                this.username.string=username;
-        }
         
+        cc.log('globalsInfo.username',globalsInfo.username);
+        
+        if(globalsInfo.username!==null){
+            this.username.string=globalsInfo.username;
+        }else{
+            var username = cc.sys.localStorage.getItem('username');
+            this.username.string=username;
+                
+        }
     },
 
     // called every frame, uncomment this function to activate update callback
