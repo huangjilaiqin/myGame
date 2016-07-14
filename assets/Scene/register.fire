@@ -496,7 +496,7 @@
       "__uuid__": "67e68bc9-dad5-4ad9-a2d8-7e03d458e32f"
     },
     "_N$returnType": 0,
-    "_N$inputFlag": 3,
+    "_N$inputFlag": 0,
     "_N$inputMode": 6,
     "_N$fontSize": 32,
     "_N$lineHeight": 32,
@@ -612,7 +612,7 @@
       "__uuid__": "67e68bc9-dad5-4ad9-a2d8-7e03d458e32f"
     },
     "_N$returnType": 0,
-    "_N$inputFlag": 3,
+    "_N$inputFlag": 0,
     "_N$inputMode": 6,
     "_N$fontSize": 32,
     "_N$lineHeight": 32,

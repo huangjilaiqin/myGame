@@ -195,6 +195,7 @@ cc.Class({
         var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
         var token = cc.sys.localStorage.getItem('token');
         var username = cc.sys.localStorage.getItem('username');
+        
         globalsInfo.userid=userid;
         globalsInfo.token=token;
         globalsInfo.username=username;
@@ -224,7 +225,7 @@ cc.Class({
                     netInstance.emit('verifyToken', {});
                     //*
                     netInstance.onOneEventOneFunc('verifyToken', function(result){
-                        console.log('verifyToken',result);
+                        console.log('verifyToken',JSON.stringify(result));
                         if(result.error){
                             cc.log("verifyToken: "+result.error);
                             //cc.director.loadScene('login');
@@ -247,11 +248,13 @@ cc.Class({
                             //*/
                             //tip=token;
                             
+                            that.initVerifyOrRelogin(that);
+                            
                             if(!that.node)
                                 return;
                             that.node.removeChildByTag(2000);
                 
-                            that.initVerifyOrRelogin(that);
+                            
                         }
                     });
                     //*/
@@ -299,6 +302,7 @@ cc.Class({
                 globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
                 this.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
             }
+            this.username.string=username;
         }
         if(globalsInfo.isVolumeOpen)
             cc.audioEngine.playMusic(this.bgAudio, true);
@@ -368,6 +372,7 @@ cc.Class({
     
     //重新登录或验证token成后初始化
     initVerifyOrRelogin:function(that){
+        cc.log('initVerifyOrRelogin',JSON.stringify(globalsInfo));
         //var netInstance = Network.getInstance();
         that.username.string=globalsInfo.username;
         //that.win.string=globalsInfo.win;
@@ -377,30 +382,6 @@ cc.Class({
         
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
-        
-        /*
-        netInstance.onOneEventOneFunc('bonus',function(data){
-            cc.log('bonus',data);
-
-            if(globalsInfo.bonus===undefined){
-                globalsInfo.bonus=data.datas;
-            }else{
-                for(var bonusRecordId in data.datas){
-                    globalsInfo.bonus[bonusRecordId]=data.datas[bonusRecordId];
-                }
-            }
-            if(that.name=='Canvas<main>'){
-                cc.log('globalsInfo.bonus ',globalsInfo.bonus);
-                for(var bonusRecordId in globalsInfo.bonus){
-                    cc.log('bonusRecordId ',bonusRecordId);
-                    that.getBonus(bonusRecordId);
-                    break;
-                }
-            }
-        });
-        netInstance.emit('bonus',{});
-        //*/
-        
     },
     
     // called every frame, uncomment this function to activate update callback

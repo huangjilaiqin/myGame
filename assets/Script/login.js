@@ -62,7 +62,7 @@ cc.Class({
         
         var that = this;
         netInstance.emit('login', {'username':username,'passwd':passwd});
-        netInstance.listeneOn('login', function(result){
+        netInstance.onOneEventOneFunc('login', function(result){
             that.node.removeChildByTag(2000);
             
             
@@ -78,7 +78,6 @@ cc.Class({
                 var token = result.token;
                 
                 cc.log('login success',userid,token);
-                
                 globalsInfo.userid=userid;
                 globalsInfo.token=token;
                 globalsInfo.username=username;
