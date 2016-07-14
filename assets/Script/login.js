@@ -28,15 +28,8 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        
-        cc.log('globalsInfo.username',globalsInfo.username);
-        
         if(globalsInfo.username!==null){
             this.username.string=globalsInfo.username;
-        }else{
-            var username = cc.sys.localStorage.getItem('username');
-            this.username.string=username;
-                
         }
     },
 
@@ -48,6 +41,8 @@ cc.Class({
         var username = this.username.string;
         var passwd = this.passwd.string;
         this.tip.string=" ";
+        cc.log(username);
+        cc.log(passwd);
         if(username.length===0 || passwd.length===0){
             this.tip.string = "账号密码不能为空";
             return;

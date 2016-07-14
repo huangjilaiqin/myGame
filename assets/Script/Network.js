@@ -87,7 +87,7 @@ var initWebSocket=function(cbs) {
         try{
             msg = JSON.parse(message.data);
         }catch(e){
-            console.log(e);
+            console.log(JSON.stringify(e));
             return;
         }
         var eventName = msg.eventName;
