@@ -877,13 +877,13 @@
     "_useOriginalSize": false,
     "_fontSize": 32,
     "_lineHeight": 32,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": " ",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
-    "_N$overflow": 1
+    "_N$overflow": 3
   },
   {
     "__type__": "cc.Widget",

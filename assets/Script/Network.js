@@ -78,7 +78,7 @@ var initWebSocket=function(cbs) {
     }
     
     _webSocket.onmessage=function(message){
-        //cc.log('onmessage',message);
+        cc.log('onmessage',message.data);
         /*
         if(/^"/.test(obj))
             obj = eval(obj);

@@ -345,7 +345,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 168,
+      "width": 15.56,
       "height": 56
     },
     "_children": [],
@@ -392,7 +392,7 @@
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "唐三炮",
+    "_N$string": " ",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
