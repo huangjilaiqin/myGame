@@ -1,6 +1,6 @@
 
 var globalsInfo = {
-    kk:0,
+    worldMessges:[],
     initGlobalListeners:function(netInstance){
         cc.log('initGlobalListeners');
         netInstance.listeneOn('verifyToken', function(result){
@@ -28,7 +28,31 @@ var globalsInfo = {
                 
             }
         });
+        
+        netInstance.listeneOn('worldMessage', function(result){
+            if(result.error){
+                cc.log("worldMessage: "+result.error);
+            }else{
+                cc.log('worldMessage receive');
+                
+                if(globalsInfo.worldMessges===undefined){
+                    globalsInfo.worldMessges=[];
+                }
+                var msgs = globalsInfo.worldMessges;
+                var newMsg = result.msg;
+                for(var i=0;i<msgs.length;){
+                    var msg = msgs[i];
+                    if(msg.userid===newMsg.userid && msg.type===newMsg.type){
+                        msgs.splice(i,1);
+                    }else{
+                        i++;
+                    }
+                }
+                globalsInfo.worldMessges.push(result.msg);
+            }
+        });
     },
+    
 };
 
 module.exports=globalsInfo;

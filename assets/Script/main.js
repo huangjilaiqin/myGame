@@ -56,6 +56,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        broadcastPrefab:{
+            default: null,
+            type: cc.Prefab
+        },
         hpPercent:{
             default:0,
             visible:false,
@@ -152,6 +156,8 @@ cc.Class({
         //界面动效
         this.initAction();
         
+        
+        
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
             cc.sys.localStorage.setItem('isVolumeOpen',1);
@@ -231,23 +237,6 @@ cc.Class({
                             //cc.director.loadScene('login');
                         }else{
                             cc.log('verifyToken success');
-                            /*
-                            globalsInfo.value=result.value;
-                            globalsInfo.total=result.total;
-                            globalsInfo.win=result.win;
-                            globalsInfo.draw=result.draw;
-                            globalsInfo.lost=result.lost;
-                                    
-                            globalsInfo.todaytask=result.todaytask;
-                            globalsInfo.todayamount=result.todayamount;
-                            globalsInfo.totalPercent=globalsInfo.todayamount/globalsInfo.todaytask;
-                            
-                            globalsInfo.remainhp=result.remainhp;
-                            globalsInfo.hp=result.hp;
-                            globalsInfo.hpPercent=globalsInfo.remainhp/globalsInfo.hp;
-                            //*/
-                            //tip=token;
-                            
                             that.initVerifyOrRelogin(that);
                             
                             if(!that.node)
@@ -318,6 +307,27 @@ cc.Class({
             this.onNotValid();
         }
         this.initListener();
+        
+        var broadcast = cc.instantiate(this.broadcastPrefab);
+        broadcast.getComponent('broadcast').init(globalsInfo.worldMessges,function(datas){
+            //每次循环后清理不在显示的信息
+            //console.log(datas.shift());
+            //bb.splice(2,1,'kk','gg');   从第2的下标开始删除1个数据，往第二个下标开始添加后面的数据
+            var len = datas.length;
+            cc.log('broadcast size:',globalsInfo.worldMessges.length);
+            for(var i=0;i<len;){
+                var data = datas[i];
+                
+                if(data.showtimes===0 || (data.showtimes===-1 && Utils.cmpDate(new Date(),new Date(data.etime))===1)){
+                    console.log('remove broadcast:',data.showtimes,new Date(data.etime));
+                    datas.splice(i,1);
+                    len--;
+                }else{
+                    i++;
+                }
+            }
+        });
+        this.node.addChild(broadcast,1);
     },
     onNotValid:function(){
         var toast = cc.instantiate(this.toastPrefab);
@@ -382,6 +392,20 @@ cc.Class({
         
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
+        
+        netInstance.onOneEventOneFunc('worldMessageHistory', function(result){
+            if(result.error){
+                cc.log("worldMessageHistory: "+result.error);
+            }else{
+                var msgs = result.msgs;
+                for(var i in msgs){
+                    globalsInfo.worldMessges.push(msgs[i]);
+                }
+                cc.log('worldMessageHistory success',globalsInfo.worldMessges);
+                
+            }
+        });
+        netInstance.emit('worldMessageHistory', {});
     },
     
     // called every frame, uncomment this function to activate update callback
@@ -491,6 +515,8 @@ cc.Class({
             cc.audioEngine.playMusic(this.bgAudio, true);
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
         }
+        //window.location.href="http://www.baidu.com";
+        //window.open("http://www.baidu.com");
     },
     quit:function(){
         var setting = cc.instantiate(this.settingPre);

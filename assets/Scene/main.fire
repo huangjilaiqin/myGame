@@ -4948,6 +4948,9 @@
       "__uuid__": "56761ff5-726a-4ea7-9cba-7f99fc9c3c8c"
     },
     "toastPrefab": {
+      "__uuid__": "ea93a9b0-e225-46bd-9288-02e8e218b2bf"
+    },
+    "broadcastPrefab": {
       "__uuid__": "5ed66a30-b423-4f78-aefe-a8754bf29258"
     },
     "hpPercent": 0,

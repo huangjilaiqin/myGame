@@ -91,6 +91,7 @@ var initWebSocket=function(cbs) {
             return;
         }
         var eventName = msg.eventName;
+        cc.log('onmessage',eventName);
 
         //全局监听函数,全局优先处理
         var cbs = globalListeners[eventName];
