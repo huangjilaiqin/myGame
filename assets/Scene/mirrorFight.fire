@@ -381,8 +381,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 300,
-      "height": 54
+      "width": 690,
+      "height": 46
     },
     "_children": [],
     "_rotationX": 0,
@@ -425,13 +425,13 @@
     "_useOriginalSize": false,
     "_fontSize": 46,
     "_lineHeight": 46,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "唐三炮唐三炮唐三炮唐三炮唐三炮",
     "_N$horizontalAlign": 2,
     "_N$verticalAlign": 1,
-    "_N$overflow": 1
+    "_N$overflow": 0
   },
   {
     "__type__": "cc.Widget",
@@ -477,8 +477,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 300,
-      "height": 54
+      "width": 920,
+      "height": 46
     },
     "_children": [],
     "_rotationX": 0,
@@ -527,7 +527,7 @@
     "_N$string": "对手唐三炮唐三炮唐三炮唐三炮唐三炮唐三炮",
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
-    "_N$overflow": 1
+    "_N$overflow": 0
   },
   {
     "__type__": "cc.Widget",
@@ -921,6 +921,9 @@
     },
     "opponentPushupAudio": {
       "__uuid__": "82d848ea-52e6-4866-b23f-711e23703d89"
+    },
+    "toastPrefab": {
+      "__uuid__": "ea93a9b0-e225-46bd-9288-02e8e218b2bf"
     },
     "countdownTime": 30,
     "gameStatus": 0,

@@ -13,17 +13,26 @@ cc.Class({
         duration:{
             default:2.5,
             visible:false,
-        }
+        },
+        position:{
+            default:null,
+            visible:false,
+        },
     },
-    init:function(info,duration){
+    init:function(info,duration,position){
         this.msg.string=info;
         cc.log(duration);
         if(duration!==undefined)
             this.duration=duration;
+        if(position!==undefined){
+            this.position=position;
+        }else{
+            this.position=cc.p(0,0);
+        }
     },
     // use this for initialization
     onLoad: function () {
-        this.node.setPosition(cc.p(0,0));
+        this.node.setPosition(this.position);
         
         var scaleAction = cc.scaleTo(0.2, 1, 1);
         scaleAction.easing(cc.easeBackOut());

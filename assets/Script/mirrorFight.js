@@ -57,6 +57,10 @@ cc.Class({
             default:null,
             url:cc.AudioClip
         },
+         toastPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
         
         countdownTime:30,
         //0:未开始,1:进行中,2:有一个人完成,3:两个人都完成
@@ -205,6 +209,9 @@ cc.Class({
         var now = new Date().getTime();
         if(now-this.lastPushupTime<350){
             cc.log('delta',now-this.lastPushupTime);
+            var toast = cc.instantiate(this.toastPrefab);
+            toast.getComponent('toast').init('您已接近吉尼斯记录了,悠着点!',3,cc.p(0,cc.winSize.height/4));
+            this.node.addChild(toast,1);
             return;
         }        
         this.lastPushupTime=now;
