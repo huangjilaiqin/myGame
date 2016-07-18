@@ -443,6 +443,10 @@ cc.Class({
         searchPre.setPosition(cc.p(0,0));
         this.node.addChild(searchPre,1,1000);
         
+        var toast = cc.instantiate(this.toastPrefab);
+        toast.getComponent('toast').init('全力以赴,是对对手的最大尊重!',3,cc.p(0,cc.winSize.height/4));
+        this.node.addChild(toast,1);
+        
         var begin = new Date().getTime();
         var that = this;
         netInstance.emit('searchOpponent', {});
@@ -453,7 +457,7 @@ cc.Class({
                 if(result.errno==100){
                     //提示体力值不够
                     var toast = cc.instantiate(that.toastPrefab);
-                    toast.getComponent('toast').init('体力值不足，请完成今日任务,赚取体力值',3);
+                    toast.getComponent('toast').init('体力值不足，赢了比赛才有体力奖励',3);
                     that.node.addChild(toast,1);
                 }else{
                     tip=result.error;
