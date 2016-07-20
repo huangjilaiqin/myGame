@@ -108,6 +108,10 @@ cc.Class({
             default:null,
             visible:false,
         },
+        finished:{
+            default:null,
+            type:cc.Sprite,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -152,11 +156,9 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        
+        window.scenename='main';
         //界面动效
         this.initAction();
-        
-        
         
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
@@ -250,22 +252,39 @@ cc.Class({
                 }
             },
             onError:function(args) {
-                cc.log('onError main');
+                cc.log('onError cb:',window.scenename);
+                if(window.scenename==='login' || window.scenename==='register'){
+                    cc.director.loadScene(window.scenename);
+                }else if(window.scenename!=='main'){
+                    cc.director.loadScene('main');
+                }
+                //*
                 that.node.removeChildByTag(2000);
                 var toast = cc.instantiate(that.toastPrefab);
                 toast.getComponent('toast').init('网络错误,请检查网络',3);
                 that.node.addChild(toast,1);
+                //*/
             },
             onClose:function(){
-                cc.log('main onClose');
+                cc.log('onClose cb:',window.scenename);
                 //cc.director.loadScene('main');
+                if(window.scenename!=='main'){
+                    cc.director.loadScene('main');
+                }
             },
             onNotValid:function(){
+                cc.log('main onNotValid');
                 //globalsInfo.netStatus=false;
-                cc.director.loadScene('main');
+                if(that.name!=='Canvas<main>'){
+                    cc.director.loadScene('main');
+                }else{
+                    //that.onNotValid();
+                }
+                Network.getInstance();
             },
         };
         //重连加载数据,1.加载全局数据 2.本场景相关操作
+        Network.setNetworkErrorHandler(cbs);
         netInstance = Network.getInstance(config.serverIp,config.serverPort,cbs);
 
         if(globalsInfo.isLogin){
@@ -304,12 +323,12 @@ cc.Class({
             }
         }
         if(globalsInfo.netStatus===false){
-            this.onNotValid();
+            //this.onNotValid();
         }
         this.initListener();
         
         var broadcast = cc.instantiate(this.broadcastPrefab);
-        broadcast.getComponent('broadcast').init(globalsInfo.worldMessges,function(datas){
+        broadcast.getComponent('broadcast').init('worldbroadcastIndex',globalsInfo.worldMessges,function(datas){
             //每次循环后清理不在显示的信息
             //console.log(datas.shift());
             //bb.splice(2,1,'kk','gg');   从第2的下标开始删除1个数据，往第二个下标开始添加后面的数据
@@ -361,7 +380,6 @@ cc.Class({
         receive.setPosition(cc.p(0,0));
         var that = this;
         receive.getComponent('receiveBonus').init(globalsInfo.bonus[bonusRecordId],function(){
-            //var netInstance = Network.getInstance();
             netInstance.emit('receiveBonus', {'bonusRecordId':bonusRecordId});
             //loading
             var loading = cc.instantiate(that.loadingPrefab);
@@ -383,7 +401,6 @@ cc.Class({
     //重新登录或验证token成后初始化
     initVerifyOrRelogin:function(that){
         cc.log('initVerifyOrRelogin',JSON.stringify(globalsInfo));
-        //var netInstance = Network.getInstance();
         that.username.string=globalsInfo.username;
         //that.win.string=globalsInfo.win;
         that.draw.string=globalsInfo.draw;
@@ -392,6 +409,10 @@ cc.Class({
         
         that.hpValueLabel.string=globalsInfo.remainhp+"/"+globalsInfo.hp;
         that.totalValueLabel.string=globalsInfo.todayamount+"/"+globalsInfo.todaytask;
+        
+        if(globalsInfo.todayamount>=globalsInfo.todaytask){
+            that.finished.node.opacity=255;
+        }
         
         netInstance.onOneEventOneFunc('worldMessageHistory', function(result){
             if(result.error){
@@ -436,7 +457,6 @@ cc.Class({
         }
     },
     searchOpponent:function(){
-        //var netInstance = Network.getInstance();
         var tip=this.tip;
         
         var searchPre=cc.instantiate(this.searchPre);
@@ -445,11 +465,12 @@ cc.Class({
         
         var toast = cc.instantiate(this.toastPrefab);
         toast.getComponent('toast').init('全力以赴,是对对手的最大尊重!',3,cc.p(0,cc.winSize.height/4));
-        this.node.addChild(toast,1);
+        this.node.addChild(toast,1,1001);
         
         var begin = new Date().getTime();
         var that = this;
-        netInstance.emit('searchOpponent', {});
+        
+        //var netInstance = Network.getInstance();
         netInstance.onOneEventOneFunc('searchOpponent', function(result){
             if(result.error){
                 //提示
@@ -459,6 +480,12 @@ cc.Class({
                     var toast = cc.instantiate(that.toastPrefab);
                     toast.getComponent('toast').init('体力值不足，赢了比赛才有体力奖励',3);
                     that.node.addChild(toast,1);
+                }else if(result.errno==8001){
+                    //网络错误
+                    cc.log('newwork error fuck');
+                    that.node.removeChildByTag(1000);
+                    that.node.removeChildByTag(1001);
+                    that.onNotValid();
                 }else{
                     tip=result.error;
                 }
@@ -481,6 +508,7 @@ cc.Class({
                 }
             }
         });
+        netInstance.emit('searchOpponent', {});
     },
     rank:function(){
 

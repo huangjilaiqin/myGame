@@ -7,10 +7,11 @@ var netStatus=false;
 var listeners={};
 var globalListeners={};
 var toSendMsgs=[];
-var callbacks;
+var networkErrorHandler;
 
 var resetWebSocet=function(){
     _webSocket.onopen = function (event) {
+        cc.log('default onopen');
         netStatus=true;
         globalsInfo.netStatus=true;
         while(toSendMsgs.length){
@@ -18,65 +19,28 @@ var resetWebSocet=function(){
             _webSocket.emit(datas.eventName,datas.obj);
         }
     };
-    _webSocket.onerror=function(arg){};
-    _webSocket.onclose=function(arg){};
-    _webSocket.onNotValid=function(){};
+    _webSocket.onerror=function(arg){
+        cc.log('default onerror');
+        netStatus=false;
+        globalsInfo.netStatus=false;
+        resetWebSocet();
+    };
+    _webSocket.onclose=function(arg){
+        cc.log('default onclose');
+        netStatus=false;
+        globalsInfo.netStatus=false;
+        //resetWebSocet();
+    };
+    _webSocket.onNotValid=function(){
+        cc.log('default onNotValid');
+    };
     listeners={};
     globalListeners={};
     toSendMsgs=[];
     cc.log('resetWebSocet');
 };
 
-var initWebSocket=function(cbs) {
-    if(cbs){
-        callbacks=cbs;
-        /*
-        CONNECTING	0
-        OPEN	1
-        CLOSING	2
-        CLOSED	3
-        */
-
-        if(callbacks.onConnect){
-            _webSocket.onopen = function (event) {
-                cc.log("Send Text WS was opened.");
-                netStatus=true;
-                globalsInfo.netStatus=true;
-                callbacks.onConnect();
-                while(toSendMsgs.length){
-                    var datas = toSendMsgs.shift();
-                    _webSocket.emit(datas.eventName,datas.obj);
-                }
-            };
-        }
-        
-        if(callbacks.onError){
-            //*
-            _webSocket.onerror=function(arg){
-                callbacks.onError(arg);
-                netStatus=false;
-                globalsInfo.netStatus=false;
-                resetWebSocet();
-            };
-            //*/
-            
-        }
-        if(callbacks.onClose){
-            _webSocket.onclose=function(arg){
-                callbacks.onClose();
-                netStatus=false;
-                globalsInfo.netStatus=false;
-                resetWebSocet();
-            };
-            
-        }
-        if(callbacks.onNotValid){
-            _webSocket.onNotValid=function(arg){
-                callbacks.onNotValid();
-            };
-        }
-    }
-    
+var initWebSocket=function() {
     _webSocket.onmessage=function(message){
         cc.log('onmessage',message.data);
         /*
@@ -126,7 +90,23 @@ var initWebSocket=function(cbs) {
             toSendMsgs.push({eventName:eventName,obj:obj});
         }else{
             cc.log('emit onNotValid');
-            _webSocket.onNotValid();
+            //_webSocket.onNotValid();
+            var msg={error:'网络错误',errno:8001};
+            var cbs = globalListeners[eventName];
+            if(cbs){
+                for(var i=0;i<cbs.length;i++){
+                    cbs[i](msg);
+                }
+            }
+    
+            cbs = listeners[eventName];
+            cc.log(listeners);
+            if(cbs){
+                cc.log('onNotValid callback');
+                for(var i=0;i<cbs.length;i++){
+                    cbs[i](msg);
+                }
+            }
         }
     };
     /*
@@ -138,18 +118,67 @@ var initWebSocket=function(cbs) {
         globalListeners[eventName].push(callback);
     };
     _webSocket.onOneEventOneFunc=function(eventName,callback) {
+        cc.log('onOneEventOneFunc:',eventName);
         listeners[eventName]=[callback];
     };
+    initNetworkErrorHandler();
+};
+
+var initNetworkErrorHandler=function(){
+    if(networkErrorHandler){
+        /*
+        CONNECTING	0
+        OPEN	1
+        CLOSING	2
+        CLOSED	3
+        */
+
+        if(networkErrorHandler.onConnect){
+            _webSocket.onopen = function (event) {
+                cc.log("WS was onConnect.");
+                netStatus=true;
+                globalsInfo.netStatus=true;
+                networkErrorHandler.onConnect();
+                while(toSendMsgs.length){
+                    var datas = toSendMsgs.shift();
+                    _webSocket.emit(datas.eventName,datas.obj);
+                }
+            };
+        }
+        
+        if(networkErrorHandler.onError){
+            //*
+            _webSocket.onerror=function(arg){
+                networkErrorHandler.onError(arg);
+                netStatus=false;
+                globalsInfo.netStatus=false;
+                resetWebSocet();
+            };
+            //*/
+            
+        }
+        if(networkErrorHandler.onClose){
+            _webSocket.onclose=function(arg){
+                networkErrorHandler.onClose();
+                netStatus=false;
+                globalsInfo.netStatus=false;
+                //resetWebSocet();
+            };
+            
+        }
+        if(networkErrorHandler.onNotValid){
+            _webSocket.onNotValid=function(arg){
+                networkErrorHandler.onNotValid();
+            };
+        }
+    }
 };
 
 var Test = {
-    
-	getInstance:function(ip,port,cbs){
+	getInstance:function(ip,port){
         cc.log('getNetworkInstance '+ip+":"+port,netStatus);
         if(cc.sys.isObjectValid(_webSocket) && netStatus){
-            if(cbs){
-                initWebSocket(cbs);
-            }
+            initWebSocket();
         }else{
             if(cc.sys.isObjectValid(_webSocket)){
                 _webSocket.close();
@@ -157,16 +186,20 @@ var Test = {
             }
             _webSocket = new WebSocket("ws://"+config.serverIp+":"+config.serverPort);
             _webSocket.myid=new Date().getTime();
+            cc.log(_webSocket);
             cc.log('new _webSocket');
             resetWebSocet();
-            initWebSocket(cbs);
+            initWebSocket();
             
             //初始化全局监听函数
             globalsInfo.initGlobalListeners(_webSocket);
         }
         
         return _webSocket;
-	}
+	},
+	setNetworkErrorHandler:function(cbs){
+        networkErrorHandler=cbs;
+    },
 };
 
 module.exports=Test;

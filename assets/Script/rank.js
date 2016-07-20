@@ -12,7 +12,7 @@ cc.Class({
     },
 
     onLoad: function () {
-                
+        window.scenename='rank';
         var loading = cc.instantiate(this.loadingPrefab);
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);

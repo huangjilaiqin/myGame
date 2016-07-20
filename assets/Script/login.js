@@ -24,12 +24,20 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        learnTipPre: {
+            default: null,
+            type: cc.Prefab,
+        },
     },
 
     // use this for initialization
     onLoad: function () {
         if(globalsInfo.username!==null){
             this.username.string=globalsInfo.username;
+        }
+        
+        if(globalsInfo.netStatus===false){
+            this.tip.string='网络错误,请检查网络';
         }
     },
 
@@ -38,6 +46,7 @@ cc.Class({
 
     // },
     login:function(){
+        window.scenename='login';
         var username = this.username.string;
         var passwd = this.passwd.string;
         this.tip.string=" ";
@@ -107,5 +116,15 @@ cc.Class({
     },
     register:function(){
           cc.director.loadScene('register');
+    },
+    getbackPasswd:function(){
+        var learnTipPre = cc.instantiate(this.learnTipPre);
+            
+        this.node.addChild(learnTipPre,1,3000);
+        var learnTip = learnTipPre.getComponent('learnTip');
+        var that = this;
+        learnTip.init("俯卧撑学院","请到下面#天天俯卧撑#官方QQ群联系管理员找回密码:\n\nQQ群: 553 689 366\n\n给您带来的不便深表歉意!",function(){
+            that.node.removeChildByTag(3000);
+        });
     },
 });

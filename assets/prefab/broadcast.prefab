@@ -72,7 +72,7 @@
     "__type__": "cc.Node",
     "_name": "bg",
     "_objFlags": 0,
-    "_opacity": 110,
+    "_opacity": 180,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -339,7 +339,8 @@
     "datas": null,
     "clearDatasCb": null,
     "currentIndex": 0,
-    "haveInitMsg": false
+    "haveInitMsg": false,
+    "typeName": null
   },
   {
     "__type__": "cc.PrefabInfo",

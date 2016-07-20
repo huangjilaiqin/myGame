@@ -103,7 +103,7 @@ cc.Class({
             'records':records,
         };
         netInstance.emit('uploadRecord', requestObj);
-        
+        var that = this;
         netInstance.onOneEventOneFunc('uploadRecord', function(result){
             //var result = JSON.parse(obj);
             if(result.error){
@@ -120,6 +120,12 @@ cc.Class({
                 globalsInfo.todayamount=result.todayamount;
                 globalsInfo.remainhp=result.remainhp;
                 globalsInfo.hp=result.hp;
+                
+                if(result.encourageMsg.length>0){
+                    var toast = cc.instantiate(that.toastPrefab);
+                    toast.getComponent('toast').init(result.encourageMsg,4,cc.p(0,cc.winSize.height/4));
+                    that.node.addChild(toast,1);
+                }
             }
         });
     },
@@ -162,7 +168,7 @@ cc.Class({
     },
     
     onLoad: function () {
-        
+        window.scenename='mirrorFight';
         cc.log(globalsInfo.opponent);
         this.myName.string=globalsInfo.username;
         this.opponentInfo = globalsInfo.opponent;
@@ -174,6 +180,7 @@ cc.Class({
         this.opponentName.string=this.opponentInfo.username;
         
         this.opponentRecordsSize=this.opponentInfo.records.length;
+        cc.log('opponentRecordsSize:',this.opponentRecordsSize);
         this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
         
         if(globalsInfo.isShowFightTip!=1){
@@ -208,12 +215,12 @@ cc.Class({
             return;
         var now = new Date().getTime();
         if(now-this.lastPushupTime<350){
-            cc.log('delta',now-this.lastPushupTime);
+            //cc.log('delta',now-this.lastPushupTime);
             var toast = cc.instantiate(this.toastPrefab);
             toast.getComponent('toast').init('您已接近吉尼斯记录了,悠着点!',3,cc.p(0,cc.winSize.height/4));
             this.node.addChild(toast,1);
             return;
-        }        
+        }
         this.lastPushupTime=now;
         this.myCountScore.add();
         if(globalsInfo.isVolumeOpen)
