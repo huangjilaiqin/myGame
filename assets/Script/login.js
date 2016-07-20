@@ -32,6 +32,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        window.scenename='login';
         if(globalsInfo.username!==null){
             this.username.string=globalsInfo.username;
         }
@@ -46,12 +47,9 @@ cc.Class({
 
     // },
     login:function(){
-        window.scenename='login';
         var username = this.username.string;
         var passwd = this.passwd.string;
         this.tip.string=" ";
-        cc.log(username);
-        cc.log(passwd);
         if(username.length===0 || passwd.length===0){
             this.tip.string = "账号密码不能为空";
             return;
@@ -65,13 +63,10 @@ cc.Class({
         this.node.addChild(loading,1,2000);
         
         var that = this;
-        netInstance.emit('login', {'username':username,'passwd':passwd});
+        
         netInstance.onOneEventOneFunc('login', function(result){
-            that.node.removeChildByTag(2000);
-            
-            
-            //that.tip.string = 'token:'+result.token+"#";
-            //that.tip2.string = 'ok';
+            if(that.node!==undefined)
+                that.node.removeChildByTag(2000);
             
             if(result.error){
                 //提示
@@ -113,6 +108,7 @@ cc.Class({
                 cc.director.loadScene('main');
             }
         });   
+        netInstance.emit('login', {'username':username,'passwd':passwd});
     },
     register:function(){
           cc.director.loadScene('register');

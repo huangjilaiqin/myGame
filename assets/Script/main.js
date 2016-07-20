@@ -157,6 +157,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         window.scenename='main';
+        globalsInfo.scenename='main';
         //界面动效
         this.initAction();
         
@@ -259,7 +260,7 @@ cc.Class({
                     cc.director.loadScene('main');
                 }
                 //*
-                that.node.removeChildByTag(2000);
+                //that.node.removeChildByTag(2000);
                 var toast = cc.instantiate(that.toastPrefab);
                 toast.getComponent('toast').init('网络错误,请检查网络',3);
                 that.node.addChild(toast,1);
@@ -280,7 +281,7 @@ cc.Class({
                 }else{
                     //that.onNotValid();
                 }
-                Network.getInstance();
+                
             },
         };
         //重连加载数据,1.加载全局数据 2.本场景相关操作
@@ -458,7 +459,13 @@ cc.Class({
     },
     searchOpponent:function(){
         var tip=this.tip;
+        var loading = cc.instantiate(this.loadingPrefab);
+        loading.setPosition(cc.p(0,50));
+        this.node.addChild(loading,1,2000);
         
+        cc.director.loadScene('mirrorFight');
+        cc.audioEngine.stopMusic();
+        /*
         var searchPre=cc.instantiate(this.searchPre);
         searchPre.setPosition(cc.p(0,0));
         this.node.addChild(searchPre,1,1000);
@@ -470,7 +477,7 @@ cc.Class({
         var begin = new Date().getTime();
         var that = this;
         
-        //var netInstance = Network.getInstance();
+        var netInstance = Network.getInstance();
         netInstance.onOneEventOneFunc('searchOpponent', function(result){
             if(result.error){
                 //提示
@@ -509,6 +516,7 @@ cc.Class({
             }
         });
         netInstance.emit('searchOpponent', {});
+        */
     },
     rank:function(){
 

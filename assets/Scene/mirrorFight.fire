@@ -381,7 +381,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 690,
+      "width": 12.78,
       "height": 46
     },
     "_children": [],
@@ -428,7 +428,7 @@
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "唐三炮唐三炮唐三炮唐三炮唐三炮",
+    "_N$string": " ",
     "_N$horizontalAlign": 2,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
@@ -477,7 +477,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 920,
+      "width": 12.78,
       "height": 46
     },
     "_children": [],
@@ -521,10 +521,10 @@
     "_useOriginalSize": false,
     "_fontSize": 46,
     "_lineHeight": 46,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "对手唐三炮唐三炮唐三炮唐三炮唐三炮唐三炮",
+    "_N$string": " ",
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
@@ -717,10 +717,10 @@
     "_useOriginalSize": false,
     "_fontSize": 46,
     "_lineHeight": 46,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
-    "_N$string": "20",
+    "_N$string": "30",
     "_N$horizontalAlign": 2,
     "_N$verticalAlign": 1,
     "_N$overflow": 0
@@ -813,7 +813,7 @@
     "_useOriginalSize": false,
     "_fontSize": 46,
     "_lineHeight": 46,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "秒",
@@ -901,6 +901,9 @@
     },
     "learnTipPre": {
       "__uuid__": "75a9b29c-0a8c-4162-8fee-b03cdee7d3f1"
+    },
+    "searchPre": {
+      "__uuid__": "9e543ae7-5387-4c90-9331-ff1d4ad2a76a"
     },
     "myCountScore": null,
     "opponentCountScorePre": {

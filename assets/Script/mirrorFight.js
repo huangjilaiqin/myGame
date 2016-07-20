@@ -25,6 +25,10 @@ cc.Class({
             default: null,
             type: cc.Prefab,
         },
+        searchPre: {
+            default: null,
+            type: cc.Prefab
+        },
         myCountScore:{
             default:null,
             visible:false,
@@ -166,9 +170,69 @@ cc.Class({
         }
         this.countdown.string=this.countdownTime;
     },
-    
+    searchOpponent:function(){
+        var tip=this.tip;
+        
+        var searchPre=cc.instantiate(this.searchPre);
+        searchPre.setPosition(cc.p(0,0));
+        this.node.addChild(searchPre,1,1000);
+        
+        var toast = cc.instantiate(this.toastPrefab);
+        toast.getComponent('toast').init('全力以赴,是对对手的最大尊重!',3,cc.p(0,cc.winSize.height/4));
+        this.node.addChild(toast,1,1001);
+        
+        var begin = new Date().getTime();
+        var that = this;
+        
+        var netInstance = Network.getInstance();
+        netInstance.onOneEventOneFunc('searchOpponent', function(result){
+            if(result.error){
+                //提示
+                that.node.removeChildByTag(1000);
+                if(result.errno==100){
+                    //提示体力值不够
+                    var toast = cc.instantiate(that.toastPrefab);
+                    toast.getComponent('toast').init('体力值不足，赢了比赛才有体力奖励',3);
+                    that.node.addChild(toast,1);
+                }else if(result.errno==8001){
+                    //网络错误
+                    cc.log('newwork error fuck');
+                    that.node.removeChildByTag(1000);
+                    that.node.removeChildByTag(1001);
+                    that.onNotValid();
+                }else{
+                    tip=result.error;
+                }
+            }else{
+                globalsInfo.opponent = result;
+                var now = new Date().getTime();
+                var delta = now-begin;
+                if(delta<2000){
+                    that.scheduleOnce(function(){
+                        that.node.removeChildByTag(1000);
+                        
+                        //处理web版第一次加载对战场景慢的问题
+                        /*
+                        var loading = cc.instantiate(this.loadingPrefab);
+                        loading.setPosition(cc.p(0,50));
+                        that.node.addChild(loading,1,2000);
+                        cc.director.loadScene('mirrorFight');
+                        cc.audioEngine.stopMusic();
+                        */
+                        that.node.removeChildByTag(1000);
+                        that.node.removeChildByTag(1001);
+                        that.initFight();
+                    },(2000-delta)/1000);
+                }
+            }
+        });
+        netInstance.emit('searchOpponent', {});
+    },
     onLoad: function () {
         window.scenename='mirrorFight';
+        this.searchOpponent();
+    },
+    initFight:function(){
         cc.log(globalsInfo.opponent);
         this.myName.string=globalsInfo.username;
         this.opponentInfo = globalsInfo.opponent;
