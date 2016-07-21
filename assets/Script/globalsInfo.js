@@ -52,7 +52,20 @@ var globalsInfo = {
             }
         });
     },
-    
+    /*
+    1:蒲公英,
+    2:360应用市场,
+    3:web,
+    4:百度手机助手，
+    5:91,
+    */
+    comefrom:1,
+    /*
+    1:Android,
+    2:iOS,
+    3:web,
+    */
+    platform:1,
 };
 
 module.exports=globalsInfo;

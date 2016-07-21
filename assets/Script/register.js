@@ -64,7 +64,11 @@ cc.Class({
         this.node.addChild(loading,1,2000);
         
         var that = this;
-        netInstance.emit('register', {'username':username,'passwd':passwd});
+        var info = {
+            username:username,
+            passwd:passwd,
+        };
+        netInstance.emit('register', {});
         netInstance.onOneEventOneFunc('register', function(result){
             that.node.removeChildByTag(2000);
             if(result.error){

@@ -105,10 +105,27 @@ cc.Class({
                 cc.sys.localStorage.setItem('token',token);
                 //that.tip.string=cc.sys.localStorage.getItem('userid');
                 //*/
+                that.sendBaseInfo();
                 cc.director.loadScene('main');
             }
         });   
         netInstance.emit('login', {'username':username,'passwd':passwd});
+    },
+    sendBaseInfo:function(){
+        var info={
+            userid:globalsInfo.userid,
+            token:globalsInfo.token,
+            os:cc.sys.os,
+            isBrowser:cc.sys.isBrowser,
+            isMobile:cc.sys.isMobile,
+            isNative:cc.sys.isNative,
+            platform:cc.sys.platform,
+            browserType:cc.sys.browserType,
+            browserVersion:cc.sys.browserVersion,
+            comefrom:globalsInfo.comefrom,
+        };
+        var netInstance = Network.getInstance();
+        netInstance.emit('baseInfo',info);
     },
     register:function(){
           cc.director.loadScene('register');

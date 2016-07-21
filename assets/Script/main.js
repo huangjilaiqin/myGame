@@ -156,6 +156,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
+        cc.log(cc.sys);
         window.scenename='main';
         globalsInfo.scenename='main';
         //界面动效
@@ -287,7 +288,9 @@ cc.Class({
         //重连加载数据,1.加载全局数据 2.本场景相关操作
         Network.setNetworkErrorHandler(cbs);
         netInstance = Network.getInstance(config.serverIp,config.serverPort,cbs);
-
+        
+        
+        
         if(globalsInfo.isLogin){
             //重新登录的情况
             
@@ -349,6 +352,8 @@ cc.Class({
         });
         this.node.addChild(broadcast,1);
     },
+    
+    
     onNotValid:function(){
         var toast = cc.instantiate(this.toastPrefab);
         toast.getComponent('toast').init('网络错误,请检查网络',3);
