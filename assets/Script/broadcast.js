@@ -68,8 +68,8 @@ cc.Class({
             if(!this.haveInitMsg){
                 this.initMsg();
             }
-            
-            this.myx-=dt*150;
+            this.myx-=dt*100;
+            //this.myx-=2.5;
             
             var minV = -this.halfScreenWidth-this.bg.node.width;
             if(this.myx<=minV){

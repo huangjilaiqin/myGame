@@ -70,7 +70,7 @@ cc.Class({
             if(result.error){
                 //提示
                 cc.log("register: "+result.error);
-                that.tip.string = result.error+"托尔斯泰托尔斯泰托尔斯泰托尔斯泰";
+                that.tip.string = result.error;
             }else{
                 globalsInfo.userid=result.userid;
                 globalsInfo.username=result.username;
