@@ -112,6 +112,14 @@ cc.Class({
             default:null,
             type:cc.Sprite,
         },
+        fightCool:{
+            default:null,
+            type:cc.ProgressBar,
+        },
+        remainCoolTime:{
+            default:null,
+            type:cc.Label,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -154,13 +162,48 @@ cc.Class({
         });
         netInstance.emit('bonus',{});
     },
+    showCooldownMsg:function(){
+        //获取上一次比赛时间
+        cc.log('lastfighttime',globalsInfo.lastfighttime);
+        var lastfighttime = new Date(Date.parse(globalsInfo.lastfighttime));
+        cc.log(lastfighttime,lastfighttime.getTime());
+        cc.log(new Date(),new Date().getTime());
+        if(globalsInfo.lastfighttime){
+            //当前时间
+            //时间差
+            //每秒定时更新信息
+            var delta = this.setCooldownPercent();
+            var remainCoolTime = Math.floor(delta);
+            var duoyu = delta-remainCoolTime;
+            this.schedule(function(){
+                if(remainCoolTime<=0)
+                    this.remainCoolTime.string='';
+                else
+                    this.remainCoolTime.string = remainCoolTime--;
+            },1,remainCoolTime,duoyu);
+        }else{
+            this.fightCool.progress=0;
+        }
+    },
+    setCooldownPercent:function(){
+        var lastfighttime = new Date(Date.parse(globalsInfo.lastfighttime));
+        var delta = (new Date().getTime()-lastfighttime.getTime())/1000;
+        var percent=0;
+        if(delta<120){
+            percent = (120-delta)/120;
+        }
+        this.fightCool.progress=percent;
+        return delta;
+    },
     // use this for initialization
     onLoad: function () {
-        cc.log(cc.sys);
+        cc.log(cc.audioEngine);
         window.scenename='main';
         globalsInfo.scenename='main';
         //界面动效
         this.initAction();
+        
+        globalsInfo.lastfighttime=cc.sys.localStorage.getItem('lastfighttime');
         
         var isVolumeOpen = cc.sys.localStorage.getItem('isVolumeOpen');
         if(isVolumeOpen===null){
@@ -174,6 +217,8 @@ cc.Class({
         cc.log('globalsInfo.netstaus',window.netstaus);
         this.win.string=window.netstaus;
         var tip = this.tip;
+        
+        this.showCooldownMsg();
         
         //第一次启动
         cc.log('isStartUp:',globalsInfo.isStartUp);
@@ -441,6 +486,8 @@ cc.Class({
             this._updateProgressBar(this.totalProgressBar,globalsInfo.totalPercent,dt);
         if(this.showAimation===1)
             this._updateProgressBar(this.hpProgressBar,globalsInfo.hpPercent,dt);
+            
+        this.setCooldownPercent();
     },
     
     _updateProgressBar: function(progressBar,percent,dt){
@@ -562,6 +609,7 @@ cc.Class({
         }
         //window.location.href="http://www.baidu.com";
         //window.open("http://www.baidu.com");
+        cc.director.loadScene('test');
     },
     quit:function(){
         var setting = cc.instantiate(this.settingPre);

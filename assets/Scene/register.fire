@@ -1024,8 +1024,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 54,
-      "height": 54
+      "width": 64,
+      "height": 64
     },
     "_children": [],
     "_rotationX": 0,
@@ -1156,10 +1156,10 @@
     "_enabled": true,
     "isAlignOnce": false,
     "_alignFlags": 12,
-    "_left": 37,
+    "_left": 32,
     "_right": 0,
     "_top": 0,
-    "_bottom": 37,
+    "_bottom": 32,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,

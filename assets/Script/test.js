@@ -26,6 +26,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        mytime:{
+            default:null,
+            type:cc.Sprite,
+        },
     },
 
     // use this for initialization
@@ -35,7 +39,7 @@ cc.Class({
         broadcast.setPosition(cc.p(0,0));
         this.node.addChild(broadcast,1);
         */
-        
+        /*
         //*领取奖励
         var receive = cc.instantiate(this.receivePre);
         receive.setPosition(cc.p(0,0));
@@ -55,10 +59,16 @@ cc.Class({
         });
         this.node.addChild(receive,1,2000);
         //*/
+        this.mynum=0;
     },
 
     // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
+    update: function (dt) {
+        if(this.mynum+dt>30)
+            this.mynum=30;
+        else
+            this.mynum += dt;
+        this.mytime.fillStart = this.mynum/30;
+            
+    },
 });

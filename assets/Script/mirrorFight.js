@@ -61,9 +61,17 @@ cc.Class({
             default:null,
             url:cc.AudioClip
         },
-         toastPrefab: {
+        ticktackAudio:{
+            default:null,
+            url:cc.AudioClip
+        },
+        toastPrefab: {
             default: null,
             type: cc.Prefab
+        },
+        timefg:{
+            default:null,
+            type:cc.Sprite,
         },
         
         countdownTime:30,
@@ -86,6 +94,8 @@ cc.Class({
     },
     gameOver:function(){
         cc.log('gameover');
+        cc.log('stop ticktack');
+        cc.audioEngine.stopMusic(this.ticktackAudio);
         //*
         this.node.removeChildByTag(1002);
         this.node.removeChildByTag(1001);
@@ -124,7 +134,8 @@ cc.Class({
                 globalsInfo.todayamount=result.todayamount;
                 globalsInfo.remainhp=result.remainhp;
                 globalsInfo.hp=result.hp;
-                
+                globalsInfo.lastfighttime=result.lastfighttime;
+                cc.sys.localStorage.setItem('lastfighttime',globalsInfo.lastfighttime);
                 if(result.encourageMsg.length>0){
                     var toast = cc.instantiate(that.toastPrefab);
                     toast.getComponent('toast').init(result.encourageMsg,4,cc.p(0,cc.winSize.height/4));
@@ -158,15 +169,18 @@ cc.Class({
     },
     ticktack:function(){
         this.countdownTime--;
-        if(this.countdownTime==3){
-            cc.log(this.countdown.node);
+        if(this.countdownTime==5){
             this.countdown.node.color = new cc.Color(255,0,0,1);
+            cc.log('begin ticktack');
+            this.ticktackAudioId = cc.audioEngine.playMusic(this.ticktackAudio,true);
             //cc.log(this.countdown.font);
             //this.countdown.font.color = new cc.Color(255,0,0,1);
         }else if(this.countdownTime===0){
             this.gameStatus++;
-            if(this.gameStatus===3)
+            if(this.gameStatus===3){
+                
                 this.gameOver();
+            }
         }
         this.countdown.string=this.countdownTime;
     },
@@ -230,6 +244,7 @@ cc.Class({
     },
     onLoad: function () {
         window.scenename='mirrorFight';
+        this.fightTime=0;
         this.searchOpponent();
     },
     initFight:function(){
@@ -288,7 +303,7 @@ cc.Class({
         this.lastPushupTime=now;
         this.myCountScore.add();
         if(globalsInfo.isVolumeOpen)
-            cc.audioEngine.playMusic(this.myPushupAudio);
+            cc.audioEngine.playEffect(this.myPushupAudio);
     },
     opponentPushup:function(){
         this.opponentCountScore.add();
@@ -320,6 +335,13 @@ cc.Class({
                     this.opponentNextTime=this.opponentInfo.records[this.opponentIndex];
                 }
             }
+        }
+        if(this.gameStatus>0){
+            if(this.fightTime+dt>30)
+                this.fightTime=30;
+            else
+                this.fightTime += dt;
+            this.timefg.fillStart = this.fightTime/30;
         }
         //*/
     },
