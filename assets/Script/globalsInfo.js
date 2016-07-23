@@ -59,7 +59,7 @@ var globalsInfo = {
     4:百度手机助手，
     5:91,
     */
-    comefrom:1,
+    comefrom:3,
     /*
     1:Android,
     2:iOS,

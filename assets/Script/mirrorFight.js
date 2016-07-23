@@ -172,7 +172,8 @@ cc.Class({
         if(this.countdownTime==5){
             this.countdown.node.color = new cc.Color(255,0,0,1);
             cc.log('begin ticktack');
-            this.ticktackAudioId = cc.audioEngine.playMusic(this.ticktackAudio,true);
+            if(globalsInfo.isVolumeOpen)
+                this.ticktackAudioId = cc.audioEngine.playMusic(this.ticktackAudio,true);
             //cc.log(this.countdown.font);
             //this.countdown.font.color = new cc.Color(255,0,0,1);
         }else if(this.countdownTime===0){

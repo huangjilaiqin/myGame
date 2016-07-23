@@ -12,10 +12,6 @@ cc.Class({
             default:null,
             url:cc.AudioClip
         },
-        tip:{
-            default:null,
-            type:cc.Label,
-        },
         searchPre: {
             default: null,
             type: cc.Prefab
@@ -116,6 +112,10 @@ cc.Class({
             default:null,
             type:cc.ProgressBar,
         },
+        cooldownTip:{
+            default:null,
+            type:cc.Label,
+        },
         remainCoolTime:{
             default:null,
             type:cc.Label,
@@ -164,36 +164,61 @@ cc.Class({
     },
     showCooldownMsg:function(){
         //获取上一次比赛时间
-        cc.log('lastfighttime',globalsInfo.lastfighttime);
-        var lastfighttime = new Date(Date.parse(globalsInfo.lastfighttime));
-        cc.log(lastfighttime,lastfighttime.getTime());
-        cc.log(new Date(),new Date().getTime());
-        if(globalsInfo.lastfighttime){
+        var delta = this.setCooldownPercent();
+        cc.log('delta:',delta);
+        if(delta<this.cooldownTotalTime && delta>0){
             //当前时间
             //时间差
             //每秒定时更新信息
-            var delta = this.setCooldownPercent();
-            var remainCoolTime = Math.floor(delta);
+            
+            var remainCoolTime = Math.floor(this.cooldownTotalTime-delta);
+            cc.log('remainCoolTime',remainCoolTime,this.cooldownTotalTime);
             var duoyu = delta-remainCoolTime;
             this.schedule(function(){
-                if(remainCoolTime<=0)
+                if(remainCoolTime<=0 || this.isCooldown){
+                    this.isCooldown=true;
+                    this.cooldownTip.string='肌肉已处于最佳状态，战斗吧，勇士！';
                     this.remainCoolTime.string='';
-                else
-                    this.remainCoolTime.string = remainCoolTime--;
-            },1,remainCoolTime,duoyu);
+                }else{
+                    this.isCooldown=false;
+                    this.remainCoolTime.string = remainCoolTime+'秒';
+                    
+                    var chushu = Math.floor(remainCoolTime/(this.cooldownTotalTime/5));
+                    var msg =  this.cooldownMsgs[chushu];
+                    var yushu = remainCoolTime%3;
+                    //msg += this.cooldownDots[yushu];
+                    this.cooldownTip.string = msg;
+                    cc.log(remainCoolTime,chushu,yushu);
+                    remainCoolTime--;
+                }
+            },1,remainCoolTime);
         }else{
             this.fightCool.progress=0;
+            this.isCooldown=true;
+            this.cooldownTip.string='肌肉已处于最佳状态，战斗吧，勇士！';
+            this.remainCoolTime.string='';
         }
     },
     setCooldownPercent:function(){
-        var lastfighttime = new Date(Date.parse(globalsInfo.lastfighttime));
-        var delta = (new Date().getTime()-lastfighttime.getTime())/1000;
-        var percent=0;
-        if(delta<120){
-            percent = (120-delta)/120;
+        var lastfighttime=globalsInfo.lastfighttime;
+        if(lastfighttime){
+            lastfighttime = new Date(Date.parse(globalsInfo.lastfighttime));
+            var delta = (new Date().getTime()-lastfighttime.getTime())/1000;
+            //cc.log(new Date(),lastfighttime,delta);
+            var percent=0;
+            if(delta<this.cooldownTotalTime){
+                percent = (this.cooldownTotalTime-delta)/this.cooldownTotalTime;
+            }else{
+                this.cooldownTip.string='肌肉已处于最佳状态，战斗吧，勇士！';
+                this.remainCoolTime.string='';
+                this.isCooldown=true;
+            }
+            this.fightCool.progress=percent;
+            return delta;
+        }else{
+            cc.log('no lasttighttime');
+            return -1;
         }
-        this.fightCool.progress=percent;
-        return delta;
     },
     // use this for initialization
     onLoad: function () {
@@ -202,6 +227,11 @@ cc.Class({
         globalsInfo.scenename='main';
         //界面动效
         this.initAction();
+        
+        this.cooldownMsgs=['三角肌冷却中...','肘肌冷却中...','胸小肌冷却中...','肱三头肌冷却中...','胸大肌冷却中...'];
+        this.cooldownDots=['...','..','.'];
+        this.cooldownTotalTime=180;
+        this.isCooldown=true;
         
         globalsInfo.lastfighttime=cc.sys.localStorage.getItem('lastfighttime');
         
@@ -510,13 +540,19 @@ cc.Class({
         }
     },
     searchOpponent:function(){
-        var tip=this.tip;
-        var loading = cc.instantiate(this.loadingPrefab);
-        loading.setPosition(cc.p(0,50));
-        this.node.addChild(loading,1,2000);
-        
-        cc.director.loadScene('mirrorFight');
-        cc.audioEngine.stopMusic();
+        if(this.isCooldown){
+            var tip=this.tip;
+            var loading = cc.instantiate(this.loadingPrefab);
+            loading.setPosition(cc.p(0,50));
+            this.node.addChild(loading,1,2000);
+            
+            cc.director.loadScene('mirrorFight');
+            cc.audioEngine.stopMusic();
+        }else{
+            var toast = cc.instantiate(this.toastPrefab);
+            toast.getComponent('toast').init('肌肉冷却中...\n良好的恢复能创造更好的成绩',3);
+            this.node.addChild(toast,1);
+        }
         /*
         var searchPre=cc.instantiate(this.searchPre);
         searchPre.setPosition(cc.p(0,0));
@@ -609,7 +645,7 @@ cc.Class({
         }
         //window.location.href="http://www.baidu.com";
         //window.open("http://www.baidu.com");
-        cc.director.loadScene('test');
+        
     },
     quit:function(){
         var setting = cc.instantiate(this.settingPre);
