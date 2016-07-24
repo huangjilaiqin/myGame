@@ -58,8 +58,10 @@ var globalsInfo = {
     3:web,
     4:百度手机助手，
     5:91,
+    6:安卓市场,
+    7:木蚂蚁,
     */
-    comefrom:3,
+    comefrom:7,
     /*
     1:Android,
     2:iOS,

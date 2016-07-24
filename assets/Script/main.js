@@ -165,14 +165,14 @@ cc.Class({
     showCooldownMsg:function(){
         //获取上一次比赛时间
         var delta = this.setCooldownPercent();
-        cc.log('delta:',delta);
+        //cc.log('delta:',delta);
         if(delta<this.cooldownTotalTime && delta>0){
             //当前时间
             //时间差
             //每秒定时更新信息
             
             var remainCoolTime = Math.floor(this.cooldownTotalTime-delta);
-            cc.log('remainCoolTime',remainCoolTime,this.cooldownTotalTime);
+            //cc.log('remainCoolTime',remainCoolTime,this.cooldownTotalTime);
             var duoyu = delta-remainCoolTime;
             this.schedule(function(){
                 if(remainCoolTime<=0 || this.isCooldown){
@@ -231,7 +231,7 @@ cc.Class({
         this.cooldownMsgs=['三角肌冷却中...','肘肌冷却中...','胸小肌冷却中...','肱三头肌冷却中...','胸大肌冷却中...'];
         this.cooldownDots=['...','..','.'];
         this.cooldownTotalTime=180;
-        this.isCooldown=true;
+        this.isCooldown=false;
         
         globalsInfo.lastfighttime=cc.sys.localStorage.getItem('lastfighttime');
         
