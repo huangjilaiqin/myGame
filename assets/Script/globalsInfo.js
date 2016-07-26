@@ -60,8 +60,10 @@ var globalsInfo = {
     5:91,
     6:安卓市场,
     7:木蚂蚁,
+    8:应用宝,
+    9:小米,
     */
-    comefrom:7,
+    comefrom:9,
     /*
     1:Android,
     2:iOS,
