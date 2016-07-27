@@ -637,14 +637,20 @@ cc.Class({
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
             cc.audioEngine.stopMusic();
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
+            if(cc.sys.isNative)
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "login", "()V");
         }else{
             globalsInfo.isVolumeOpen=1;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
             cc.audioEngine.playMusic(this.bgAudio, true);
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
+            if(cc.sys.isNative)
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "share", "()V");
         }
         //window.location.href="http://www.baidu.com";
         //window.open("http://www.baidu.com");
+        //jsb.reflection.call
+        //cc.log(this.reflection);
         
     },
     quit:function(){
