@@ -1,0 +1,1 @@
+将app下的文件对cocos creator下的build的android studio目录下的文件进行覆盖
