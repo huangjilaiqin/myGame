@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "",
+    "_name": "test",
     "_objFlags": 0,
     "_opacity": 255,
     "_color": {
@@ -172,6 +172,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -305,9 +306,7 @@
       "__id__": 6
     },
     "_enabled": true,
-    "_spriteFrame": {
-      "__uuid__": "7a040985-84d5-47a6-85ca-f04674ba307a"
-    },
+    "_spriteFrame": null,
     "_type": 3,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -492,7 +491,9 @@
       "__id__": 2
     },
     "_enabled": true,
-    "broadcastPre": null,
+    "broadcastPre": {
+      "__uuid__": "5ed66a30-b423-4f78-aefe-a8754bf29258"
+    },
     "receivePre": {
       "__uuid__": "7aaaed50-1f9c-4522-838b-28a75de92e60"
     },
