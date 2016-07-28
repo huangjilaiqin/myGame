@@ -112,6 +112,10 @@ cc.Class({
         });   
         netInstance.emit('login', {'username':username,'passwd':passwd});
     },
+    qqLogin:function(){
+        if(cc.sys.isNative)
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "login", "()V");
+    },
     sendBaseInfo:function(){
         var info={
             userid:globalsInfo.userid,
