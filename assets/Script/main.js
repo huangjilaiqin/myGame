@@ -222,6 +222,8 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
+        this.win.string=globalsInfo.comefrom;
+        cc.log('comefrom:',globalsInfo.comefrom);
         cc.log(cc.audioEngine);
         window.scenename='main';
         globalsInfo.scenename='main';
@@ -631,7 +633,7 @@ cc.Class({
 
         //this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
-        this.win.string=window.netstaus;
+        this.win.string=globalsInfo.comefrom;
         if(globalsInfo.isVolumeOpen==1){
             globalsInfo.isVolumeOpen=0;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
@@ -673,6 +675,11 @@ cc.Class({
                 that.node.removeChildByTag(2230);
             },
         });
+        
+        
+        var channelName=jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getChannelName", "()Ljava/lang/String;");
+        cc.log('channelName',channelName);
+        
     },
     totalToast:function(){
         var toast = cc.instantiate(this.toastPrefab);

@@ -40,6 +40,7 @@ cc.Class({
         if(globalsInfo.netStatus===false){
             this.tip.string='网络错误,请检查网络';
         }
+        
     },
 
     // called every frame, uncomment this function to activate update callback

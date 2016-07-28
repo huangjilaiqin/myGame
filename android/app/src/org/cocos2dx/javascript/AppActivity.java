@@ -23,8 +23,11 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.javascript;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.tencent.connect.share.QQShare;
@@ -34,6 +37,7 @@ import com.tencent.tauth.UiError;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.lib.Cocos2dxJavascriptJavaBridge;
 
 // For JS and JAVA reflection test, you can delete it if it's your own project
 // -------------------------------------
@@ -41,6 +45,7 @@ import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 public class AppActivity extends Cocos2dxActivity {
 
     private static AppActivity app = null;
+    private static PackageManager packageManager=null;
     private static IUiListener listener = new IUiListener() {
         @Override
         public void onComplete(Object o) {
@@ -62,12 +67,29 @@ public class AppActivity extends Cocos2dxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = this;
+        packageManager=getPackageManager();
 
         // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
-
+        System.out.println("onCreate");
     }
 
+    public static String getChannelName(){
+        try {
+            System.out.println("getChannelName");
+            //ApplicationInfo ai = app.getApplicationInfo();
+            ApplicationInfo ai = packageManager.getApplicationInfo(app.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = ai.metaData;
+            String channelName = bundle.getString("CHANNEL");
+            System.out.println("getChannelName "+channelName);
+            if (channelName.length() > 0)
+                return channelName;
+            else
+                return "xxxxx";
+        }catch (Exception e){
+            return "xxxxx";
+        }
+    }
     public static void login(){
         System.out.println("login");
         app.runOnGLThread(new Runnable() {
@@ -77,10 +99,12 @@ public class AppActivity extends Cocos2dxActivity {
                 // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
                 if (!mTencent.isSessionValid())
                 {
+                    System.out.println("session is not valid");
                     mTencent.login(app, "all", new IUiListener() {
                         @Override
                         public void onComplete(Object o) {
-                            System.out.println("onComplete");
+                            System.out.println("onComplete"+o.toString());
+                            //Cocos2dxJavascriptJavaBridge.evalString("");
                         }
 
                         @Override
@@ -93,6 +117,8 @@ public class AppActivity extends Cocos2dxActivity {
                             System.out.println("onCancel");
                         }
                     });
+                }else{
+                    System.out.println("session is valid");
                 }
             }
         });
@@ -104,28 +130,6 @@ public class AppActivity extends Cocos2dxActivity {
             public void run() {
                 Tencent mTencent = Tencent.createInstance("1105464601", app);
                 mTencent.logout(app);
-                /*
-                // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-                if (!mTencent.isSessionValid())
-                {
-                    mTencent.login(app, "all", new IUiListener() {
-                        @Override
-                        public void onComplete(Object o) {
-                            System.out.println("onComplete");
-                        }
-
-                        @Override
-                        public void onError(UiError uiError) {
-                            System.out.println("onError");
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            System.out.println("onCancel");
-                        }
-                    });
-                }
-                */
             }
         });
     }

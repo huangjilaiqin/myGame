@@ -63,7 +63,7 @@ var globalsInfo = {
     8:应用宝,
     9:小米,
     */
-    comefrom:9,
+    comefrom:3,
     /*
     1:Android,
     2:iOS,
@@ -71,5 +71,28 @@ var globalsInfo = {
     */
     platform:1,
 };
+//*
+var channels = {
+    pgyer:1,
+    _360:2,
+    baidu:4,
+    _91:5,
+    android:6,
+    mumayi:7,
+    tencent:8,
+    mi:9,
+};
+
+if(cc.sys.isNative){
+    cc.log('js get channelName');
+    var channelName=jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getChannelName", "()Ljava/lang/String;");
+    cc.log('js channelName',channelName);
+    var channelNum=channels[channelName];
+    if(channelNum)
+        globalsInfo.comefrom = channelNum;
+    else
+        globalsInfo.comefrom = -1;
+}
+//*/
 
 module.exports=globalsInfo;

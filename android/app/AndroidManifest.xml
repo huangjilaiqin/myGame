@@ -12,7 +12,11 @@
         <!-- Tell Cocos2dxActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
                    android:value="cocos2djs" />
-        
+
+        <meta-data
+            android:name="CHANNEL"
+            android:value="${CHANNEL_VALUE}" />
+
         <activity
             android:name="org.cocos2dx.javascript.AppActivity"
             android:screenOrientation="portrait"

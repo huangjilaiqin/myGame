@@ -8,8 +8,11 @@ android {
         applicationId "com.lessask.pushup"
         minSdkVersion 10
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1.0"
+
+        //默认渠道是蒲公英
+        manifestPlaceholders = [CHANNEL_VALUE: "pgyer"]
     }
 
     sourceSets.main {
@@ -40,6 +43,19 @@ android {
                 signingConfig signingConfigs.release
             }
         }
+    }
+    productFlavors{
+        pgyer {}
+        _360 {}
+        baidu {}
+        _91 {}
+        android {}
+        tencent {}
+        mi {}
+        wandoujia {}
+    }
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
     }
 }
 
