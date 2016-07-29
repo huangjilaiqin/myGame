@@ -133,8 +133,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 102.5,
-      "height": 50
+      "width": 86.74,
+      "height": 40
     },
     "_children": [],
     "_rotationX": 0,
@@ -176,10 +176,8 @@
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
-    "_N$file": {
-      "__uuid__": "c03065e9-190b-4278-91ce-886b028aba17"
-    },
-    "_isSystemFontUsed": false,
+    "_N$file": null,
+    "_isSystemFontUsed": true,
     "_N$string": "x325",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
@@ -502,6 +500,9 @@
     },
     "mytime": {
       "__id__": 11
+    },
+    "score": {
+      "__id__": 4
     }
   }
 ]

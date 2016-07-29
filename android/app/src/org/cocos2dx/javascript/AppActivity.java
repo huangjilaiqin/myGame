@@ -90,21 +90,27 @@ public class AppActivity extends Cocos2dxActivity {
             return "xxxxx";
         }
     }
-    public static void login(){
-        System.out.println("login");
-        app.runOnGLThread(new Runnable() {
+    public static void qqLogin(){
+        app.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Tencent mTencent = Tencent.createInstance("1105464601", app);
                 // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-                if (!mTencent.isSessionValid())
-                {
+                if (!mTencent.isSessionValid()) {
                     System.out.println("session is not valid");
                     mTencent.login(app, "all", new IUiListener() {
                         @Override
                         public void onComplete(Object o) {
-                            System.out.println("onComplete"+o.toString());
-                            //Cocos2dxJavascriptJavaBridge.evalString("");
+                            final String oString = o.toString();
+                            app.runOnGLThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Cocos2dxJavascriptJavaBridge.evalString("cc.director.loadScene(\"login\")");
+                                    //Cocos2dxJavascriptJavaBridge.evalString("qqLogin()");
+                                    Cocos2dxJavascriptJavaBridge.evalString("cc.eventManager.dispatchCustomEvent(\"qqLogin\"," + oString + ");");
+                                    //Cocos2dxJavascriptJavaBridge.evalString("cc.eventManager.dispatchCustomEvent(\"qqLogin\");");
+                                }
+                            });
                         }
 
                         @Override
@@ -117,14 +123,18 @@ public class AppActivity extends Cocos2dxActivity {
                             System.out.println("onCancel");
                         }
                     });
-                }else{
+                } else {
                     System.out.println("session is valid");
                 }
             }
         });
     }
 
-    public static void logout(){
+    public static String qqGetUserInfo(){
+        return "";
+    }
+
+    public static void qqLogout(){
         app.runOnGLThread(new Runnable() {
             @Override
             public void run() {
@@ -134,7 +144,7 @@ public class AppActivity extends Cocos2dxActivity {
         });
     }
 
-    public static void share()
+    public static void qqShare()
     {
         app.runOnGLThread(new Runnable() {
             @Override

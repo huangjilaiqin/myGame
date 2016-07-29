@@ -222,9 +222,8 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        this.win.string=globalsInfo.comefrom;
-        cc.log('comefrom:',globalsInfo.comefrom);
-        cc.log(cc.audioEngine);
+        this.win.string=globalsInfo.qqObj;
+        
         window.scenename='main';
         globalsInfo.scenename='main';
         //界面动效
@@ -246,8 +245,6 @@ cc.Class({
         cc.log('isVolumeOpen',isVolumeOpen);
         globalsInfo.isVolumeOpen=isVolumeOpen;
         this.changeVolumeBg(isVolumeOpen);
-        cc.log('globalsInfo.netstaus',window.netstaus);
-        this.win.string=window.netstaus;
         var tip = this.tip;
         
         this.showCooldownMsg();
@@ -377,7 +374,7 @@ cc.Class({
             this.initVerifyOrRelogin(this);
         }else{
             
-            this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
+            //this.win.string= globalsInfo.win!==undefined?globalsInfo.win:0;
             this.draw.string=globalsInfo.draw!==undefined?globalsInfo.draw:0;
             this.lost.string=globalsInfo.lost!==undefined?globalsInfo.lost:0;
             var total = globalsInfo.total!==undefined?globalsInfo.total:0;
@@ -633,7 +630,7 @@ cc.Class({
 
         //this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
-        this.win.string=globalsInfo.comefrom;
+        this.win.string=globalsInfo.qqObj;
         if(globalsInfo.isVolumeOpen==1){
             globalsInfo.isVolumeOpen=0;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
@@ -690,5 +687,8 @@ cc.Class({
         var toast = cc.instantiate(this.toastPrefab);
         toast.getComponent('toast').init('1. 对战消耗一点体力值\n2. 赢一局奖励2点体力值\n3. 每天凌晨重置体力值',3);
         this.node.addChild(toast,1);
+    },
+    testFoo:function(){
+        cc.director.loadScene('login');
     },
 });

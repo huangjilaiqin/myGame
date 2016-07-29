@@ -1,5 +1,6 @@
 
 const Network = require('Network');
+const globalsInfo = require('globalsInfo');
 
 cc.Class({
     extends: cc.Component,
@@ -29,6 +30,10 @@ cc.Class({
         mytime:{
             default:null,
             type:cc.Sprite,
+        },
+        score:{
+            default:null,
+            type:cc.Label,
         },
     },
 
@@ -60,6 +65,8 @@ cc.Class({
         this.node.addChild(receive,1,2000);
         //*/
         this.mynum=0;
+        this.score.string=globalsInfo.qqObj;
+        //this.score.string="234";
     },
 
     // called every frame, uncomment this function to activate update callback

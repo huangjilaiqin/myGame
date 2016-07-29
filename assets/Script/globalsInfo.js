@@ -70,6 +70,11 @@ var globalsInfo = {
     3:web,
     */
     platform:1,
+    qqLogin:function(obj){
+        globalsInfo.qqObj = obj;
+        cc.log("onComplete",obj);
+        cc.director.loadScene('main');
+    },
 };
 //*
 var channels = {

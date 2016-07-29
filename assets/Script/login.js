@@ -28,10 +28,16 @@ cc.Class({
             default: null,
             type: cc.Prefab,
         },
+        toastPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
     },
 
     // use this for initialization
     onLoad: function () {
+        
+        
         window.scenename='login';
         if(globalsInfo.username!==null){
             this.username.string=globalsInfo.username;
@@ -40,7 +46,16 @@ cc.Class({
         if(globalsInfo.netStatus===false){
             this.tip.string='网络错误,请检查网络';
         }
-        
+        var that = this;
+        cc.eventManager.addCustomListener("qqLogin", function(event){
+            that.node.removeChildByTag(2000);
+            var userData = event._userData;
+            var openid = userData.openid;
+            cc.log("onComplete:",JSON.stringify(userData));
+            globalsInfo.qqObj = openid;
+            //cc.director.loadScene('test');
+            //加载用户信息,走login协议
+        });
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -113,8 +128,14 @@ cc.Class({
         netInstance.emit('login', {'username':username,'passwd':passwd});
     },
     qqLogin:function(){
-        if(cc.sys.isNative)
+        if(cc.sys.isNative){
+            var loading = cc.instantiate(this.loadingPrefab);
+            loading.setPosition(cc.p(0,0));
+            this.node.addChild(loading,1,2000);
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "login", "()V");
+        }else{
+            
+        }
     },
     sendBaseInfo:function(){
         var info={

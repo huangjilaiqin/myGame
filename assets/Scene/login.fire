@@ -1633,7 +1633,7 @@
     "_actualFontSize": 32,
     "_fontSize": 32,
     "_lineHeight": 32,
-    "_enableWrapText": false,
+    "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "QQ登录",
