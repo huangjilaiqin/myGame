@@ -47,14 +47,26 @@ cc.Class({
             this.tip.string='网络错误,请检查网络';
         }
         var that = this;
+        //qq授权成功后调用登陆协议
         cc.eventManager.addCustomListener("qqLogin", function(event){
-            that.node.removeChildByTag(2000);
+            //that.node.removeChildByTag(2000);
             var userData = event._userData;
+            
             var openid = userData.openid;
+            var accessToken = userData.access_token;
+            
             cc.log("onComplete:",JSON.stringify(userData));
             globalsInfo.qqObj = openid;
             //cc.director.loadScene('test');
             //加载用户信息,走login协议
+            
+            var requestObj = {
+                openid:openid,
+                accessToken:accessToken,
+                logintype:1,
+                registerFrom:globalsInfo.comefrom
+            };
+            that.sendLoginRequest(requestObj);
         });
     },
 
@@ -72,15 +84,24 @@ cc.Class({
         }
         cc.log('login',username);
         
-        var netInstance = Network.getInstance();
+        
         //转圈圈
         var loading = cc.instantiate(this.loadingPrefab);
         loading.setPosition(cc.p(0,0));
         this.node.addChild(loading,1,2000);
         
+        //var that = this;
+        var requestObj = {
+            username:username,
+            passwd:passwd
+        };
+        this.sendLoginRequest(requestObj);
+    },
+    sendLoginRequest:function(obj){
         var that = this;
-        
+        var netInstance = Network.getInstance();
         netInstance.onOneEventOneFunc('login', function(result){
+            cc.log('login back',result);
             if(that.node!==undefined)
                 that.node.removeChildByTag(2000);
             
@@ -91,11 +112,14 @@ cc.Class({
             }else{
                 var userid = result.userid;
                 var token = result.token;
+                var username = result.username;
                 
                 cc.log('login success',userid,token);
                 globalsInfo.userid=userid;
                 globalsInfo.token=token;
                 globalsInfo.username=username;
+                globalsInfo.openid=result.openid;
+                globalsInfo.logintype=result.logintype;
                 
                 globalsInfo.value=result.value;
                 globalsInfo.total=result.total;
@@ -119,20 +143,23 @@ cc.Class({
                 cc.sys.localStorage.setItem('userid',userid);
                 cc.sys.localStorage.setItem('username',username);
                 cc.sys.localStorage.setItem('token',token);
+                cc.sys.localStorage.setItem('openid',result.openid);
+                cc.sys.localStorage.setItem('logintype',result.logintype);
+                
                 //that.tip.string=cc.sys.localStorage.getItem('userid');
                 //*/
                 that.sendBaseInfo();
                 cc.director.loadScene('main');
             }
         });   
-        netInstance.emit('login', {'username':username,'passwd':passwd});
+        netInstance.emit('login', obj);
     },
     qqLogin:function(){
         if(cc.sys.isNative){
             var loading = cc.instantiate(this.loadingPrefab);
             loading.setPosition(cc.p(0,0));
             this.node.addChild(loading,1,2000);
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "login", "()V");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
         }else{
             
         }
@@ -150,7 +177,11 @@ cc.Class({
             browserVersion:cc.sys.browserVersion,
             comefrom:globalsInfo.comefrom,
         };
+        cc.log('login baseInfo',info);
         var netInstance = Network.getInstance();
+        netInstance.onOneEventOneFunc('baseInfo', function(result){
+            cc.log('baseInfo back',result);
+        });
         netInstance.emit('baseInfo',info);
     },
     register:function(){

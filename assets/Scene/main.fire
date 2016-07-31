@@ -5445,6 +5445,9 @@
     },
     "remainCoolTime": {
       "__id__": 101
+    },
+    "bindQQPre": {
+      "__uuid__": "d5dc9ce3-1673-4d75-9edd-e322bdb95516"
     }
   }
 ]

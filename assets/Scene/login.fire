@@ -41,7 +41,7 @@
     "_globalZOrder": 0,
     "_tag": -1,
     "_opacityModifyRGB": false,
-    "_reorderChildDirty": false,
+    "_reorderChildDirty": true,
     "_id": "20a21d17-4428-44cd-9f32-7686832acabc"
   },
   {
@@ -1010,8 +1010,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 1377,
-      "y": 29
+      "x": 2013,
+      "y": 13
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1815,6 +1815,7 @@
     },
     "learnTipPre": {
       "__uuid__": "75a9b29c-0a8c-4162-8fee-b03cdee7d3f1"
-    }
+    },
+    "toastPrefab": null
   }
 ]

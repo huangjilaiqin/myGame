@@ -120,6 +120,10 @@ cc.Class({
             default:null,
             type:cc.Label,
         },
+        bindQQPre:{
+            default:null,
+            type:cc.Prefab,
+        },
     },
     changeVolumeBg:function(isOpen){
         if(isOpen){
@@ -216,7 +220,6 @@ cc.Class({
             this.fightCool.progress=percent;
             return delta;
         }else{
-            cc.log('no lasttighttime');
             return -1;
         }
     },
@@ -507,6 +510,68 @@ cc.Class({
             }
         });
         netInstance.emit('worldMessageHistory', {});
+        
+        //检查是否需要绑定qq登录
+        cc.log('bindQQ openid:',globalsInfo.openid);
+        if(cc.sys.isNative && (!globalsInfo.openid || globalsInfo.openid.length===0))
+            that.bindQQ();
+    },
+    
+    bindQQ:function(){
+        cc.log('bindQQ');
+        var bindQQPre = cc.instantiate(this.bindQQPre);
+        this.node.addChild(bindQQPre,1,3100);
+        var bindQQ = bindQQPre.getComponent('bindQQ');
+        var that = this;
+        bindQQ.init("重要公告","尊敬的用户请您绑定QQ登录,下个版本我们将取消帐号密码登录,绑定后您的信息不会丢失！\n请点击下面按钮进行绑定",function(){
+            cc.log('bindQQ call');
+            //qq授权成功后调用登录协议
+            cc.eventManager.addCustomListener("qqLogin", function(event){
+                //that.node.removeChildByTag(2000);
+                var userData = event._userData;
+                
+                var openid = userData.openid;
+                var accessToken = userData.access_token;
+                
+                cc.log("onComplete bindQQ:",JSON.stringify(userData));
+                globalsInfo.qqObj = openid;
+                //cc.director.loadScene('test');
+                //加载用户信息,走login协议
+                
+                var netInstance = Network.getInstance();
+                netInstance.onOneEventOneFunc('bindQQ', function(result){
+                    cc.log('bindQQ back',result);
+                    
+                    that.node.removeChildByTag(3100);
+                    if(that.node!==undefined)
+                        that.node.removeChildByTag(2000);
+                    
+                    if(result.error){
+                        //提示
+                        cc.log("bindQQ: "+result.error);
+                        that.tip.string = result.error;
+                    }else{
+                        cc.sys.localStorage.setItem('openid',result.openid);
+                        cc.sys.localStorage.setItem('logintype',result.logintype);
+                    }
+                });
+                var requestObj = {
+                    openid:openid,
+                    accessToken:accessToken,
+                    logintype:1,
+                    registerFrom:globalsInfo.comefrom
+                };
+                netInstance.emit('bindQQ', requestObj);
+            });
+            if(cc.sys.isNative){
+                var loading = cc.instantiate(that.loadingPrefab);
+                loading.setPosition(cc.p(0,0));
+                that.node.addChild(loading,1,2000);
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
+            }else{
+                
+            }
+        });
     },
     
     // called every frame, uncomment this function to activate update callback
@@ -663,7 +728,8 @@ cc.Class({
                 cc.sys.localStorage.removeItem('userid');
                 cc.sys.localStorage.removeItem('token');
                 cc.sys.localStorage.removeItem('isShowFightTip');
-                //cc.sys.localStorage.removeItem('username');
+                cc.sys.localStorage.removeItem('openid');
+                cc.sys.localStorage.removeItem('logintype');
                
                 that.node.removeChildByTag(2230);
                 cc.director.loadScene('login');
@@ -672,11 +738,6 @@ cc.Class({
                 that.node.removeChildByTag(2230);
             },
         });
-        
-        
-        var channelName=jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getChannelName", "()Ljava/lang/String;");
-        cc.log('channelName',channelName);
-        
     },
     totalToast:function(){
         var toast = cc.instantiate(this.toastPrefab);
