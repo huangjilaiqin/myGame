@@ -225,7 +225,6 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        this.win.string=globalsInfo.qqObj;
         
         window.scenename='main';
         globalsInfo.scenename='main';
@@ -282,6 +281,7 @@ cc.Class({
         var userid = parseInt(cc.sys.localStorage.getItem('userid'));  
         var token = cc.sys.localStorage.getItem('token');
         var username = cc.sys.localStorage.getItem('username');
+        globalsInfo.openid=cc.sys.localStorage.getItem('openid');
         
         globalsInfo.userid=userid;
         globalsInfo.token=token;
@@ -512,7 +512,7 @@ cc.Class({
         netInstance.emit('worldMessageHistory', {});
         
         //检查是否需要绑定qq登录
-        cc.log('bindQQ openid:',globalsInfo.openid);
+        cc.log('check openid:',globalsInfo.openid);
         if(cc.sys.isNative && (!globalsInfo.openid || globalsInfo.openid.length===0))
             that.bindQQ();
     },
@@ -534,7 +534,6 @@ cc.Class({
                 var accessToken = userData.access_token;
                 
                 cc.log("onComplete bindQQ:",JSON.stringify(userData));
-                globalsInfo.qqObj = openid;
                 //cc.director.loadScene('test');
                 //加载用户信息,走login协议
                 
@@ -551,6 +550,7 @@ cc.Class({
                         cc.log("bindQQ: "+result.error);
                         that.tip.string = result.error;
                     }else{
+                        globalsInfo.openid=result.openid;
                         cc.sys.localStorage.setItem('openid',result.openid);
                         cc.sys.localStorage.setItem('logintype',result.logintype);
                     }
@@ -695,7 +695,6 @@ cc.Class({
 
         //this.ws.send('restart test asdfasdf');
         cc.log('volumeSetting globalsInfo.netstaus',window.netstaus);
-        this.win.string=globalsInfo.qqObj;
         if(globalsInfo.isVolumeOpen==1){
             globalsInfo.isVolumeOpen=0;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);

@@ -327,6 +327,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -459,7 +460,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 568,
+      "width": 405.52,
       "height": 32
     },
     "_children": [],
@@ -469,8 +470,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 8,
-      "y": 52
+      "x": -73,
+      "y": 47
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -503,15 +504,16 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
+    "_actualFontSize": 32,
     "_fontSize": 32,
     "_lineHeight": 32,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_N$string": "官方QQ反馈群: 553 689 366",
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 0,
-    "_N$overflow": 1
+    "_N$overflow": 0
   },
   {
     "__type__": "cc.Widget",
@@ -523,9 +525,9 @@
     "_enabled": true,
     "isAlignOnce": false,
     "_alignFlags": 41,
-    "_left": 32,
-    "_right": 16,
-    "_top": 104,
+    "_left": 32.24000000000001,
+    "_right": 178.24,
+    "_top": 109,
     "_bottom": 208,
     "_isAbsLeft": true,
     "_isAbsRight": true,
@@ -673,6 +675,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
+    "_actualFontSize": 40,
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -947,6 +950,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,

@@ -32,11 +32,28 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        registerBt:{
+            default:null,
+            type:cc.Button,
+        },
+        qqRegisterBt:{
+            default:null,
+            type:cc.Button,
+        },
+        thirdLoginTip:{
+            default:null,
+            type:cc.Label,
+        },
     },
 
     // use this for initialization
     onLoad: function () {
-        
+        if(!cc.sys.isNative){
+            this.qqRegisterBt.node.active=false;
+            this.thirdLoginTip.node.active=false;
+        }else{
+            this.registerBt.node.active=false;
+        }
         
         window.scenename='login';
         if(globalsInfo.username!==null){
@@ -55,8 +72,7 @@ cc.Class({
             var openid = userData.openid;
             var accessToken = userData.access_token;
             
-            cc.log("onComplete:",JSON.stringify(userData));
-            globalsInfo.qqObj = openid;
+            cc.log("qqLogin onComplete:",JSON.stringify(userData));
             //cc.director.loadScene('test');
             //加载用户信息,走login协议
             
@@ -161,7 +177,9 @@ cc.Class({
             this.node.addChild(loading,1,2000);
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
         }else{
-            
+            var toast = cc.instantiate(that.toastPrefab);
+            toast.getComponent('toast').init('web版下个版本将支持QQ登录',3);
+            that.node.addChild(toast,1);
         }
     },
     sendBaseInfo:function(){
