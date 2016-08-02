@@ -192,7 +192,6 @@ cc.Class({
                     var yushu = remainCoolTime%3;
                     //msg += this.cooldownDots[yushu];
                     this.cooldownTip.string = msg;
-                    cc.log(remainCoolTime,chushu,yushu);
                     remainCoolTime--;
                 }
             },1,remainCoolTime);
