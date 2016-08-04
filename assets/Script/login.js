@@ -49,8 +49,8 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         if(!cc.sys.isNative){
-            this.qqRegisterBt.node.active=false;
-            this.thirdLoginTip.node.active=false;
+            //this.qqRegisterBt.node.active=false;
+            //this.thirdLoginTip.node.active=false;
         }else{
             this.registerBt.node.active=false;
         }
@@ -84,6 +84,33 @@ cc.Class({
             };
             that.sendLoginRequest(requestObj);
         });
+        QC.Login({
+           //btnId：插入按钮的节点id，必选
+           btnId:"qqLoginBtn",    
+           //用户需要确认的scope授权项，可选，默认all
+           scope:"all",
+           //按钮尺寸，可用值[A_XL| A_L| A_M| A_S|  B_M| B_S| C_S]，可选，默认B_S
+           size: "A_XL"
+       }, function(reqData, opts){//登录成功
+           //根据返回数据，更换按钮显示状态方法
+           var dom = document.getElementById(opts['btnId']),
+           _logoutTemplate=[
+                //头像
+                '<span><img src="{figureurl}" class="{size_key}"/></span>',
+                //昵称
+                '<span>{nickname}</span>',
+                //退出
+                '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'    
+           ].join("");
+           dom && (dom.innerHTML = QC.String.format(_logoutTemplate, {
+               nickname : QC.String.escHTML(reqData.nickname), //做xss过滤
+               figureurl : reqData.figureurl
+           }));
+           //模拟点击触发超链
+           
+       }, function(opts){//注销成功
+             alert('QQ登录 注销成功');
+       });
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -177,9 +204,17 @@ cc.Class({
             this.node.addChild(loading,1,2000);
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
         }else{
-            var toast = cc.instantiate(that.toastPrefab);
+            /*
+            var toast = cc.instantiate(this.toastPrefab);
             toast.getComponent('toast').init('web版下个版本将支持QQ登录',3);
-            that.node.addChild(toast,1);
+            this.node.addChild(toast,1);
+            QC.Login({//按默认样式插入QQ登录按钮
+        		btnId:"qq_login_btn"	//插入按钮的节点id
+        	});*/
+        	//调用QC.Login方法，指定btnId参数将按钮绑定在容器节点中
+        	cc.log(document.getElementById('qqLoginBtn'));
+        	cc.log(document.getElementById('qqLoginBtn').firstChild);
+            cc.log(document.getElementById('qqLoginBtn').firstChild.getAttribute('onClick'));
         }
     },
     sendBaseInfo:function(){

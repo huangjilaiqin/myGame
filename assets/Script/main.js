@@ -224,7 +224,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        
+        //cc.log('QC',QC);
         window.scenename='main';
         globalsInfo.scenename='main';
         //界面动效
