@@ -1,30 +1,4 @@
-/*
-cc.Class({
-    extends: cc.Component,
 
-    properties: {
-        // foo: {
-        //    default: null,
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
-    },
-
-    // use this for initialization
-    onLoad: function () {
-        cc.log('qqSdk');
-    },
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
-});
-*/
 var ver = "1.0.1";
 try {
     ver = opener.QC.getVersion();
@@ -53,16 +27,15 @@ for (var i = 0,att; i < qc_script.attributes.length; i++) {
         arr.push([att.name.toLowerCase(), '"' + att.value + '"'].join("="));
     }
 }*/
-arr.push('data-appid="101341128"');
-arr.push('data-redirecturi="http://www.pushup.gandafu.com"');
+arr.push('data-appid="101337231"');
+arr.push('data-redirecturi="http://www.helloworld.gandafu.com/"');
 arr.push('charset="utf-8"');
 
 if (document.readyState != 'complete') {
     document.write('<script ' + arr.join(" ") + ' ><' + '/script>');
-    document.write('');
+    document.write('<span id="qqLoginBtn"></span>');
 } else {
-    var s = document.createElement("script"),
-    attr;
+    var s = document.createElement("script"),attr;
     s.type = "text/javascript";
     s.src = s_src;
     for (var i = arr.length; i--;) {
@@ -71,9 +44,12 @@ if (document.readyState != 'complete') {
             s.setAttribute(attr[0], attr[1].replace(/\"/g, ""));
         }
     }
+    var span = document.createElement("span");
+    span.id="qqLoginBtn";
     var h = document.getElementsByTagName("head");
     if (h && h[0]) {
         h[0].appendChild(s);
+        h[0].appendChild(span);
     }
 }
 cc.log('qqSdk2');

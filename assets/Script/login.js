@@ -54,6 +54,15 @@ cc.Class({
         }else{
             this.registerBt.node.active=false;
         }
+        if(location.hash.indexOf('access_token')!=-1){
+            cc.log('location access_token');
+            cc.log('QC.Login.check():',QC.Login.check());
+            QC.Login.getMe(function(openId, accessToken){
+                cc.log('openId:',openId);
+                cc.log('accessToken:',accessToken);
+            });
+        }
+        cc.log('location:',location);
         
         window.scenename='login';
         if(globalsInfo.username!==null){
@@ -214,7 +223,18 @@ cc.Class({
         	//调用QC.Login方法，指定btnId参数将按钮绑定在容器节点中
         	cc.log(document.getElementById('qqLoginBtn'));
         	cc.log(document.getElementById('qqLoginBtn').firstChild);
-            cc.log(document.getElementById('qqLoginBtn').firstChild.getAttribute('onClick'));
+        	var loginStr = document.getElementById('qqLoginBtn').firstChild.getAttribute('onClick');
+            cc.log(typeof(loginStr));
+            loginStr=loginStr.replace("return window.open('","");
+            loginStr=loginStr.replace("'","");
+            cc.log(loginStr);
+            var loginArr=loginStr.split(",");
+            cc.log(loginArr);
+            var qqLoginUrl = loginArr[0];
+            cc.log(qqLoginUrl);
+            //eval(loginStr);
+            window.location.href=qqLoginUrl;
+            //window.open(qqLoginUrl);
         }
     },
     sendBaseInfo:function(){
