@@ -51,18 +51,36 @@ cc.Class({
         if(!cc.sys.isNative){
             //this.qqRegisterBt.node.active=false;
             //this.thirdLoginTip.node.active=false;
+            cc.log('location:',location);
+            //新用户验证后qq带着参数回调这个接口
+            if(location.hash.indexOf('access_token')!=-1){
+                cc.log('location access_token');
+                var loading = cc.instantiate(this.loadingPrefab);
+                loading.setPosition(cc.p(0,0));
+                this.node.addChild(loading,1,2000);
+                
+                cc.log('main QC.Login.check():',QC.Login.check());
+                QC.Login.getMe(function(openid, accessToken){
+                    cc.log('login openId:',openid);
+                    cc.log('login accessToken:',accessToken);
+                    //发送登录协议
+                    var requestObj = {
+                        openid:openid,
+                        accessToken:accessToken,
+                        logintype:1,
+                        registerFrom:globalsInfo.comefrom,
+                    };
+                    this.sendLoginRequest(requestObj);
+                    //绑定后清除location.hash
+                }.bind(this));
+            }else{
+                //web版 qq登录初始化
+                this.prepareWebQQLogin();
+            }
         }else{
             this.registerBt.node.active=false;
         }
-        if(location.hash.indexOf('access_token')!=-1){
-            cc.log('location access_token');
-            cc.log('QC.Login.check():',QC.Login.check());
-            QC.Login.getMe(function(openId, accessToken){
-                cc.log('openId:',openId);
-                cc.log('accessToken:',accessToken);
-            });
-        }
-        cc.log('location:',location);
+        
         
         window.scenename='login';
         if(globalsInfo.username!==null){
@@ -93,6 +111,10 @@ cc.Class({
             };
             that.sendLoginRequest(requestObj);
         });
+        
+    },
+    
+    prepareWebQQLogin(){
         QC.Login({
            //btnId：插入按钮的节点id，必选
            btnId:"qqLoginBtn",    

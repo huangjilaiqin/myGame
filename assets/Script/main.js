@@ -224,7 +224,6 @@ cc.Class({
     },
     // use this for initialization
     onLoad: function () {
-        //cc.log('QC',QC);
         window.scenename='main';
         globalsInfo.scenename='main';
         //界面动效
@@ -511,11 +510,65 @@ cc.Class({
         netInstance.emit('worldMessageHistory', {});
         
         //检查是否需要绑定qq登录
-        cc.log('check openid:',globalsInfo.openid);
-        if(cc.sys.isNative && (!globalsInfo.openid || globalsInfo.openid.length===0))
-            that.bindQQ();
+        cc.log('main check openid:',globalsInfo.openid);
+        //if(cc.sys.isNative && (!globalsInfo.openid || globalsInfo.openid.length===0))
+        if(!globalsInfo.openid || globalsInfo.openid.length===0){
+            if(!cc.sys.isNative){
+                that.prepareWebQQLogin();
+                //检查是否是授权回来的连接
+                if(location.hash.indexOf('access_token')!=-1){
+                    cc.log('main location access_token');
+                    //转圈圈
+                    var loading = cc.instantiate(that.loadingPrefab);
+                    loading.setPosition(cc.p(0,0));
+                    that.node.addChild(loading,1,2000);
+                    
+                    cc.log('main QC.Login.check():',QC.Login.check());
+                    QC.Login.getMe(function(openid, accessToken){
+                        cc.log('main openId:',openid);
+                        cc.log('main accessToken:',accessToken);
+                        //发送绑定协议
+                        that.sendBindQQRequest(openid,accessToken);
+                        //绑定后清除location.hash
+                    });
+                }else{
+                    //没有绑定,且没有授权 则提示绑定qq
+                    that.bindQQ();
+                }
+            }else{
+                that.bindQQ();
+            }
+        }
     },
-    
+    prepareWebQQLogin(){
+        QC.Login({
+           //btnId：插入按钮的节点id，必选
+           btnId:"qqLoginBtn",    
+           //用户需要确认的scope授权项，可选，默认all
+           scope:"all",
+           //按钮尺寸，可用值[A_XL| A_L| A_M| A_S|  B_M| B_S| C_S]，可选，默认B_S
+           size: "A_XL"
+       }, function(reqData, opts){//登录成功
+           //根据返回数据，更换按钮显示状态方法
+           var dom = document.getElementById(opts['btnId']),
+           _logoutTemplate=[
+                //头像
+                '<span><img src="{figureurl}" class="{size_key}"/></span>',
+                //昵称
+                '<span>{nickname}</span>',
+                //退出
+                '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'    
+           ].join("");
+           dom && (dom.innerHTML = QC.String.format(_logoutTemplate, {
+               nickname : QC.String.escHTML(reqData.nickname), //做xss过滤
+               figureurl : reqData.figureurl
+           }));
+           //模拟点击触发超链
+           
+       }, function(opts){//注销成功
+             alert('QQ登录 注销成功');
+       });
+    },
     bindQQ:function(){
         cc.log('bindQQ');
         var bindQQPre = cc.instantiate(this.bindQQPre);
@@ -524,55 +577,88 @@ cc.Class({
         var that = this;
         bindQQ.init("重要公告","尊敬的用户请您绑定QQ登录,下个版本我们将取消帐号密码登录,绑定后您的信息不会丢失！\n请点击下面按钮进行绑定",function(){
             cc.log('bindQQ call');
-            //qq授权成功后调用登录协议
-            cc.eventManager.addCustomListener("qqLogin", function(event){
-                //that.node.removeChildByTag(2000);
-                var userData = event._userData;
-                
-                var openid = userData.openid;
-                var accessToken = userData.access_token;
-                
-                cc.log("onComplete bindQQ:",JSON.stringify(userData));
-                //cc.director.loadScene('test');
-                //加载用户信息,走login协议
-                
-                var netInstance = Network.getInstance();
-                netInstance.onOneEventOneFunc('bindQQ', function(result){
-                    cc.log('bindQQ back',result);
-                    
-                    that.node.removeChildByTag(3100);
-                    if(that.node!==undefined)
-                        that.node.removeChildByTag(2000);
-                    
-                    if(result.error){
-                        //提示
-                        cc.log("bindQQ: "+result.error);
-                        that.tip.string = result.error;
-                    }else{
-                        globalsInfo.openid=result.openid;
-                        cc.sys.localStorage.setItem('openid',result.openid);
-                        cc.sys.localStorage.setItem('logintype',result.logintype);
-                    }
-                });
-                var requestObj = {
-                    openid:openid,
-                    accessToken:accessToken,
-                    logintype:1,
-                    registerFrom:globalsInfo.comefrom
-                };
-                netInstance.emit('bindQQ', requestObj);
-            });
             if(cc.sys.isNative){
-                var loading = cc.instantiate(that.loadingPrefab);
-                loading.setPosition(cc.p(0,0));
-                that.node.addChild(loading,1,2000);
-                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
+                if(cc.sys.os==='Android')
+                    that.bindQQAndroid();
+                else if(cc.sys.os==='iOS')
+                    that.bindQQiOS();
+                else{
+                    var toast = cc.instantiate(that.toastPrefab);
+                    toast.getComponent('toast').init('该系统暂不支持QQ登录\n请到QQ群: 553 689 366 联系官方人员 ',5);
+                    that.node.addChild(toast,1);
+                }
             }else{
+                var toast = cc.instantiate(that.toastPrefab);
+                toast.getComponent('toast').init('web QQ登录 ',3);
+                that.node.addChild(toast,1);
                 
+                cc.log(document.getElementById('qqLoginBtn'));
+            	cc.log(document.getElementById('qqLoginBtn').firstChild);
+            	var loginStr = document.getElementById('qqLoginBtn').firstChild.getAttribute('onClick');
+                cc.log(typeof(loginStr));
+                loginStr=loginStr.replace("return window.open('","");
+                loginStr=loginStr.replace("'","");
+                cc.log(loginStr);
+                var loginArr=loginStr.split(",");
+                cc.log(loginArr);
+                var qqLoginUrl = loginArr[0];
+                cc.log(qqLoginUrl);
+                //eval(loginStr);
+                window.location.href=qqLoginUrl;
+                //window.open(qqLoginUrl);
             }
         });
     },
+    bindQQiOS:function(){
+        
+    },
+    bindQQAndroid:function(){
+        var that = this;
+        //qq授权成功后调用登录协议
+        cc.eventManager.addCustomListener("qqLogin", function(event){
+            //that.node.removeChildByTag(2000);
+            var userData = event._userData;
+            
+            var openid = userData.openid;
+            var accessToken = userData.access_token;
+            
+            cc.log("onComplete bindQQ:",JSON.stringify(userData));
+            that.sendBindQQRequest(openid,accessToken);
+        });
+        var loading = cc.instantiate(that.loadingPrefab);
+        loading.setPosition(cc.p(0,0));
+        that.node.addChild(loading,1,2000);
+        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "qqLogin", "()V");
+    },
     
+    sendBindQQRequest(openid,accessToken){
+        var netInstance = Network.getInstance();
+        //var that=this;
+        netInstance.onOneEventOneFunc('bindQQ', function(result){
+            cc.log('bindQQ back',result);
+            
+            this.node.removeChildByTag(3100);
+            if(this.node!==undefined)
+                this.node.removeChildByTag(2000);
+            
+            if(result.error){
+                //提示
+                cc.log("bindQQ: "+result.error);
+                this.tip.string = result.error;
+            }else{
+                globalsInfo.openid=result.openid;
+                cc.sys.localStorage.setItem('openid',result.openid);
+                cc.sys.localStorage.setItem('logintype',result.logintype);
+            }
+        }.bind(this));
+        var requestObj = {
+            openid:openid,
+            accessToken:accessToken,
+            logintype:1,
+            registerFrom:globalsInfo.comefrom
+        };
+        netInstance.emit('bindQQ', requestObj);
+    },
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         if(this.showAimation===1)
@@ -616,58 +702,6 @@ cc.Class({
             toast.getComponent('toast').init('肌肉冷却中...\n良好的恢复能创造更好的成绩',3);
             this.node.addChild(toast,1);
         }
-        /*
-        var searchPre=cc.instantiate(this.searchPre);
-        searchPre.setPosition(cc.p(0,0));
-        this.node.addChild(searchPre,1,1000);
-        
-        var toast = cc.instantiate(this.toastPrefab);
-        toast.getComponent('toast').init('全力以赴,是对对手的最大尊重!',3,cc.p(0,cc.winSize.height/4));
-        this.node.addChild(toast,1,1001);
-        
-        var begin = new Date().getTime();
-        var that = this;
-        
-        var netInstance = Network.getInstance();
-        netInstance.onOneEventOneFunc('searchOpponent', function(result){
-            if(result.error){
-                //提示
-                that.node.removeChildByTag(1000);
-                if(result.errno==100){
-                    //提示体力值不够
-                    var toast = cc.instantiate(that.toastPrefab);
-                    toast.getComponent('toast').init('体力值不足，赢了比赛才有体力奖励',3);
-                    that.node.addChild(toast,1);
-                }else if(result.errno==8001){
-                    //网络错误
-                    cc.log('newwork error fuck');
-                    that.node.removeChildByTag(1000);
-                    that.node.removeChildByTag(1001);
-                    that.onNotValid();
-                }else{
-                    tip=result.error;
-                }
-            }else{
-                globalsInfo.opponent = result;
-                var now = new Date().getTime();
-                var delta = now-begin;
-                if(delta<2000){
-                    that.scheduleOnce(function(){
-                        that.node.removeChildByTag(1000);
-                        
-                        //处理web版第一次加载对战场景慢的问题
-                        var loading = cc.instantiate(this.loadingPrefab);
-                        loading.setPosition(cc.p(0,50));
-                        that.node.addChild(loading,1,2000);
-                        
-                        cc.director.loadScene('mirrorFight');
-                        cc.audioEngine.stopMusic();
-                    },(2000-delta)/1000);
-                }
-            }
-        });
-        netInstance.emit('searchOpponent', {});
-        */
     },
     rank:function(){
 
@@ -699,15 +733,11 @@ cc.Class({
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
             cc.audioEngine.stopMusic();
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
-            if(cc.sys.isNative)
-                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "login", "()V");
         }else{
             globalsInfo.isVolumeOpen=1;
             cc.sys.localStorage.setItem('isVolumeOpen',globalsInfo.isVolumeOpen);
             cc.audioEngine.playMusic(this.bgAudio, true);
             this.changeVolumeBg(globalsInfo.isVolumeOpen);
-            if(cc.sys.isNative)
-                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "share", "()V");
         }
         //window.location.href="http://www.baidu.com";
         //window.open("http://www.baidu.com");
@@ -728,8 +758,22 @@ cc.Class({
                 cc.sys.localStorage.removeItem('isShowFightTip');
                 cc.sys.localStorage.removeItem('openid');
                 cc.sys.localStorage.removeItem('logintype');
-               
+                cc.log('quit');
                 that.node.removeChildByTag(2230);
+                if(!cc.sys.isNative){
+                    location.hash='';
+                    document.getElementById('qqLoginBtn').remove();
+                    //*
+                    if(QC.Login.check())
+                        //QC.Login.signOut();
+                    
+                        //清理cookie
+                        //去掉Url的参数
+                        location.hash='/';
+                        //去掉span子节点
+                    }
+                    //*/
+                }
                 cc.director.loadScene('login');
             },
             confirm:function(){
